@@ -1,0 +1,299 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Criar Usuário</span>
+    </h3>
+    <div
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Clique para voltar a listagem"
+    >
+      <a href="javascript:void(0)" routerLink="/usuario" class="btn btn-sm btn-light-primary align-items-end">
+        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen058.svg'" class="svg-icon svg-icon-3"></span>
+        Voltar
+      </a>
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <form class="card" [formGroup]="criarUsuarioForm">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Nome*</label>
+                <input class="form-control" type="text" formControlName="nome" maxlength="100" />
+                <div
+                  *ngIf="criarUsuarioForm.get('nome')?.touched && criarUsuarioForm.get('nome')?.hasError('required')"
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="criarUsuarioForm.get('nome')?.touched && criarUsuarioForm.get('nome')?.hasError('minlength')"
+                  class="text text-danger mt-3"
+                >
+                  Nome deve ter no mínimo 2 caracteres!
+                </div>
+                <div
+                  *ngIf="criarUsuarioForm.get('nome')?.touched && criarUsuarioForm.get('nome')?.hasError('maxlength')"
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 100
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Telefone</label>
+                <input
+                  mask="(00) 0000-0000||(00) 00000-0000"
+                  class="form-control"
+                  type="text"
+                  formControlName="telefone"
+                  maxlength="15"
+                />
+                <div
+                  *ngIf="
+                    criarUsuarioForm.get('telefone')?.touched && criarUsuarioForm.get('telefone')?.hasError('maxlength')
+                  "
+                  class="text text-danger"
+                >
+                  Tamanho máximo: 15
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Email</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  formControlName="email"
+                  maxlength="126"
+                  (blur)="sugerirLogin()"
+                />
+                <div
+                  *ngIf="criarUsuarioForm.get('email')?.touched && criarUsuarioForm.get('email')?.hasError('email')"
+                  class="text text-danger"
+                >
+                  Email inválido!
+                </div>
+                <div
+                  *ngIf="criarUsuarioForm.get('email')?.touched && criarUsuarioForm.get('email')?.hasError('maxlength')"
+                  class="text text-danger"
+                >
+                  Tamanho máximo: 126
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Perfil*</label>
+                <select class="form-select form-select-lg" formControlName="perfil_id">
+                  <option value="">selecione</option>
+                  <option *ngFor="let perfil of perfis" value="{{ perfil.id }}">{{ perfil.nome }}</option>
+                </select>
+                <div
+                  *ngIf="
+                    criarUsuarioForm.get('perfil_id')?.touched &&
+                    criarUsuarioForm.get('perfil_id')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Login*</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  formControlName="login"
+                  maxlength="126"
+                  (blur)="removerEspacosDoLogin()"
+                />
+                <div
+                  *ngIf="criarUsuarioForm.get('login')?.touched && criarUsuarioForm.get('login')?.hasError('required')"
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="criarUsuarioForm.get('login')?.touched && criarUsuarioForm.get('login')?.hasError('maxlength')"
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 50
+                </div>
+                <div
+                  *ngIf="criarUsuarioForm.get('login')?.touched && criarUsuarioForm.get('login')?.hasError('minlength')"
+                  class="text text-danger mt-3"
+                >
+                  Nome deve ter no mínimo 5 caracteres!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Data Limite Acesso*</label>
+                <input class="form-control" type="date" formControlName="dataLimiteAcesso" />
+                <div
+                  *ngIf="
+                    criarUsuarioForm.get('dataLimiteAcesso')?.touched &&
+                    criarUsuarioForm.get('dataLimiteAcesso')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr />
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Senha*</label>
+                <input class="form-control" type="password" formControlName="password" maxlength="25" />
+                <div
+                  *ngIf="
+                    criarUsuarioForm.get('password')?.touched && criarUsuarioForm.get('password')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    criarUsuarioForm.get('password')?.touched && criarUsuarioForm.get('password')?.hasError('minlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Senha deve ter no mínimo 3 caracteres!
+                </div>
+                <div
+                  *ngIf="
+                    criarUsuarioForm.get('password')?.touched && criarUsuarioForm.get('password')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 25
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Repetir Senha*</label>
+                <input class="form-control" type="password" formControlName="repetirSenha" maxlength="25" />
+                <div
+                  *ngIf="
+                    criarUsuarioForm.get('repetirSenha')?.touched &&
+                    criarUsuarioForm.get('repetirSenha')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    criarUsuarioForm.get('repetirSenha')?.touched &&
+                    criarUsuarioForm.get('repetirSenha')?.hasError('minlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Senha deve ter no mínimo 3 caracteres!
+                </div>
+                <div
+                  *ngIf="
+                    criarUsuarioForm.get('repetirSenha')?.touched &&
+                    criarUsuarioForm.get('repetirSenha')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 25
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr />
+          <div class="row">
+            <div class="col-md-3">
+              <button (click)="selecionarTodasSecretarias()" class="btn btn-sm btn-primary">
+                Selecionar Todas Secretarias
+              </button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-5">
+              <div class="form-group">
+                <label class="form-group">Secretarias*</label>
+                <ng-select
+                  class="ngSelectDropdown"
+                  [items]="secretariasFundos"
+                  bindLabel="descricao"
+                  bindValue="id"
+                  [(ngModel)]="selectedSecretarias"
+                  [multiple]="true"
+                  formControlName="secretarias"
+                >
+                </ng-select>
+                <div
+                  *ngIf="
+                    criarUsuarioForm.get('secretarias')?.touched &&
+                    criarUsuarioForm.get('secretarias')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <!-- <div class="col-md-5">
+              <div class="form-group">
+                <label class="form-group">Municipios*</label>
+                <ng-select
+                  class="ngSelectDropdown"
+                  [items]="municipios"
+                  bindLabel="db_cliente"
+                  bindValue="id"
+                  [(ngModel)]="selectedMunicipios"
+                  [multiple]="true"
+                  formControlName="municipios"
+                >
+                </ng-select>
+                 <div
+                  *ngIf="
+                    criarUsuarioForm.get('municipios')?.touched &&
+                    criarUsuarioForm.get('municipios')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div> 
+              </div>
+            </div> -->
+          </div>
+        </div>
+        <div class="card-footer text-right">
+          <button class="btn btn-success" [disabled]="!criarUsuarioForm.valid" (click)="salvar(criarUsuarioForm.value)">
+            Cadastrar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>

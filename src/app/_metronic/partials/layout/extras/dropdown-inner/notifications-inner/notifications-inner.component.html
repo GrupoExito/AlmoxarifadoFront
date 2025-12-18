@@ -1,0 +1,155 @@
+<!-- O HOST DESTE COMPONENTE já tem as classes do KT Menu (definidas no decorator) -->
+
+<!-- Cabeçalho -->
+<div class="notif-header bg-primary text-white rounded-top-3 py-1">
+  <div class="d-flex align-items-center justify-content-between px-3 px-md-4 pt-4 pb-3">
+    <h3 class="mb-0 fw-bold notif-title">
+      Notificações
+      <span class="notif-meta fs-8 ps-2">{{ totalPendencias }} PENDÊNCIAS</span>
+    </h3>
+
+    <div class="d-flex align-items-center gap-2">
+      <button
+        type="button"
+        class="btn btn-sm btn-light text-primary fw-bold"
+        (click)="marcarTudoComoLido(activeArea)"
+        [disabled]="getCount(activeArea, 'naoLidas') === 0"
+      >
+        Marcar tudo como lido
+      </button>
+      <!-- <button type="button"
+              class="btn btn-sm btn-outline-light"
+              (click)="abrirConfiguracoes()">
+        <i class="fa-solid fa-gear me-1"></i> Preferências
+      </button> -->
+    </div>
+  </div>
+
+  <!-- Abas das Áreas -->
+  <ul class="nav nav-pills nav-fill fw-bold px-2 px-md-3 gap-2 gap-md-3 notif-areas">
+    <li class="nav-item" *ngFor="let area of areas">
+      <button
+        class="nav-link position-relative notif-area-pill"
+        [class.active]="activeArea === area.key"
+        (click)="setActiveArea(area.key)"
+        type="button"
+        role="tab"
+        [attr.aria-selected]="activeArea === area.key ? 'true' : 'false'"
+      >
+        <span class="text-uppercase">{{ area.label }}</span>
+        <span
+          *ngIf="getCount(area.key, 'naoLidas') > 0"
+          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+        >
+          {{ getCount(area.key, 'naoLidas') }}
+        </span>
+      </button>
+    </li>
+  </ul>
+</div>
+
+<!-- Corpo scrollável (sub-abas + lista) -->
+<div class="notif-body">
+  <!-- Sub-abas: Não lidas / Lidas (grudadas no topo da área scroll) -->
+  <div class="notif-subtabs px-3 px-md-4 pt-2">
+    <ul class="nav nav-tabs small notif-tabs">
+      <li class="nav-item">
+        <button
+          class="nav-link"
+          [class.active]="subTab[activeArea] === 'NAO_LIDAS'"
+          (click)="setSubTab(activeArea, 'NAO_LIDAS')"
+          type="button"
+        >
+          Não lidas
+          <span class="badge bg-danger ms-1">{{ getCount(activeArea, 'naoLidas') }}</span>
+        </button>
+      </li>
+      <li class="nav-item">
+        <button
+          class="nav-link"
+          [class.active]="subTab[activeArea] === 'LIDAS'"
+          (click)="setSubTab(activeArea, 'LIDAS')"
+          type="button"
+        >
+          Lidas
+          <span class="badge bg-light text-dark ms-1">{{ getCount(activeArea, 'lidas') }}</span>
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Estado vazio -->
+  <div *ngIf="visibleList.length === 0" class="text-center text-muted py-5">
+    <i class="fa-regular fa-bell-slash fs-1 mb-2 d-block"></i>
+    <div class="fw-semibold">Nada por aqui</div>
+    <div class="small">Você está em dia nesta aba.</div>
+  </div>
+
+  <!-- Lista de notificações -->
+  <div
+    *ngFor="let n of visibleList; trackBy: trackById"
+    class="notif-item d-flex align-items-start justify-content-between p-3 rounded-3 border mb-2"
+    [class.unread]="!n.mencao_lida"
+  >
+    <div class="d-flex align-items-start gap-3 me-3">
+      <div
+        class="rounded-3 d-flex align-items-center justify-content-center notif-icon"
+        [ngClass]="{
+          'bg-light-success': n.tipo === 'sucesso',
+          'bg-light-warning': n.tipo === 'aviso',
+          'bg-light-danger': n.tipo === 'erro',
+          'bg-light-primary': n.tipo === 'info'
+        }"
+      >
+        <i
+          [ngClass]="{
+            'fa-solid fa-message': n.icone === 'comentario',
+            'fa fa-regular fa-circle-check': n.icone === 'ok',
+            'fa-solid fa-triangle-exclamation': n.icone === 'alerta',
+            'fa-regular fa-bell': n.icone === 'padrao'
+          }"
+        ></i>
+      </div>
+
+      <div>
+        <a
+          (click)="abrirNotificacao(n)"
+          class="notif-title fw-semibold text-decoration-none text-dark d-inline-block text-wrap"
+        >
+          {{ n.titulo }}
+        </a>
+        <div class="notif-desc small">{{ n.descricao }}</div>
+        <div class="d-flex align-items-center gap-2 small mt-1">
+          <span class="badge bg-light text-muted border">{{ n.areaLabel }}</span>
+          <span class="text-muted">{{ n.tempo }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex align-items-center gap-1">
+      <button
+        class="btn btn-sm btn-outline-secondary"
+        title="Marcar como lida"
+        *ngIf="!n.mencao_lida"
+        (click)="marcarComoLida(n)"
+      >
+        <i class="fa-regular fa-circle-check"></i>
+      </button>
+      <button class="btn btn-sm btn-light" title="Abrir" (click)="abrirNotificacao(n)">
+        <i class="fa-solid fa-up-right-from-square"></i>
+      </button>
+      <!-- <button class="btn btn-sm btn-light text-danger"
+              title="Descartar"
+              (click)="descartar(n)">
+        <i class="fa-regular fa-trash-can"></i>
+      </button> -->
+    </div>
+  </div>
+</div>
+
+<!-- Rodapé -->
+<div class="notif-footer py-3 text-center border-top">
+  <a class="btn btn-link btn-sm text-decoration-none" (click)="verTodas(activeArea)">
+    Ver todas <i class="fa-solid fa-arrow-right ms-1"></i>
+  </a>
+</div>

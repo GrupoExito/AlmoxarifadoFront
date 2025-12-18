@@ -1,0 +1,32 @@
+.dashboard-container {
+  padding: 16px;
+}
+
+.titulo {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+
+.kpi-card {
+  background-color: #f1f1f1;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+}
+
+.kpi-title {
+  font-size: 14px;
+  color: #555;
+}
+
+.kpi-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #2b7a78;
+}

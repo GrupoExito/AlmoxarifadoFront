@@ -1,0 +1,119 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Editar Órgão</span>
+    </h3>
+    <div
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Clique para adicionar novo órgão"
+    >
+      <a href="javascript:void(0)" routerLink="/orgao/criar" class="btn btn-sm btn-light-primary align-items-end me-3">
+        <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>
+        Novo Órgão
+      </a>
+      <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
+        title="Clique para voltar">
+      <a href="javascript:void(0)" routerLink="/orgao" class="btn btn-sm btn-light-primary align-items-end">
+        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen058.svg'" class="svg-icon svg-icon-3"></span>
+        Voltar
+      </a>
+    </div>
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <form class="card" [formGroup]="editarOrgaoForm">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Descrição*</label>
+                <input class="form-control" type="text" formControlName="descricao" maxlength="50" />
+                <div
+                  *ngIf="
+                    editarOrgaoForm.get('descricao')?.touched && editarOrgaoForm.get('descricao')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    editarOrgaoForm.get('descricao')?.touched && editarOrgaoForm.get('descricao')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 50
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Código TCM</label>
+                <input mask="9*" class="form-control" type="text" formControlName="codigo_tcm" />
+              </div>
+            </div>
+            <div class="col-md-3 mt-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Data Início</label>
+                <input class="form-control" type="date" formControlName="datainicio" />
+                <div
+                  *ngIf="
+                    editarOrgaoForm.get('datainicio')?.touched &&
+                    editarOrgaoForm.get('datainicio')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 mt-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Data Fim</label>
+                <input class="form-control" type="date" formControlName="datafim" />
+                <div
+                  *ngIf="
+                    editarOrgaoForm.get('datafim')?.touched && editarOrgaoForm.get('datafim')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mt-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Tipo Poder*</label>
+                <select class="form-select form-select-lg" formControlName="tipopoder">
+                  <option value="">Selecione um tipo poder</option>
+                  <option value="1">Legislativo</option>
+                  <option value="2">Executivo</option>
+                  <option value="3">Executivo - Fundo</option>
+                </select>
+                <div
+                  *ngIf="
+                    editarOrgaoForm.get('tipopoder')?.touched && editarOrgaoForm.get('tipopoder')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer text-right">
+          <button class="btn btn-success" [disabled]="!editarOrgaoForm.valid" (click)="editar()">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>

@@ -1,0 +1,83 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Tipos de Produtos/Serviços</span>
+    </h3>
+    <div
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Clique para adicionar novo Tipo Produto"
+    >
+      <a href="javascript:void(0)" routerLink="/tipoproduto/criar" class="btn btn-sm btn-light-primary align-items-end">
+        <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>
+        Novo Tipo
+      </a>
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- begin::Body -->
+  <div class="card-body py-3">
+    <!-- begin::Table container -->
+    <div class="table-responsive">
+      <!-- begin::Table -->
+      <table
+        datatable
+        [dtOptions]="dtOptions"
+        [dtTrigger]="dtTrigger"
+        class="table table-hover table-row-dashed table-row-gray-300 align-middle gs-0 gy-0"
+      >
+        <!-- begin::Table head -->
+        <thead>
+          <tr class="fw-bolder text-dark fs-5">
+            <th class="min-w-80px">Código</th>
+            <th class="min-w-140px">Descrição</th>
+            <th class="min-w-80px">Tipo</th>
+            <th class="min-w-60px text-center">Ações</th>
+          </tr>
+        </thead>
+        <!-- end::Table head -->
+        <!-- begin::Table body -->
+        <tbody>
+          <tr *ngFor="let tipoproduto of tipoProdutos; trackBy: trackItem">
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5 mx-3"> {{ tipoproduto.id }} </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span href="#" class="text-dark fw-normal d-block fs-5"> {{ tipoproduto.descricao }} </span>
+            </td>
+            <td>
+              <span href="#" class="text-dark fw-normal d-block fs-5"> {{ tipoproduto.tipo_descricao }} </span>
+            </td>
+            <td>
+              <div class="d-flex justify-content-end flex-shrink-0">
+                <button
+                  [routerLink]="['/tipoproduto/editar', tipoproduto.id]"
+                  class="btn btn-icon btn-active-color-warning btn-md me-1"
+                >
+                  <span [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'" class="svg-icon svg-icon-3"></span>
+                </button>
+                <button (click)="deletar(tipoproduto.id)" href="#" class="btn btn-icon btn-active-color-danger btn-md">
+                  <span
+                    [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
+                    class="svg-icon svg-icon-3"
+                  ></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+        <!-- end::Table body -->
+      </table>
+      <!-- end::Table -->
+    </div>
+    <!-- end::Table container -->
+  </div>
+  <!-- begin::Body -->
+</div>

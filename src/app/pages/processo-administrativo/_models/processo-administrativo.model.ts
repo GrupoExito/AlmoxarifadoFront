@@ -1,0 +1,31 @@
+export interface ProcessoAdministrativo {
+  id?: number;
+  gexercicio_id: number;
+  objeto: string;
+  numero_pa?: string;
+  modalidade_compra_id?: number;
+  modalidade_compra_descricao?: string;
+  usuario_criacao_id: number;
+  ativo?: number;
+  usuario_exclusao_id?: number;
+  data_exclusao?: string;
+  tipo_demanda_id?: number;
+  data_pa: string;
+  autuador?: string;
+  funcao_autuador?: string;
+  data_autuacao?: string;
+  tipo_descricao?: string;
+  processo_adm_id?: number;
+  criterio_julgamento?: number;
+  prazo_entrega_dias?: number;
+  flstatus_id: number;
+  flsetor_id?: number;
+  pendencia?: number;
+  numero_objeto?: string;
+  lote?: boolean;
+  cotaca_id?: number;
+  processo_Adm_id?: number;
+  id_objeto?: string;
+  pad_id?: number;
+  flsetor_usuario?: number;
+}

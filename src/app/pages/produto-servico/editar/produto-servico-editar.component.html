@@ -1,0 +1,144 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Editar Produto/Serviço</span>
+    </h3>
+    <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover">
+      <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
+        title="Clique para voltar">
+        <a href="javascript:void(0)" routerLink="/produtoservico" class="btn btn-sm btn-light-primary align-items-end">
+          <span [inlineSVG]="'./assets/media/icons/duotune/general/gen058.svg'" class="svg-icon svg-icon-3"></span>
+          Voltar
+        </a>
+      </div>
+    </div>
+  </div>
+  <form [formGroup]="editarProdutoServicoForm">
+    <div class="card-body">
+      <div class="row mt-2 mb-2">
+        <div class="card-toolbar">
+          <!--app-produto-estoque-almoxarifado></app-produto-estoque-almoxarifado-->
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-2">
+          <div class="form-group">
+            <label class="form-label mt-3 mb-1">Código do Produto</label>
+            <input class="form-control border-2 border-dark" type="text" [value]="id" disabled />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="form-label mt-3 mb-1">Descrição*</label>
+            <textarea rows="5" class="form-control" type="text" formControlName="descricao" maxlength="5000"></textarea>
+            <div *ngIf="
+                editarProdutoServicoForm.get('descricao')?.touched &&
+                editarProdutoServicoForm.get('descricao')?.hasError('required')
+              " class="text text-danger">
+              Campo obrigatório!
+            </div>
+            <div *ngIf="
+                editarProdutoServicoForm.get('descricao')?.touched &&
+                editarProdutoServicoForm.get('descricao')?.hasError('maxlength')
+              " class="text text-danger">
+              Tamanho máximo: 5000
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="form-label mt-3 mb-1">Unidade Medida*</label>
+            <select class="form-select form-select-lg" formControlName="unidade_medida_id">
+              <option value="">Selecione uma unidade de medida</option>
+              <option *ngFor="let unidadeMedida of unidadesMedida | sortBy : 'asc' : 'descricao'"
+                value="{{ unidadeMedida.id }}">
+                {{ unidadeMedida.descricao }}
+              </option>
+            </select>
+            <div *ngIf="
+                editarProdutoServicoForm.get('unidade_medida_id')?.touched &&
+                editarProdutoServicoForm.get('unidade_medida_id')?.hasError('required')
+              " class="text text-danger mt-3">
+              Campo obrigatório!
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="form-group">
+            <label class="form-label mt-3 mb-1">Valor Referência*</label>
+            <input class="form-control" type="number" formControlName="valor_referencia" />
+            <div *ngIf="
+                editarProdutoServicoForm.get('valor_referencia')?.touched &&
+                editarProdutoServicoForm.get('valor_referencia')?.hasError('required')
+              " class="text text-danger">
+              Campo obrigatório!
+            </div>
+          </div>
+        </div>
+      </div>
+      <br/>
+      <p><strong>INFORMAÇÕES DO ALMOXARIFADO</strong></p>
+      <hr/>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="form-label mt-3 mb-1">Descrição*</label>
+            <textarea rows="5" class="form-control" type="text" formControlName="descricao_almoxarifado" maxlength="5000"></textarea>
+            <div *ngIf="
+                editarProdutoServicoForm.get('descricao_almoxarifado')?.touched &&
+                editarProdutoServicoForm.get('descricao_almoxarifado')?.hasError('required')
+              " class="text text-danger">
+              Campo obrigatório!
+            </div>
+            <div *ngIf="
+                editarProdutoServicoForm.get('descricao_almoxarifado')?.touched &&
+                editarProdutoServicoForm.get('descricao_almoxarifado')?.hasError('maxlength')
+              " class="text text-danger">
+              Tamanho máximo: 5000
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label class="form-label mt-3 mb-1">Unidade medida fracionamento*</label>
+            <select class="form-select form-select-lg" formControlName="unidade_medida_almoxarifado_id">
+              <option value="">Selecione uma unidade de medida</option>
+              <option *ngFor="let unidadeMedida of unidadesMedida | sortBy : 'asc' : 'descricao'"
+                value="{{ unidadeMedida.id }}">
+                {{ unidadeMedida.descricao }}
+              </option>
+            </select>
+            <div *ngIf="
+                editarProdutoServicoForm.get('unidade_medida_almoxarifado_id')?.touched &&
+                editarProdutoServicoForm.get('unidade_medida_almoxarifado_id')?.hasError('required')
+              " class="text text-danger">
+              Campo obrigatório!
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label class="form-label mt-3 mb-1">Quantidade fracionada*</label>
+            <input class="form-control" type="number" formControlName="qtde_do_principal" />
+            <div *ngIf="
+                editarProdutoServicoForm.get('qtde_do_principal')?.touched &&
+                editarProdutoServicoForm.get('qtde_do_principal')?.hasError('required')
+              " class="text text-danger">
+              Campo obrigatório!
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer text-right">
+      <button class="btn btn-success" [disabled]="!editarProdutoServicoForm.valid" (click)="editar()">Atualizar</button>
+    </div>
+  </form>
+</div>

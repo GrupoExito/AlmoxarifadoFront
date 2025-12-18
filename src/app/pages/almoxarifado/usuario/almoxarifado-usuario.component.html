@@ -1,0 +1,77 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Usuários do Almoxarifado</span>
+    </h3>
+    <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
+      title="Almoxarifado">
+      <a href="javascript:void(0)" routerLink="/almoxarifado/listar"
+        class="btn btn-sm btn-light-primary align-items-end">
+        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen058.svg'" class="svg-icon svg-icon-3"></span>
+        Voltar
+      </a>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="row my-3">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-group">Usuários*</label>
+            <ng-select appendTo="body" class="ngSelectDropdown" [items]="usuarios" bindLabel="nome" bindValue="id"
+              [(ngModel)]="selectedUsuarios" [multiple]="true">
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-md-6 align-self-end">
+          <button class="btn btn-success" (click)="adicionar()">Adicionar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Usuários Adicionados ao Almoxarifado</span>
+    </h3>
+  </div>
+  <div class="card-body py-3">
+    <div class="table-responsive">
+      <table class="table table-hover table-row-dashed table-row-gray-300 align-middle gs-0 gy-0">
+        <!-- begin::Table head -->
+        <thead>
+          <tr class="fw-bolder text-dark fs-5">
+            <th class="min-w-140px">Usuário</th>
+            <th class="min-w-140px">Almoxarifado</th>
+            <th class="min-w-140px">Autorizador</th>
+            <th class="min-w-140px text-end">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of usuariosAdicionados">
+            <td>{{ item.usuario_nome }}</td>
+            <td>{{ item.almoxarifado_descricao }}</td>
+            <td>{{ item.autorizador ? 'Sim' : 'Não' }}</td>
+            <td>
+              <div class="d-flex justify-content-end flex-shrink-0">
+                <button (click)="autorizador(item.usuario_id!, item.almoxarifado_id!, !item.autorizador)" href="#"
+                *appPermission="['Almoxarifado', 'excluir_usuario']"
+                  class="btn btn-icon btn-active-color-danger btn-md">
+                  <span *ngIf="!item.autorizador" [inlineSVG]="'./assets/media/icons/duotune/general/gen043.svg'" class="svg-icon svg-icon-3"></span>
+                  <span *ngIf="item.autorizador" [inlineSVG]="'./assets/media/icons/duotune/general/gen044.svg'" class="svg-icon svg-icon-3"></span>
+                </button>
+                <button (click)="deletar(item.usuario_id!, item.almoxarifado_id!)" href="#"
+                *appPermission="['Almoxarifado', 'excluir_usuario']"
+                  class="btn btn-icon btn-active-color-danger btn-md">
+                  <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
+                    class="svg-icon svg-icon-3"></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

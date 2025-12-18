@@ -1,0 +1,97 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Editar Subfunção de Governo</span>
+    </h3>
+    <div
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Clique para adicionar nova subfunção"
+    >
+      <a
+        href="javascript:void(0)"
+        routerLink="/subfuncaogoverno/criar"
+        class="btn btn-sm btn-light-primary align-items-end me-3"
+      >
+        <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>
+        Nova Subfunção
+      </a>
+      <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
+        title="Clique para voltar">
+      <a href="javascript:void(0)" routerLink="/subfuncaogoverno" class="btn btn-sm btn-light-primary align-items-end">
+        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen058.svg'" class="svg-icon svg-icon-3"></span>
+        Voltar
+      </a>
+      </div>
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <form class="card" [formGroup]="editarSubFuncaoGovernoForm">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Código*</label>
+                <input class="form-control" type="text" formControlName="codigo" />
+                <div
+                  *ngIf="
+                    editarSubFuncaoGovernoForm.get('codigo')?.touched &&
+                    editarSubFuncaoGovernoForm.get('codigo')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    editarSubFuncaoGovernoForm.get('codigo')?.touched &&
+                    editarSubFuncaoGovernoForm.get('codigo')?.hasError('maxlength')
+                  "
+                  class="text text-danger"
+                >
+                  Tamanho máximo: 10
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Descrição*</label>
+                <input class="form-control" type="text" formControlName="descricao" />
+                <div
+                  *ngIf="
+                    editarSubFuncaoGovernoForm.get('descricao')?.touched &&
+                    editarSubFuncaoGovernoForm.get('descricao')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    editarSubFuncaoGovernoForm.get('descricao')?.touched &&
+                    editarSubFuncaoGovernoForm.get('descricao')?.hasError('maxlength')
+                  "
+                  class="text text-danger"
+                >
+                  Tamanho máximo: 100
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer text-right">
+          <button class="btn btn-success" [disabled]="!editarSubFuncaoGovernoForm.valid" (click)="editar()">
+            Salvar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>

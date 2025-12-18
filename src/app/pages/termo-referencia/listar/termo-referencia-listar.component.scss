@@ -1,0 +1,39 @@
+::ng-deep .accordion-button:not(.collapsed) {
+  background-color: #B6D9F2;
+  border-bottom: 1px solid #343c80;
+}
+::ng-deep .accordion-button {
+  background-color: #B6D9F2;
+  border-bottom: 1px solid #343c80;
+}
+
+::ng-deep .title-header {
+  justify-content: start;
+}
+
+.notification {
+  text-decoration: none;
+  padding: 15px 26px;
+  position: relative;
+  display: inline-block;
+  border-radius: 2px;
+}
+
+.notification .badge {
+  position: absolute;
+  top: -5px;
+  right: 5px;
+  padding: 5px 10px;
+  border-radius: 50%;
+  background: red;
+  color: white;
+}
+
+#tableTR {
+  width: 100%;
+  overflow: hidden;
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}

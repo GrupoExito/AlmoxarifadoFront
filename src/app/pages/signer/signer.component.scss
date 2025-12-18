@@ -1,0 +1,36 @@
+.imgTumb {
+  max-width:100px;
+  max-height:150px;
+  width: auto;
+  height: auto;
+  padding-top: 10px;
+}
+
+.div-imagem {
+  max-height: 500px; /* Defina a altura máxima desejada */
+  overflow-y: auto; /* Adiciona uma barra de rolagem vertical caso o conteúdo ultrapasse a altura máxima */
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: darkcyan;
+  text-align: center;
+}
+
+.div-paginaView {
+  max-height: 1100px; /* Defina a altura máxima desejada */
+  overflow-y: auto; /* Adiciona uma barra de rolagem vertical caso o conteúdo ultrapasse a altura máxima */
+  background-color: darkcyan;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  position: relative;
+}
+
+.retangulo {
+  position: absolute;
+  border: 2px solid red; /* Cor da borda do retângulo */
+}
+
+.paginaView {
+  max-width: 800px; /* Defina a altura máxima desejada */
+  min-width: 700px; /* Defina a altura máxima desejada */
+}

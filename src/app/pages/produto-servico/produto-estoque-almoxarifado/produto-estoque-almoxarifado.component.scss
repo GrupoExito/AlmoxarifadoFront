@@ -1,0 +1,11 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.ng-select.ngSelectDropdown ::ng-deep .ng-select-container  {
+  min-height: 42.94px;
+  border-radius: 1;
+  background: azure;
+}

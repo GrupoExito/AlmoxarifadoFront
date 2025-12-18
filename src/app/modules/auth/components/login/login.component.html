@@ -1,0 +1,159 @@
+<!--begin::Form-->
+<form
+  class="form w-70 w-md-50 mx-auto my-0"
+  [formGroup]="loginForm"
+  novalidate="novalidate"
+  id="kt_login_signin_form"
+  (ngSubmit)="submit()"
+>
+  <!-- begin::Alert error-->
+  <ng-container *ngIf="hasError">
+    <div class="mb-lg-15 alert alert-danger">
+      <div class="alert-text font-weight-bold">Dados incorretos, tente novamente.</div>
+    </div>
+  </ng-container>
+  <!-- end::Alert error-->
+  <!--begin::Form group-->
+  <div class="mb-10">
+    <label class="form-label fs-6 fw-bolder text-white">Login</label>
+    <input
+      class="form-control form-control-lg form-control-solid .input-custom"
+      type="email"
+      name="email"
+      formControlName="email"
+      autocomplete="off"
+      [ngClass]="{
+        'is-invalid': loginForm.controls['email'].invalid,
+        'is-valid': loginForm.controls['email'].valid
+      }"
+    />
+    <ng-container
+      [ngTemplateOutlet]="formError"
+      [ngTemplateOutletContext]="{
+        validation: 'required',
+        message: 'É necessário um login válido',
+        control: loginForm.controls['email']
+      }"
+    ></ng-container>
+    <ng-container
+      [ngTemplateOutlet]="formError"
+      [ngTemplateOutletContext]="{
+        validation: 'email',
+        message: 'É necessário um login válido',
+        control: loginForm.controls['email']
+      }"
+    ></ng-container>
+    <ng-container
+      [ngTemplateOutlet]="formError"
+      [ngTemplateOutletContext]="{
+        validation: 'minLength',
+        message: 'Login deve ter pelo menos 5 caracteres',
+        control: loginForm.controls['email']
+      }"
+    ></ng-container>
+    <ng-container
+      [ngTemplateOutlet]="formError"
+      [ngTemplateOutletContext]="{
+        validation: 'maxLength',
+        message: 'Email deve ter no máximo 360 caracteres',
+        control: loginForm.controls['email']
+      }"
+    ></ng-container>
+  </div>
+  <!--end::Form group-->
+
+  <!--begin::Form group-->
+  <div class="fv-row mb-10">
+    <div class="d-flex justify-content-between mt-n5">
+      <div class="d-flex flex-stack mb-2">
+        <label class="form-label fw-bolder text-white fs-6 mb-0">Senha</label>
+        <a
+          routerLink="/auth/forgot-password"
+          class="link-primary fs-6 fw-bolder"
+          id="kt_login_forgot"
+          [style.margin-left]="'5px'"
+        >
+          Esqueceu a senha ?
+        </a>
+      </div>
+    </div>
+
+    <input
+      class="form-control form-control-lg form-control-solid .input-custom"
+      type="password"
+      name="password"
+      autocomplete="off"
+      formControlName="password"
+      [ngClass]="{
+        'is-invalid': loginForm.controls['password'].invalid,
+        'is-valid': loginForm.controls['password'].valid
+      }"
+    />
+    <ng-container
+      [ngTemplateOutlet]="formError"
+      [ngTemplateOutletContext]="{
+        validation: 'required',
+        message: 'senha é obrigatória.',
+        control: loginForm.controls['password']
+      }"
+    ></ng-container>
+    <ng-container
+      [ngTemplateOutlet]="formError"
+      [ngTemplateOutletContext]="{
+        validation: 'minlength',
+        message: 'senha deve conter pelo menos 3 caracteres.',
+        control: loginForm.controls['password']
+      }"
+    ></ng-container>
+    <ng-container
+      [ngTemplateOutlet]="formError"
+      [ngTemplateOutletContext]="{
+        validation: 'maxLength',
+        message: 'senha deve ter no máximo 100 caracteres.',
+        control: loginForm.controls['password']
+      }"
+    ></ng-container>
+    <div *ngIf="hasManyUsers">
+      <label class="form-label fs-6 fw-bolder text-white">Cliente</label>
+      <ng-select
+      class="ngSelectDropdown"
+      [items]="clientes"
+      bindLabel="nome"
+      bindValue="id"
+      formControlName="cliente_id"
+    >
+    </ng-select>
+    </div>
+  </div>
+  <!--end::Form group-->
+
+  <!--begin::Action-->
+  <div class="text-center">
+    <button
+      type="submit"
+      id="kt_sign_in_submit"
+      class="btn btn-lg btn-danger btn-magenta w-100 mb-5"
+      [disabled]="loginForm.invalid"
+    >
+      <ng-container *ngIf="isLoading$ | async">
+        <span class="indicator-progress" [style.display]="'block'">
+          Carregando...
+          <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+        </span>
+      </ng-container>
+      <ng-container *ngIf="(isLoading$ | async) === false">
+        <span class="indicator-label">Entrar</span>
+      </ng-container>
+    </button>
+  </div>
+  <!--end::Action-->
+</form>
+<!--end::Form-->
+
+<ng-template #formError let-control="control" let-message="message" let-validation="validation">
+  <ng-container *ngIf="control.hasError(validation) && (control.dirty || control.touched)">
+    <div class="alert alert-danger mt-3" role="alert">
+      {{ message }}
+    </div>
+  </ng-container>
+</ng-template>

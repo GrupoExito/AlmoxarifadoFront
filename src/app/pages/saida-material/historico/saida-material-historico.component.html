@@ -1,0 +1,106 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8 mt-3">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Adicionar Observação</span>
+    </h3>
+  </div>
+  <!-- end::Header -->
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <form class="card" [formGroup]="historicoForm">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <div class="row mt-2">
+                  <div class="form-group">
+                    <label>Observação</label>
+                    <textarea
+                      class="form-control"
+                      id="floatingTextarea3"
+                      formControlName="historico"
+                      name="historico"
+                      cols="30"
+                      rows="2"
+                    ></textarea>
+                  </div>
+                </div>
+                <div
+                  *ngIf="
+                    historicoForm.get('historico')?.touched && historicoForm.get('historico')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 text-end align-self-end mb-3">
+          <button class="btn btn-success" [disabled]="!historicoForm.valid" (click)="criar()">
+            Adicionar Observação
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>
+<div class="card mb-5 mb-xxl-8">
+  <!-- begin::Header-->
+  <div class="card-header align-items-center border-0">
+    <h3 class="card-title align-items-start flex-column mt-4">
+      <span class="fw-bolder mb-2 text-dark">Histórico</span>
+      <span class="text-body fw-bold fs-7" *ngIf="saidaMaterialHistorico"
+        >{{ saidaMaterialHistorico.length }} Registros</span
+      >
+    </h3>
+  </div>
+  <div class="card-body pt-5" *ngIf="saidaMaterialHistorico">
+    <div class="timeline-label">
+      <!-- begin::Item-->
+      <div class="timeline-item" *ngFor="let saidaMaterialHistoricos of saidaMaterialHistorico">
+        <!-- begin::Label-->
+
+        <div class="timeline-label fw-bolder text-gray-800 fs-6">
+          {{ saidaMaterialHistoricos.data_historico | date : 'dd/MM/yyyy' }} <br />
+          {{ saidaMaterialHistoricos.data_historico | date : 'HH:mm' }}
+        </div>
+
+        <!-- end::Label-->
+        <!-- begin::Badge-->
+        <div class="timeline-badge">
+          <i class="fa fa-genderless text-success fs-1"></i>
+        </div>
+        <!-- end::Badge-->
+        <!-- begin::Text-->
+
+        <div class="fw-mormal timeline-content text-dark ps-3">
+          <!-- <div>{{ sdHistorico.num_dias_duracao ? sdHistorico.num_dias_duracao + ' Dia(s)' : '' }}</div> -->
+          <span class="badge rounded-pill bg-primary">
+            {{
+              saidaMaterialHistoricos.historico !== 'Abertura de SD' ? saidaMaterialHistoricos.id : 'Início do Processo'
+            }}
+          </span>
+          <span class="ms-2 badge rounded-pill bg-primary">
+            {{ saidaMaterialHistoricos.status_descricao }}
+          </span>
+          <span class="ms-2 badge rounded-pill bg-secondary">
+            {{ saidaMaterialHistoricos.nome }}
+          </span>
+          <br />
+          <span *ngIf="saidaMaterialHistoricos.historico" class="badge rounded-pill bg-info">
+            {{ saidaMaterialHistoricos.historico }}
+          </span>
+        </div>
+      </div>
+      <!-- end::Item-->
+    </div>
+    <!-- end::Timeline-->
+    <!-- end::Timeline-->
+  </div>
+  <!-- end: Card Body-->
+</div>

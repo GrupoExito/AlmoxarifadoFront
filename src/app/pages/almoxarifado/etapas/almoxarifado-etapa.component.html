@@ -1,0 +1,106 @@
+<div class="card px-0">
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Almoxarifado</span>
+    </h3>
+    <div class="btn-toolbar" role="toolbar">
+      <div
+        class="card-toolbar"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        data-bs-trigger="hover"
+        title="Clique para adicionar novo almoxarifado"
+      >
+        <a
+          href="javascript:void(0)"
+          routerLink="/almoxarifado/criar"
+          class="btn btn-sm btn-light-primary align-items-end me-4"
+        >
+          <i class="fa-solid fa-plus"></i>
+          Nova Entrada
+        </a>
+        <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
+        title="Clique para voltar">
+        <a
+          href="javascript:void(0)"
+          routerLink="/almoxarifado/listar"
+          class="btn btn-sm btn-light-primary align-items-end"
+        >
+          <span [inlineSVG]="'./assets/media/icons/duotune/general/gen058.svg'" class="svg-icon svg-icon-3"></span>
+          Voltar
+        </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card px-0">
+    <div class="mt-2">
+      <div class="justify-items mx-2 d-flex">
+        <div class="justify-items mt-0 nav nav-pills d-flex nav-pills-custom mb-0">
+          <div class="nav-item mx-4 mb-3 me-0" role="presentation">
+            <a
+              [ngClass]="{ disabled: !this.id }"
+              class="nav-link nav-link-border-solid btn btn-outline btn-flex flex-column flex-stack pt-9 pb-7 page-bg active"
+              data-bs-toggle="pill"
+              routerLink="cadastro"
+              routerLinkActive="navAtiva"
+              style="width: 90px; height: 130px"
+              role="tab"
+              tabindex="-1"
+            >
+              <div class="nav-icon mb-3">
+                <img src="/assets/media/icons/documentos.png" class="icon-config" alt="" />
+              </div>
+              <div class="">
+                <span class="text-gray-800 fw-bold fs-5 d-block">Dados Almoxarifado</span>
+                <!-- <span class="text-gray-600 fw-semibold fs-3">{{
+                  eMQuantidade ? eMQuantidade.quantidade_itens : '-'
+                }}</span> -->
+              </div>
+            </a>
+          </div>
+
+          <div class="nav-item mx-4 mb-3 me-0" role="presentation">
+            <a
+              [ngClass]="{ disabled: !this.id }"
+              class="nav-link nav-link-border-solid btn btn-outline btn-flex flex-column flex-stack pt-9 pb-7 page-bg active"
+              data-bs-toggle="pill"
+              routerLink="itens"
+              routerLinkActive="navAtiva"
+              style="width: 90px; height: 130px"
+              aria-selected="false"
+              role="tab"
+              tabindex="-1"
+            >
+              <div class="nav-icon mb-3">
+                <img src="/assets/media/icons/items.png" class="icon-config" alt="" />
+              </div>
+
+              <div class="">
+                <span class="text-gray-800 fw-bold fs-5 d-block">Itens no estoque</span>
+                <!-- <span class="text-gray-600 fw-semibold fs-3">{{
+                  }}</span> -->
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 
+ Modal Impressão 
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Impressão do almoxarifado</h4>
+    <button type="button" class="btn-close" aria-label="Close"></button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group mb-0">
+      <label>Impressões</label>
+      <select class="form-select">
+        <option value="0" aria-placeholder="Impressões">Selecione</option>
+      </select>
+    </div>
+  </div>
+</ng-template> -->

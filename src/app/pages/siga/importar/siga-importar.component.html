@@ -1,0 +1,61 @@
+<div class="card mt-3 mb-3">
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Siga - Importação via TXT</span>
+    </h3>
+  </div>
+  <form [formGroup]="importarForm">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label class="form-label">Cliente*</label>
+            <select class="form-select form-select-lg" formControlName="cliente">
+              <option value="">Selecione Cliente</option>
+              <option *ngFor="let cliente of clientes" value="{{ cliente.db_cliente }}">{{ cliente.nome }}</option>
+            </select>
+          </div>
+          <div
+            *ngIf="importarForm.get('cliente')?.touched && importarForm.get('cliente')?.hasError('required')"
+            class="text text-danger"
+          >
+            Campo obrigatório!
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label class="form-label">Importando qual módulo*</label>
+            <select class="form-select form-select-lg" formControlName="funcao_importacao">
+              <option value="">Selecione o que está importando</option>
+              <option value="orgao">Órgão</option>
+              <option value="unidadeorcamentaria">Unidade Orçamentária</option>
+              <option value="programa">Programa</option>
+              <option value="fonterecurso">Fonte de Recurso</option>
+              <option value="projetoatividade">Projeto Atividade</option>
+              <option value="dotacao">Dotação Orçamentária</option>
+            </select>
+          </div>
+          <div
+            *ngIf="
+              importarForm.get('funcao_importacao')?.touched &&
+              importarForm.get('funcao_importacao')?.hasError('required')
+            "
+            class="text text-danger"
+          >
+            Campo obrigatório!
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label">Selecione o Arquivo*</label>
+            <input class="form-control" type="file" id="formFile" (change)="selecionarArquivo($event)" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="card-footer text-right">
+    <button (click)="exportar()" class="btn btn-success btn-lg">Exportar</button>
+  </div>
+</div>

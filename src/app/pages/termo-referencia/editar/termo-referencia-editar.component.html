@@ -1,0 +1,130 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8 mt-3">
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Processo</span>
+    </h3>
+  </div>
+  <form [formGroup]="editarForm">
+    <div class="card-body py-0">
+      <div class="row mt-2">
+        <div class="col-md-2">
+          <div class="form-group mb-0">
+            <label>Exercício*</label>
+            <select class="form-select" formControlName="gexercicio_id">
+              <option value="">Ano/Exercício</option>
+              <option *ngFor="let exercicio of exercicios" value="{{ exercicio.id }}" aria-placeholder="Ano/Exercício">
+                {{ exercicio.id }}
+              </option>
+            </select>
+            <div
+              *ngIf="editarForm.get('gexercicio_id')?.touched && editarForm.get('gexercicio_id')?.hasError('required')"
+              class="text text-danger"
+            >
+              Campo obrigatório!
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group mb-0">
+            <label>Setor*</label>
+            <select class="form-select" formControlName="flsetor_id">
+              <option value="">Setor</option>
+              <option *ngFor="let setor of setores" value="{{ setor.id }}" aria-placeholder="Setor">
+                {{ setor.nome }}
+              </option>
+            </select>
+            <div
+              *ngIf="editarForm.get('flsetor_id')?.touched && editarForm.get('flsetor_id')?.hasError('required')"
+              class="text text-danger"
+            >
+              Campo obrigatório!
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group mb-0">
+            <label>Modelo*</label>
+            <select class="form-select" formControlName="modelo_tr_id">
+              <option value="">Modelo</option>
+              <option *ngFor="let modelos of modeloDocumentos" value="{{ modelos.id }}" aria-placeholder="Modelos">
+                {{ modelos.descricao }}
+              </option>
+            </select>
+            <div
+              *ngIf="editarForm.get('modelo_tr_id')?.touched && editarForm.get('modelo_tr_id')?.hasError('required')"
+              class="text text-danger"
+            >
+              Campo obrigatório!
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="form-group mb-0">
+            <label>Data*</label>
+            <input class="form-control" type="date" formControlName="data_tr" />
+            <div
+              *ngIf="editarForm.get('data_tr')?.touched && editarForm.get('data_tr')?.hasError('required')"
+              class="text text-danger mt-3"
+            >
+              Campo obrigatório!
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="form-group mb-0">
+          <label>Objeto</label>
+          <span
+            class="tooltip-toggle-right"
+            aria-label="Descreva o objeto do 'Termo Referência'. Escreva de forma clara e sucinta."
+            tabindex="1"
+          >
+            <i class="px-1 py-2 fa fa-lg fa-solid fa-circle-question"> </i>
+          </span>
+          <textarea
+            class="form-control"
+            id="floatingTextarea3"
+            style="height: 100px"
+            formControlName="objeto"
+            name="objeto"
+            cols="30"
+            rows="4"
+          >
+          </textarea>
+          <div
+            *ngIf="editarForm.get('objeto')?.touched && editarForm.get('objeto')?.hasError('required')"
+            class="text text-danger"
+          >
+            Campo obrigatório!
+          </div>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="form-group mb-0">
+          <label>Justificativa*</label>
+          <textarea
+            class="form-control"
+            id="floatingTextarea3"
+            style="height: 100px"
+            formControlName="justificativa"
+            name="justificativa"
+            cols="30"
+            rows="4"
+          >
+          </textarea>
+          <div
+            *ngIf="editarForm.get('justificativa')?.touched && editarForm.get('justificativa')?.hasError('required')"
+            class="text text-danger"
+          >
+            Campo obrigatório!
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer text-right">
+      <button class="btn btn-success" [disabled]="!editarForm.valid" (click)="atualizar()">
+        Atualizar Termo Referencia
+      </button>
+    </div>
+  </form>
+</div>

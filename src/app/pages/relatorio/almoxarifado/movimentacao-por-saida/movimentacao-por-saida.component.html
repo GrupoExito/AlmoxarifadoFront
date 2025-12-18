@@ -1,0 +1,116 @@
+<div class="card mt-3 mb-3">
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Filtros</span>
+    </h3>
+  </div>
+  <div class="card mt-3">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-2">
+          <div class="form-group mb-0">
+            <label>Data Inicial</label>
+            <input class="form-control" type="date" [(ngModel)]="dataInicialSelecionada" />
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="form-group mb-0">
+            <label>Data Final</label>
+            <input class="form-control" type="date" [(ngModel)]="dataFinalSelecionada" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Secretaria</label>
+            <select class="form-select" [(ngModel)]="optionSecretariaFundo">
+              <option value="0">Todos</option>
+              <option value="1">Apenas as Selecionadas</option>
+              <option value="2">Exceto as Selecionadas</option>
+            </select>
+          </div>
+          <div *ngIf="optionSecretariaFundo !== '0'">
+            <label class="form-group">Secretarias</label>
+            <ng-select
+              class="ngSelectDropdown"
+              [items]="secretariaFundos"
+              bindLabel="descricao"
+              bindValue="id"
+              [(ngModel)]="selectedSecretariaFundo"
+              [multiple]="true"
+            >
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Almoxarifado</label>
+            <select class="form-select" [(ngModel)]="optionAlmoxarifado">
+              <option value="0">Todos</option>
+              <option value="1">Apenas os Selecionadas</option>
+              <option value="2">Exceto os Selecionadas</option>
+            </select>
+          </div>
+          <div *ngIf="optionAlmoxarifado !== '0'">
+            <label class="form-group">Almoxarifados</label>
+            <ng-select
+              class="ngSelectDropdown"
+              [items]="almoxarifados"
+              bindLabel="descricao"
+              bindValue="id"
+              [(ngModel)]="selectedAlmoxarifado"
+              [multiple]="true"
+            >
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Setores</label>
+            <select class="form-select" [(ngModel)]="optionSetor"> 
+              <option value="0">Todos</option>
+              <option value="1">Apenas os Selecionadas</option>
+              <option value="2">Exceto os Selecionadas</option>
+            </select>
+          </div>
+          <div *ngIf="optionSetor !== '0'">
+            <label class="form-group">Setores</label>
+            <ng-select
+              class="ngSelectDropdown"
+              [items]="setores"
+              bindLabel="nome"
+              bindValue="id"
+              [(ngModel)]="selectedSetor"
+              [multiple]="true"
+            >
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Tipo de Produto</label>
+            <select class="form-select" [(ngModel)]="optionTipoProduto"> 
+              <option value="0">Todos</option>
+              <option value="1">Apenas os Selecionados</option>
+              <option value="2">Exceto os Selecionados</option>
+            </select>
+          </div>
+          <div *ngIf="optionTipoProduto !== '0'">
+            <label class="form-group">Tipo de Produto</label>
+            <ng-select
+              class="ngSelectDropdown"
+              [items]="tiposProduto"
+              bindLabel="descricao"
+              bindValue="id"
+              [(ngModel)]="selectedTipoProdutos"
+              [multiple]="true"
+            >
+            </ng-select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer text-right">
+    <button class="btn btn-success" (click)="filtrar()">Filtrar</button>
+  </div>
+</div>

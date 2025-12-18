@@ -1,0 +1,114 @@
+<div id="adicionarItem"></div>
+
+<div class="card card-xxl-stretch mb-5 mb-xxl-8 mt-3">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Itens estoque</span>
+    </h3>
+  </div>
+  <!-- end::Header -->
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="card-body py-3">
+        <!-- begin::Table container -->
+        <div class="table-responsive">
+          <!-- begin::Table -->
+          <table
+            datatable
+            [dtOptions]="dtOptions"
+            [dtTrigger]="dtTrigger"
+            class="table table-hover table-row-dashed table-row-gray-300 align-middle gs-0 gy-0"
+          >
+            <!-- begin::Table head -->
+            <thead>
+              <tr class="fw-bolder text-dark fs-5">
+                <th class="min-w-20px">Seq</th>
+                <th class="min-w-20px">Código</th>
+                <th class="min-w-240px">Descrição</th>
+                <th class="min-w-20px">Quantidade</th>
+                <th class="min-w-20px text-center">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of itens | sortBy: 'asc':'item_descricao'; trackBy: trackItem; let i = index">
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="d-flex justify-content-start flex-column">
+                      <span class="text-dark fw-normal fs-5"> {{ i + 1 }} </span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="d-flex justify-content-start flex-column">
+                      <span class="text-dark fw-normal fs-5"> {{ item.produto_servico_id }} </span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="d-flex justify-content-start flex-column">
+                      <span class="text-dark fw-normal fs-5"> {{ item.descricao_almoxarifado }} </span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="d-flex justify-content-start flex-column">
+                      <span class="text-dark fw-normal fs-5"> {{ item.saldo }} </span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <button
+                    class="ms-2 btn btn-primary btn-sm rounded-pill"
+                    (click)="exibirModal(modalMovimentacao, item.produto_servico_id)"
+                  >
+                    Movimentação
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+            <!-- end::Table body -->
+          </table>
+          <!-- end::Table -->
+        </div>
+        <!-- end::Table container -->
+      </div>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>
+
+<ng-template #modalMovimentacao let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Movimentações</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Tipo</th>
+          <th>Descrição</th>
+          <th>Item</th>
+          <th>Valor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of itensModal">
+          <td>
+            <span *ngIf="item.movimentacao === 'saida'" class="badge bg-danger">Saída</span>
+            <span *ngIf="item.movimentacao === 'entrada'" class="badge bg-success">Entrada</span>
+          </td>
+          <td>{{ item.produto_servico_descricao }}</td>
+          <td>{{ item.quantidade }}</td>
+          <td>{{ item.valor }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer"></div>
+</ng-template>

@@ -1,0 +1,30 @@
+export interface PlanejamentoContratacao {
+  id?: number;
+  gsecretaria_fundo_id: number;
+  gexercicio_id: number;
+  data_criacao?: string;
+  gsetor_id?: number;
+  gpessoa_responsavel_id: number;
+  justificativa_necessidade: string;
+  descricao_objeto: string;
+  valor_total_estimado?: string;
+  gusuario_criacao_id: number;
+  ativo?: boolean;
+  gusuario_exclusao_id?: number;
+  data_exclusao?: string;
+  tipo_demanda_id?: number;
+  grau_prioridade: number;
+  data_prevista: string;
+  vinculacao_dependencia: string;
+  indicacao_correlacao: string;
+  responsavel_planejamento_id?: number;
+  nome_setor?: string;
+  descricao_secretaria?: string;
+  nome_responsavel?: string;
+  flsetor_id?: number;
+  flstatus_id?: number;
+  pca_unificado_id?: number;
+  categoria_item_PNCP?: number;
+  data_execucao: string;
+  modalidade_contratacao: number;
+}

@@ -1,0 +1,326 @@
+<div class="card px-0">
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Termo Referência</span>
+    </h3>
+    <div class="btn-toolbar" role="toolbar">
+      <div
+        class="card-toolbar me-4"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        data-bs-trigger="hover"
+        title="Clique para adicionar novo TR"
+      >
+        <a
+          href="javascript:void(0)"
+          routerLink="/termoreferencial/cadastro"
+          class="btn btn-sm btn-light-primary align-items-end"
+        >
+          <i class="fa-solid fa-plus"></i>
+          Novo TR
+        </a>
+      </div>
+      <div
+        class="card-toolbar"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        data-bs-trigger="hover"
+        title="Clique para voltar"
+      >
+        <a
+          href="javascript:void(0)"
+          routerLink="/termoreferencial/listar"
+          class="btn btn-sm btn-light-primary align-items-end"
+        >
+          <span [inlineSVG]="'./assets/media/icons/duotune/general/gen058.svg'" class="svg-icon svg-icon-3"></span>
+          Voltar
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="card px-0">
+    <div class="mt-2">
+      <div class="justify-items mx-2 d-flex">
+        <div class="justify-items mt-0 nav nav-pills d-flex nav-pills-custom mb-0">
+          <div *ngIf="termoReferencia" class="justify-items mt-0 nav nav-pills d-flex nav-pills-custom mb-0">
+            <div class="card text-dark header-informations mb-3 mx-1 px-0">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <b>Número: {{ termoReferencia.id }}</b>
+                </li>
+                <li class="list-group-item">
+                  <b>Exercício: {{ termoReferencia.gexercicio_id }}</b>
+                </li>
+                <!-- <li class="list-group-item">
+                  <b>Status: {{ status }}</b>
+                </li> -->
+              </ul>
+            </div>
+          </div>
+          <div class="nav-item mx-4 mb-3 me-0" role="presentation">
+            <a
+              class="nav-link nav-link-border-solid btn btn-outline btn-flex flex-column flex-stack pt-9 pb-7 page-bg active"
+              data-bs-toggle="pill"
+              routerLink="cadastro"
+              routerLinkActive="navAtiva"
+              style="width: 90px; height: 130px"
+              role="tab"
+              tabindex="-1"
+            >
+              <div class="nav-icon mb-3">
+                <img src="/assets/media/icons/documentos.png" class="icon-config" alt="" />
+              </div>
+
+              <div class="">
+                <span class="text-gray-800 fw-bold fs-5 d-block">Termo Referência</span>
+                <!-- <span class="text-gray-600 fw-semibold fs-4">{{ '-' }}</span> -->
+              </div>
+            </a>
+          </div>
+          <div class="nav-item mx-4 mb-3 me-0" role="presentation">
+            <a
+              [ngClass]="{ disabled: !this.id }"
+              class="nav-link nav-link-border-solid btn btn-outline btn-flex flex-column flex-stack pt-9 pb-7 page-bg active"
+              data-bs-toggle="pill"
+              routerLink="pad"
+              routerLinkActive="navAtiva"
+              style="width: 90px; height: 130px"
+              aria-selected="false"
+              role="tab"
+              tabindex="-1"
+            >
+              <div class="nav-icon mb-3">
+                <img src="/assets/media/icons/despesas.png" class="icon-config" alt="" />
+              </div>
+
+              <div class="">
+                <span class="text-gray-800 fw-bold fs-5 d-block">Processo Adm</span>
+                <!-- <span class="text-gray-600 fw-semibold fs-3">{{
+                  trQuantidade ? trQuantidade.quantidade_sds : '-'
+                }}</span> -->
+              </div>
+            </a>
+          </div>
+          <div class="nav-item mx-4 mb-3 me-0" role="presentation">
+            <a
+              [ngClass]="{ disabled: !this.id }"
+              class="nav-link nav-link-border-solid btn btn-outline btn-flex flex-column flex-stack pt-6 pb-7 page-bg active"
+              data-bs-toggle="pill"
+              routerLink="precoreferencial"
+              routerLinkActive="navAtiva"
+              style="width: 90px; height: 130px"
+              role="tab"
+              tabindex="-1"
+            >
+              <div class="nav-icon">
+                <img src="/assets/media/icons/precoreferencial.png" class="icon-config" alt="" />
+              </div>
+              <div class="">
+                <span class="text-gray-800 fw-bold fs-5 d-block">Preço</span>
+                <span class="text-gray-800 fw-bold fs-5 d-block">Referencial</span>
+              </div>
+            </a>
+          </div>
+          <div class="nav-item mx-4 mb-3 me-0" role="presentation">
+            <a
+              [ngClass]="{ disabled: !this.id }"
+              class="nav-link nav-link-border-solid btn btn-outline btn-flex flex-column flex-stack pt-9 pb-7 page-bg active"
+              data-bs-toggle="pill"
+              routerLink="modelodocumento"
+              routerLinkActive="navAtiva"
+              style="width: 90px; height: 130px"
+              aria-selected="false"
+              role="tab"
+              tabindex="-1"
+            >
+              <div class="nav-icon mb-3">
+                <img src="/assets/media/icons/documentos.png" class="icon-config" alt="" />
+              </div>
+
+              <div class="">
+                <span class="text-gray-800 fw-bold fs-5 d-block">Modelo de Documento</span>
+              </div>
+            </a>
+          </div>
+
+          <div class="nav-item mx-4 mb-3 me-0" role="presentation">
+            <a
+              [ngClass]="{ disabled: !this.id }"
+              class="nav-link nav-link-border-solid btn btn-outline btn-flex flex-column flex-stack pt-9 pb-7 page-bg active"
+              data-bs-toggle="pill"
+              routerLink="anexos"
+              routerLinkActive="navAtiva"
+              style="width: 90px; height: 130px"
+              aria-selected="false"
+              role="tab"
+              tabindex="-1"
+            >
+              <div class="nav-icon mb-3">
+                <img src="/assets/media/icons/folders.png" class="icon-config" alt="" />
+              </div>
+
+              <div class="">
+                <span class="text-gray-800 fw-bold fs-5 d-block">Anexos</span>
+                <span class="text-gray-600 fw-semibold fs-3">{{
+                  trQuantidade ? trQuantidade.quantidade_anexos : '-'
+                }}</span>
+              </div>
+            </a>
+          </div>
+
+          <div class="nav-item mx-4 mb-3 me-0" role="presentation">
+            <a
+              [ngClass]="{ disabled: !this.id }"
+              class="nav-link nav-link-border-solid btn btn-outline btn-flex flex-column flex-stack pt-9 pb-7 page-bg active"
+              data-bs-toggle="pill"
+              routerLink="historico"
+              routerLinkActive="navAtiva"
+              style="width: 90px; height: 130px"
+              aria-selected="false"
+              role="tab"
+              tabindex="-1"
+            >
+              <div class="nav-icon mb-3">
+                <img src="/assets/media/icons/clock.png" class="icon-config" alt="" />
+              </div>
+
+              <div class="">
+                <span class="text-gray-800 fw-bold fs-5 d-block">Histórico</span>
+                <span class="text-gray-600 fw-semibold fs-3">{{
+                  trQuantidade ? trQuantidade.quantidade_historico : '-'
+                }}</span>
+              </div>
+            </a>
+          </div>
+
+          <div class="nav-item mx-4 mb-3 me-0" role="presentation">
+            <a
+              [ngClass]="{ disabled: !this.id }"
+              class="nav-link nav-link-border-solid btn btn-outline btn-flex flex-column flex-stack pt-9 pb-7 page-bg active"
+              data-bs-toggle="pill"
+              (click)="open(enviartr)"
+              style="width: 90px; height: 130px"
+              aria-selected="false"
+              role="tab"
+              tabindex="-1"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+            >
+              <div class="nav-icon mb-3">
+                <img src="/assets/media/icons/sending.png" class="icon-config" alt="" />
+              </div>
+
+              <div class="">
+                <span class="text-gray-800 fw-bold fs-5 d-block">Enviar TR</span>
+              </div>
+            </a>
+          </div>
+          <div class="nav-item mx-4 mb-3 me-0" role="presentation">
+            <a
+              [ngClass]="{ disabled: !this.id }"
+              class="nav-link nav-link-border-solid btn btn-outline btn-flex flex-column flex-stack pt-9 pb-7 page-bg active"
+              data-bs-toggle="pill"
+              (click)="open(content)"
+              style="width: 90px; height: 130px"
+              aria-selected="false"
+              role="tab"
+              tabindex="-1"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+            >
+              <div class="nav-icon mb-3">
+                <img src="/assets/media/icons/printer.png" class="icon-config" alt="" />
+              </div>
+
+              <div class="">
+                <span class="text-gray-800 fw-bold fs-5 d-block">Impressão</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Impressão -->
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Exportar Documentos do Tr</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group mb-0">
+      <label>Impressões</label>
+      <select class="form-select" [(ngModel)]="selectedImpressao">
+        <option value="0" aria-placeholder="Impressões">Selecione</option>
+        <option value="1" aria-placeholder="Impressões">Termo de Referência</option>
+        <option *ngIf="impressoInformacaoDotacao" value="2" aria-placeholder="Impressões">Informação de Dotação</option>
+      </select>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="imprimir()">Imprimir</button>
+  </div>
+</ng-template>
+
+<!-- Modal Envio de SD-->
+<ng-template #enviartr let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Alterar Status/Setor</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <label class="form-label">Deseja alterar status?</label>
+    <div class="form-group mt-1">
+      <div class="form-check form-check-inline">
+        <input [(ngModel)]="alterarStatus" class="form-check-input-sm" type="radio" name="sim" [value]="1" />
+        <label class="form-check-label fs-7 ml-1" for="sim">Sim</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input [(ngModel)]="alterarStatus" class="form-check-input-sm" type="radio" name="nao" [value]="0" />
+        <label class="form-check-label fs-7 ml-1" for="nao">Não</label>
+      </div>
+    </div>
+
+    <div class="form-group mb-0" *ngIf="alterarStatus">
+      <label>Status</label>
+      <select [disabled]="statusExterno" class="form-select" [(ngModel)]="selectedStatusTermoReferencia">
+        <option value="0" aria-placeholder="Status">Selecione</option>
+        <option *ngFor="let status of statusFluxos" value="{{ status.id }}" aria-placeholder="Status">
+          {{ status.descricao }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group mb-0">
+      <label>Selecionar Setor</label>
+      <select class="form-select" [(ngModel)]="selectedSetor">
+        <option value="0" aria-placeholder="Setores">Selecione</option>
+        <option *ngFor="let setor of setores" value="{{ setor.id }}" aria-placeholder="Setores">
+          {{ setor.nome }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Observação</label>
+      <textarea class="form-control" name="historico" cols="30" rows="2" [(ngModel)]="observacao"></textarea>
+    </div>
+
+    <label class="form-label">Gerar pendência?</label>
+    <div class="form-group mt-1">
+      <div class="form-check form-check-inline">
+        <input [(ngModel)]="gerarPendencia" class="form-check-input-sm" type="radio" name="pendenciasim" [value]="1" />
+        <label class="form-check-label fs-7 ml-1" for="pendenciasim">Sim</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input [(ngModel)]="gerarPendencia" class="form-check-input-sm" type="radio" name="pendencianao" [value]="0" />
+        <label class="form-check-label fs-7 ml-1" for="pendencianao">Não</label>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="enviarTr()">Salvar</button>
+  </div>
+</ng-template>

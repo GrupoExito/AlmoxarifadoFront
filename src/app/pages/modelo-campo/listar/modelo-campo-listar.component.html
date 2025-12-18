@@ -1,0 +1,104 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-5">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Modelos</span>
+    </h3>
+    <div
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Clique para adicionar novo modelo"
+    >
+      <a href="javascript:void(0)" routerLink="/modelocampo/criar" class="btn btn-sm btn-light-primary align-items-end">
+        <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>
+        Novo Modelo
+      </a>
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- begin::Body -->
+  <div class="card-body py-3">
+    <!-- begin::Table container -->
+    <div class="table-responsive">
+      <!-- begin::Table -->
+      <table
+        datatable
+        [dtOptions]="dtOptions"
+        [dtTrigger]="dtTrigger"
+        class="table table-hover table-row-dashed table-row-gray-300 align-middle gs-0 gy-1"
+      >
+        <!-- begin::Table head -->
+        <thead>
+          <tr class="fw-bolder text-dark fs-5">
+            <th class="min-w-120px">Código</th>
+            <th class="min-w-140px">Tipo</th>
+            <th class="min-w-140px">Título</th>
+            <th class="min-w-140px">Nome da tabela</th>
+            <th class="min-w-140px">Campo resultado</th>
+            <th class="min-w-140px">Campo filtro</th>
+            <th class="min-w-100px text-end">Ações</th>
+          </tr>
+        </thead>
+        <!-- end::Table head -->
+        <!-- begin::Table body -->
+        <tbody>
+          <tr *ngFor="let modeloCampo of modeloCampo; trackBy: trackItem">
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5 mx-3"> {{ modeloCampo.id }} </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span href="#" class="text-dark fw-normal d-block fs-5">{{ modeloCampo.tipo }}</span>
+            </td>
+            <td class="text-content-start">
+              <div class="d-flex flex-column w-100 me-2">
+                <span href="#" class="text-dark fw-normal d-block fs-5"> {{ modeloCampo.titulo }} </span>
+              </div>
+            </td>
+            <td class="text-content-start">
+              <div class="d-flex flex-column w-100 me-2">
+                <span href="#" class="text-dark fw-normal d-block fs-5"> {{ modeloCampo.nome_tabela_view }} </span>
+              </div>
+            </td>
+            <td class="text-content-start">
+              <div class="d-flex flex-column w-100 me-2">
+                <span href="#" class="text-dark fw-normal d-block fs-5"> {{ modeloCampo.campo_resultado }} </span>
+              </div>
+            </td>
+            <td class="text-content-start">
+              <div class="d-flex flex-column w-100 me-2">
+                <span href="#" class="text-dark fw-normal d-block fs-5"> {{ modeloCampo.campo_filtro }} </span>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex justify-content-end flex-shrink-0">
+                <button
+                  title="Editar"
+                  [routerLink]="['/modelocampo/editar', modeloCampo.id]"
+                  class="btn btn-icon btn-active-color-warning btn-md me-1"
+                >
+                  <span [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'" class="svg-icon svg-icon-3"></span>
+                </button>
+                <button (click)="deletar(modeloCampo.id)" href="#" class="btn btn-icon btn-active-color-danger btn-md">
+                  <span
+                    [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
+                    class="svg-icon svg-icon-3"
+                  ></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+        <!-- end::Table body -->
+      </table>
+      <!-- end::Table -->
+    </div>
+    <!-- end::Table container -->
+  </div>
+  <!-- begin::Body -->
+</div>

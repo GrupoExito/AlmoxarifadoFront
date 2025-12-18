@@ -1,0 +1,299 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2 d-flex">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Criar Entrada Material</span>
+    </h3>
+    <div
+      *ngIf="entradaMaterial?.status_id === 1"
+      class="card-toolbar ms-auto"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Confirmar a entrada de material"
+    >
+      <a
+        *appPermission="['Almoxarifado', 'confirmar_entrada']"
+        (click)="confimarEntrada()"
+        class="btn btn-sm btn-light-success align-items-end me-4"
+      >
+        <span [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'" class="svg-icon svg-icon-3"></span>
+        Confirmar
+      </a>
+    </div>
+    <div
+      *ngIf="entradaMaterial?.status_id === 1 && entradaMaterial?.tipo_entrada !== 2
+      "
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Cancelar a entrada de material"
+    >
+      <a
+        *appPermission="['Almoxarifado', 'cancelar_entrada']"
+        (click)="cancelar()"
+        class="btn btn-sm btn-light-danger align-items-end me-4"
+      >
+        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'" class="svg-icon svg-icon-3"></span>
+        Excluir
+      </a>
+    </div>
+
+    <div
+      *ngIf="entradaMaterial?.status_id === 12"
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Cancelar a entrada de material"
+    >
+      <a
+        *appPermission="['Almoxarifado', 'reabrir_entrada']"
+        (click)="reabrirEntrada()"
+        class="btn btn-sm btn-light-warning align-items-end me-4"
+      >
+        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'" class="svg-icon svg-icon-3"></span>
+        Reabrir
+      </a>
+    </div>
+
+    <div
+      *ngIf="entradaMaterial?.status_id === 1"
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Clique para adicionar nova entrada material"
+    >
+      <a
+        href="javascript:void(0)"
+        [routerLink]="['/entradamaterial/view', this.id, 'editar']"
+        class="btn btn-sm btn-light-primary align-items-end"
+      >
+        <span [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'" class="svg-icon svg-icon-3"></span>
+        Editar
+      </a>
+    </div>
+    <!-- fluxo status:
+        Confirmado = aberto
+        Cancelar = aberto, confirmado
+        Reabrir = cancelado
+        Editar = aberto-->
+  </div>
+
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <form class="card" [formGroup]="criarEntradaMaterialForm">
+        <div class="card-body">
+          <div class="row mt-2">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="form-group">Almoxarifado</label>
+                <ng-select
+                  class="ngSelectDropdown"
+                  [items]="almoxarifados"
+                  bindLabel="descricao"
+                  bindValue="id"
+                  formControlName="almoxarifado_id"
+                >
+                </ng-select>
+
+                <div
+                  *ngIf="
+                    criarEntradaMaterialForm.get('almoxarifado_id')?.touched &&
+                    criarEntradaMaterialForm.get('almoxarifado_id')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="form-group">Secretaria</label>
+                <ng-select
+                  class="ngSelectDropdown"
+                  [items]="secretarias"
+                  bindLabel="descricao"
+                  bindValue="id"
+                  formControlName="secretaria_fundo_id"
+                >
+                </ng-select>
+                <div
+                  *ngIf="
+                    criarEntradaMaterialForm.get('secretaria_fundo_id')?.touched &&
+                    criarEntradaMaterialForm.get('secretaria_fundo_id')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="form-group">Fornecedor</label>
+                <ng-select
+                  class="ngSelectDropdown"
+                  [items]="fornecedores"
+                  bindLabel="razao_social"
+                  bindValue="id"
+                  formControlName="fornecedor_id"
+                >
+                </ng-select>
+
+                <div
+                  *ngIf="
+                    criarEntradaMaterialForm.get('fornecedor_id')?.touched &&
+                    criarEntradaMaterialForm.get('fornecedor_id')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mb-2">Tipo* </label>
+                <select
+                  class="form-select"
+                  formControlName="tipo_entrada"
+                  aria-label="Tipo"
+                  (change)="onTipoEntradaChange()"
+                >
+                  <option [ngValue]="1">Compra</option>
+                  <option [ngValue]="2">Transferência</option>
+                  <option [ngValue]="3">Doação/Convênio</option>
+                  <option [ngValue]="4">Devolução</option>
+                  <option [ngValue]="5">Produção própria/Reaproveitamento</option>
+                  <option [ngValue]="6">Ajuste de inventário</option>
+                  <option [ngValue]="7">Empréstimo/Cessão/Comodato</option>
+                </select>
+                <div
+                  *ngIf="
+                    criarEntradaMaterialForm.get('tipo_entrada')?.touched &&
+                    criarEntradaMaterialForm.get('tipo_entrada')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group mb-0">
+                <label>Data da Entrada*</label>
+                <input class="form-control" type="date" formControlName="data_entrada" />
+                <div
+                  *ngIf="
+                    criarEntradaMaterialForm.get('data_entrada')?.touched &&
+                    criarEntradaMaterialForm.get('data_entrada')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label">Nota</label>
+                <input class="form-control" type="text" formControlName="nota" maxlength="10" />
+                <div
+                  *ngIf="
+                    criarEntradaMaterialForm.get('nota')?.touched &&
+                    criarEntradaMaterialForm.get('nota')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    criarEntradaMaterialForm.get('nota')?.touched &&
+                    criarEntradaMaterialForm.get('nota')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 10
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group mb-0">
+                <label>Data Nota</label>
+                <input class="form-control" type="date" formControlName="data_nota" />
+                <div
+                  *ngIf="
+                    criarEntradaMaterialForm.get('data_nota')?.touched &&
+                    criarEntradaMaterialForm.get('data_nota')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label">Conta Contábil</label>
+                <input class="form-control" type="text" formControlName="conta_contabil" maxlength="30" />
+              </div>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div *ngIf="criarEntradaMaterialForm.get('tipo_entrada')?.value === 4" class="col-md-1">
+              <div class="form-group">
+                <div class="form-group">
+                  <label class="form-label">N° Saida</label>
+                  <input class="form-control" type="number" formControlName="saida_material_id" maxlength="6" />
+                </div>
+              </div>
+            </div>
+            <div *ngIf="criarEntradaMaterialForm.get('tipo_entrada')?.value === 1" class="col-md-4">
+              <div class="form-group">
+                <label class="form-group">Pedido de Compra</label>
+                <ng-select
+                  class="ngSelectDropdown mt-2"
+                  [items]="pedidoCompra"
+                  bindLabel="idAndObjeto"
+                  bindValue="id"
+                  formControlName="pedido_despesa_id"
+                >
+                </ng-select>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="row mt-2">
+              <div class="form-group mb-0">
+                <label>Observação</label>
+                <textarea
+                  class="form-control"
+                  id="floatingTextarea3"
+                  style="height: 100px"
+                  formControlName="observacao"
+                  name="Observacao"
+                  cols="30"
+                  rows="2"
+                >
+                </textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer text-right" *ngIf="!id">
+          <button type="button" class="btn btn-success" [disabled]="!criarEntradaMaterialForm.valid" (click)="criar()">
+            Cadastrar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>

@@ -1,0 +1,79 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Editar Banco</span>
+    </h3>
+    <div
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Clique para adicionar novo banco"
+    >
+      <a href="javascript:void(0)" routerLink="/banco/criar" class="btn btn-sm btn-light-primary align-items-end me-3">
+        <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>
+        Novo Banco
+      </a>
+      <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
+        title="Clique para voltar">
+      <a href="javascript:void(0)" routerLink="/banco" class="btn btn-sm btn-light-primary align-items-end">
+        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen058.svg'" class="svg-icon svg-icon-3"></span>
+        Voltar
+      </a>
+      </div>
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <form class="card" [formGroup]="editarBancoForm">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Número*</label>
+                <input class="form-control" type="text" formControlName="numero" maxlength="5" />
+                <div
+                  *ngIf="editarBancoForm.get('numero')?.touched && editarBancoForm.get('numero')?.hasError('required')"
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="editarBancoForm.get('numero')?.touched && editarBancoForm.get('numero')?.hasError('maxlength')"
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 5
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Nome do Banco*</label>
+                <input class="form-control" type="text" formControlName="nome" maxlength="80" />
+                <div
+                  *ngIf="editarBancoForm.get('nome')?.touched && editarBancoForm.get('nome')?.hasError('required')"
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="editarBancoForm.get('nome')?.touched && editarBancoForm.get('nome')?.hasError('maxlength')"
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 80
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer text-right">
+          <button class="btn btn-success" [disabled]="!editarBancoForm.valid" (click)="editar()">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>

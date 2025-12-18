@@ -1,0 +1,152 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Editar Solicitante </span>
+    </h3>
+    <div
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Clique para adicionar Solicitante"
+    >
+      <a
+        href="javascript:void(0)"
+        routerLink="/solicitante/criar"
+        class="btn btn-sm btn-light-primary align-items-end me-3"
+      >
+        <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>
+        Novo Solicitante
+      </a>
+      <div
+        class="card-toolbar"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        data-bs-trigger="hover"
+        title="Clique para voltar"
+      >
+        <a href="javascript:void(0)" routerLink="/solicitante" class="btn btn-sm btn-light-primary align-items-end">
+          <span [inlineSVG]="'./assets/media/icons/duotune/general/gen058.svg'" class="svg-icon svg-icon-3"></span>
+          Voltar
+        </a>
+      </div>
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <form class="card" [formGroup]="editarSolicitanteForm">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Nome</label>
+                <input class="form-control" type="text" formControlName="nome" />
+                <div
+                  *ngIf="
+                    editarSolicitanteForm.get('nome')?.touched &&
+                    editarSolicitanteForm.get('nome')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    editarSolicitanteForm.get('nome')?.touched &&
+                    editarSolicitanteForm.get('nome')?.hasError('maxlength')
+                  "
+                  class="text text-danger"
+                >
+                  Tamanho máximo: 50
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">CPF</label>
+                <input class="form-control" type="text" mask="000.000.000-00" formControlName="cpf" />
+                <div
+                  *ngIf="
+                    editarSolicitanteForm.get('cpf')?.touched && editarSolicitanteForm.get('cpf')?.hasError('maxlength')
+                  "
+                  class="text text-danger"
+                >
+                  Tamanho máximo: 15
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">RG</label>
+                <input class="form-control" type="text" formControlName="rg" />
+                <div
+                  *ngIf="
+                    editarSolicitanteForm.get('rg')?.touched && editarSolicitanteForm.get('rg')?.hasError('maxlength')
+                  "
+                  class="text text-danger"
+                >
+                  Tamanho máximo: 15
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Telefone</label>
+                <input class="form-control" type="text" mask="(00)00000-0000" formControlName="telefone" />
+                <div
+                  *ngIf="
+                    editarSolicitanteForm.get('telefone')?.touched &&
+                    editarSolicitanteForm.get('telefone')?.hasError('maxlength')
+                  "
+                  class="text text-danger"
+                >
+                  Tamanho máximo: 15
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3">
+              <button (click)="selecionarTodosSetores()" class="btn btn-sm btn-primary">
+                Selecionar Todos Setores
+              </button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-5">
+              <div class="form-group">
+                <label class="form-group">Setores*</label>
+                <ng-select
+                  class="ngSelectDropdown"
+                  [items]="setores"
+                  bindLabel="nome"
+                  bindValue="id"
+                  [(ngModel)]="selectedSetores"
+                  [multiple]="true"
+                  formControlName="setor"
+                >
+                </ng-select>
+                <div
+                  *ngIf="
+                    editarSolicitanteForm.get('setor')?.touched &&
+                    editarSolicitanteForm.get('setor')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer text-right">
+          <button class="btn btn-success" [disabled]="!editarSolicitanteForm.valid" (click)="editar()">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>

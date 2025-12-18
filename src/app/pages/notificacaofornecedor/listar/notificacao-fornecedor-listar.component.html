@@ -1,0 +1,81 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Notificação Fornecedor</span>
+    </h3>
+    <div
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Clique para adicionar nova Notificacao"
+    >
+      <a href="javascript:void(0)" routerLink="/notificacaofornecedor/criar" class="btn btn-sm btn-light-primary align-items-end">
+        <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>
+        Nova Notificação
+      </a>
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- begin::Body -->
+  <div class="card-body py-3">
+    <!-- begin::Table container -->
+    <div class="table-responsive">
+      <!-- begin::Table -->
+      <table
+        datatable
+        [dtOptions]="dtOptions"
+        [dtTrigger]="dtTrigger"
+        class="table table-hover table-row-dashed table-row-gray-300 align-middle gs-0 gy-0"
+      >
+        <!-- begin::Table head -->
+        <thead>
+          <tr class="fw-bolder text-dark fs-5">
+            <th class="min-w-10px">Id</th>
+            <th class="min-w-100px">Fornecedor</th>
+            <th class="min-w-100px">Data</th>
+            <th class="min-w-100px">Observação</th>
+            <th class="min-w-100px text-center">Ações</th>
+          </tr>
+        </thead>
+        <!-- end::Table head -->
+        <!-- begin::Table body -->
+        <tbody>
+          <tr *ngFor="let item of notificacaoFornecedores; trackBy: trackItem">
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5 mx-3"> {{ item.id }} </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span href="#" class="text-dark fw-normal d-block fs-5"> {{ item.fantasia }} </span>
+            </td>
+            <td>
+              <span href="#" class="text-dark fw-normal d-block fs-5"> {{ item.data_notificacao | date: 'dd/MM/yyyy' }} </span>
+            </td>
+            <td>
+              <span href="#" class="text-dark fw-normal d-block fs-5"> {{ item.observacao }} </span>
+            </td>
+            <td>
+              <div class="d-flex justify-content-end flex-shrink-0">
+                <button (click)="deletar(item.id)" href="#" class="btn btn-icon btn-active-color-danger btn-md">
+                  <span
+                    [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
+                    class="svg-icon svg-icon-3"
+                  ></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+        <!-- end::Table body -->
+      </table>
+      <!-- end::Table -->
+    </div>
+    <!-- end::Table container -->
+  </div>
+  <!-- begin::Body -->
+</div>

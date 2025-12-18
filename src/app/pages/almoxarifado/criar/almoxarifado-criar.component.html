@@ -1,0 +1,193 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Criar Almoxarifado</span>
+    </h3>
+    <div
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Clique para voltar"
+    >
+      <a
+        href="javascript:void(0)"
+        routerLink="/almoxarifado/listar"
+        class="btn btn-sm btn-light-primary align-items-end"
+      >
+        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen058.svg'" class="svg-icon svg-icon-3"></span>
+        Voltar
+      </a>
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <form class="card" [formGroup]="criarAlmoxarifadoForm">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Descrição*</label>
+                <input class="form-control" type="text" formControlName="descricao" />
+                <div
+                  *ngIf="
+                    criarAlmoxarifadoForm.get('descricao')?.touched &&
+                    criarAlmoxarifadoForm.get('descricao')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    criarAlmoxarifadoForm.get('descricao')?.touched &&
+                    criarAlmoxarifadoForm.get('descricao')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 100
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Logradouro</label>
+                <input class="form-control" type="text" formControlName="logradouro" maxlength="100" />
+                <div
+                  *ngIf="
+                    criarAlmoxarifadoForm.get('logradouro')?.touched &&
+                    criarAlmoxarifadoForm.get('logradouro')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 100
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-2 mb-1">Número</label>
+                <input class="form-control" type="text" formControlName="numero_logradouro" maxlength="10" />
+                <div
+                  *ngIf="
+                    criarAlmoxarifadoForm.get('numero_logradouro')?.touched &&
+                    criarAlmoxarifadoForm.get('numero_logradouro')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-2"
+                >
+                  Tamanho máximo: 100
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Complemento</label>
+                <input class="form-control" type="text" formControlName="logradouro_complemento" maxlength="50" />
+                <div
+                  *ngIf="
+                    criarAlmoxarifadoForm.get('logradouro_complemento')?.touched &&
+                    criarAlmoxarifadoForm.get('logradouro_complemento')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 50
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Bairro</label>
+                <input class="form-control" type="text" formControlName="bairro" maxlength="80" />
+                <div
+                  *ngIf="
+                    criarAlmoxarifadoForm.get('bairro')?.touched &&
+                    criarAlmoxarifadoForm.get('bairro')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 80
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Cidade</label>
+                <input class="form-control" type="text" formControlName="municipio" maxlength="80" />
+                <div
+                  *ngIf="
+                    criarAlmoxarifadoForm.get('municipio')?.touched &&
+                    criarAlmoxarifadoForm.get('municipio')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 80
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">UF</label>
+                <select class="form-select" formControlName="uf" aria-label="uf_id">
+                  <option *ngFor="let estado of estados" value="{{ estado.id }}">{{ estado.nome }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">CEP</label>
+                <input
+                  #cep
+                  class="form-control"
+                  type="text"
+                  mask="00000-000"
+                  formControlName="cep"
+                  maxlength="9"
+                />
+                <div
+                  *ngIf="
+                    criarAlmoxarifadoForm.get('cep')?.touched && criarAlmoxarifadoForm.get('cep')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 10
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Telefone</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  mask="(00) 0000-0000||(00) 00000-0000"
+                  formControlName="telefone"
+                  maxlength="15"
+                />
+                <div
+                  *ngIf="
+                    criarAlmoxarifadoForm.get('telefone')?.touched &&
+                    criarAlmoxarifadoForm.get('telefone')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 15
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer text-right" *ngIf="!id">
+          <button class="btn btn-success" [disabled]="!criarAlmoxarifadoForm.valid" (click)="criar()">Cadastrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>

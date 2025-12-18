@@ -1,0 +1,32 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Three image containers (use 25% for four, and 50% for two, etc) */
+.column {
+  float: left!important;
+  width: 30%!important;
+  padding: 5px!important;
+}
+
+
+/* Clear floats after image containers */
+.row::after {
+  content: ""!important;
+  clear: both!important;
+  display: table!important;
+}
+
+.column:hover .the-buttons  {
+  display: block;
+  position: relative;
+  transform: translate(-50%, -50%);
+  top: -50%;
+  left: 75%;
+}
+
+.column .the-buttons  {
+  display:none;
+}

@@ -1,0 +1,136 @@
+<div
+  class="d-flex flex-column flex-column-fluid bgi-position-y-bottom position-x-center bgi-no-repeat bgi-size-contain bgi-attachment-fixed"
+>
+  <!--begin::Content-->
+  <div class="d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20">
+    <a routerLink="/" class="mb-12"><img alt="Logo" src="./assets/media/logos/logo-1.svg" class="h-45px" /></a>
+  </div>
+
+  <div class="container" *ngIf="assinaturas">
+    <div class="card card-xxl-stretch mb-5 mb-xxl-8">
+      <!-- begin::Header -->
+      <div class="card-header border-1 pt-5">
+        <h3 class="card-title align-items-start flex-column">
+          <span class="card-label fw-bolder fs-3 mb-1">Validação de assinaturas</span>
+        </h3>
+        <div
+          class="card-toolbar"
+          data-bs-toggle="tooltip"
+          data-bs-placement="top"
+          data-bs-trigger="hover"
+          title="Clique para adicionar novo banco"
+        ></div>
+        <div class="mb-2">
+        </div>
+      </div>
+      <!-- end::Header -->
+      <!-- begin::Body -->
+      <div class="card-body py-3">
+
+        <div class="row mt-3">
+          <h3>Dados do Arquivo</h3>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="form-label py-1">Arquivo</label>
+              <input
+                class="form-control"
+                type="text"
+                disabled
+                value="{{ documento.path }}"
+              />
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="form-label py-1">Data criação</label>
+              <input
+                class="form-control"
+                type="text"
+                disabled
+                value="{{ documento.data_cadastro }}"
+              />
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="form-label py-1">Hash</label>
+              <input
+                class="form-control"
+                type="text"
+                disabled
+                value="{{ documento.hash }}"
+              />
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="form-label py-1">Classificação</label>
+              <input
+                class="form-control"
+                type="text"
+                disabled
+                value="{{ documento.tipo_arquivo }}"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- begin::Table container -->
+        <div class="table-responsive">
+          <!-- begin::Table -->
+          <table
+            datatable
+            class="table table-hover table-row-dashed table-row-gray-300 align-middle gs-0 gy-1"
+          >
+            <!-- begin::Table head -->
+            <thead>
+              <tr class="fw-bolder text-dark fs-5">
+                <th>Data assinatura</th>
+                <th>Signatário</th>
+                <th>Hash</th>
+              </tr>
+            </thead>
+            <!-- end::Table head -->
+            <!-- begin::Table body -->
+            <tbody>
+              <tr *ngFor="let item of assinaturas; trackBy: trackItem">
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="d-flex justify-content-start flex-column">
+                      <span class="text-dark fw-normal fs-5"> {{ item.data_assinatura }} </span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="d-flex justify-content-start flex-column">
+                      <span class="text-dark fw-normal fs-5"> {{ item.usuario_id }} </span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="d-flex justify-content-start flex-column">
+                      <span class="text-dark fw-normal fs-5"> {{ item.hash }} </span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <!-- end::Table body -->
+          </table>
+          <!-- end::Table -->
+        </div>
+        <!-- end::Table container -->
+      </div>
+      <!-- begin::Body -->
+    </div>
+  </div>
+
+  <!-- begin::Footer -->
+  <div class="d-flex flex-center flex-column-auto p-10">
+    <div class="d-flex align-items-center fw-bold fs-6">
+    </div>
+  </div>
+  <!-- end::Footer -->
+</div>

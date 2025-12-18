@@ -1,0 +1,130 @@
+<div class="card mt-3">
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Relatórios de Almoxarifado</span>
+    </h3>
+  </div>
+  <div class="card mt-3">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="form-group">
+            <select class="form-select form-select-lg" [(ngModel)]="relatorioSelecionado">
+              <option value="0">Selecione</option>
+              <option value="1">Relatório de Movimentacao de Entrada de Material</option>
+              <option value="2">Relatório de Movimentacão de Entrada de Material por Fornecedor</option>
+              <option value="3">Relatório de Movimentacão de Entrada de Material por Data</option>
+              <option value="23">Relatório de Movimentacão de Entrada de Material por Item</option>
+              <option value="4">Relatório de Movimentacão de Saida de Material Agrupado por Saida</option>
+              <option value="5">Relatório de Movimentacão de Saida de Material por Data</option>
+              <option value="6">Relatório de Movimentacão de Saida de Material por Setor</option>
+              <option value="15">Relatório de Movimentacão de Saida de Material por Setor - Resumido</option>
+              <option value="21">Relatório de Movimentacão de Saida de Material por Cidadão</option>
+              <option value="22">Relatório de Movimentacão de Saida de Material por Item</option>
+              <option value="7">Relatório de Transferência de Material</option>
+              <option value="8">Relatório de Material em Estoque</option>
+              <option value="18">Relatório de Material em Estoque Por Secretaria</option>
+              <option value="17">Relatório de Material em Estoque Zerado</option>
+              <option value="19">Relatório de Material em Estoque (lote / data validade)</option>
+              <option value="9">Relatório de Balancete de Estoque</option>
+              <option value="10">Relatório de Material em Estoque Abaixo do Minimo</option>
+              <option value="11">Relatório de Extrato de Movimentação</option>
+              <option value="12">Relatório de Estoque Excel</option>
+              <option value="20">Relatório de Estoque</option>
+              <option value="13">Relatório de Movimentacão de Saida de Material Excel</option>
+              <option value="14">Relatório de Balancete de Estoque Excel</option>
+              <option value="16">Relatório de movimentação de Estoque (lote / data validade)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="relatorioSelecionado === '1'">
+  <app-relatorio-movimentacao-por-entrada></app-relatorio-movimentacao-por-entrada>
+</div>
+
+<div *ngIf="relatorioSelecionado === '2'">
+  <app-relatorio-movimentacao-por-entrada-fornecedor></app-relatorio-movimentacao-por-entrada-fornecedor>
+</div>
+
+<div *ngIf="relatorioSelecionado === '3'">
+  <app-relatorio-movimentacao-por-entrada-data></app-relatorio-movimentacao-por-entrada-data>
+</div>
+
+<div *ngIf="relatorioSelecionado === '4'">
+  <app-relatorio-movimentacao-por-saida></app-relatorio-movimentacao-por-saida>
+</div>
+
+<div *ngIf="relatorioSelecionado === '5'">
+  <app-relatorio-movimentacao-por-saida-data></app-relatorio-movimentacao-por-saida-data>
+</div>
+
+<div *ngIf="relatorioSelecionado === '6'">
+  <app-relatorio-movimentacao-por-saida-setor></app-relatorio-movimentacao-por-saida-setor>
+</div>
+
+<div *ngIf="relatorioSelecionado === '15'">
+  <app-relatorio-movimentacao-por-saida-setor-resumido></app-relatorio-movimentacao-por-saida-setor-resumido>
+</div>
+
+<div *ngIf="relatorioSelecionado === '7'">
+  <app-relatorio-transferencia-material></app-relatorio-transferencia-material>
+</div>
+
+<div *ngIf="relatorioSelecionado === '8'">
+  <app-relatorio-material-estoque></app-relatorio-material-estoque>
+</div>
+<div *ngIf="relatorioSelecionado === '18'">
+  <app-relatorio-material-estoque-secretaria></app-relatorio-material-estoque-secretaria>
+</div>
+<div *ngIf="relatorioSelecionado === '17'">
+  <app-relatorio-material-estoque-zerado></app-relatorio-material-estoque-zerado>
+</div>
+<div *ngIf="relatorioSelecionado === '19'">
+  <app-relatorio-material-estoque-lote-data-validade></app-relatorio-material-estoque-lote-data-validade>
+</div>
+<div *ngIf="relatorioSelecionado === '9'">
+  <app-balancete-material-estoque></app-balancete-material-estoque>
+</div>
+
+<div *ngIf="relatorioSelecionado === '10'">
+  <app-relatorio-material-minimo></app-relatorio-material-minimo>
+</div>
+<div *ngIf="relatorioSelecionado === '11'">
+  <app-relatorio-extrato-movimentacao></app-relatorio-extrato-movimentacao>
+</div>
+
+<div *ngIf="relatorioSelecionado === '12'">
+  <app-relatorio-estoque-excel></app-relatorio-estoque-excel>
+</div>
+
+<div *ngIf="relatorioSelecionado === '13'">
+  <app-relatorio-movimentacao-por-saida-excel></app-relatorio-movimentacao-por-saida-excel>
+</div>
+
+<div *ngIf="relatorioSelecionado === '14'">
+  <app-balancete-material-estoque-excel></app-balancete-material-estoque-excel>
+</div>
+
+<div *ngIf="relatorioSelecionado === '16'">
+  <app-balancete-estoque-lote-data-validade></app-balancete-estoque-lote-data-validade>
+</div>
+
+<div *ngIf="relatorioSelecionado === '20'">
+  <app-relatorio-estoque></app-relatorio-estoque>
+</div>
+
+<div *ngIf="relatorioSelecionado === '21'">
+  <app-relatorio-movimentacao-por-saida-cidadao-resumido></app-relatorio-movimentacao-por-saida-cidadao-resumido>
+</div>
+
+<div *ngIf="relatorioSelecionado === '22'">
+  <app-relatorio-movimentacao-por-saida-item></app-relatorio-movimentacao-por-saida-item>
+</div>
+
+<div *ngIf="relatorioSelecionado === '23'">
+  <app-relatorio-movimentacao-por-entrada-item></app-relatorio-movimentacao-por-entrada-item>
+</div>

@@ -1,0 +1,68 @@
+<div #element class="conteiner m-lg-1">
+<div id="card-row" class="row" style="width: 100%; background-color: #f3f4f8">
+  <div class="card col-md-5 m-md-5" *ngIf="processosEmTramitacao">
+    <app-donut1
+      cssClass="h-md-50 mb-5 mb-xl-10"
+      [chartLine]="11"
+      [chartSize]="70"
+      [chartRotate]="145"
+      componentName="comp1"
+      labelDonut="Processos em Tramitação"
+      [dados]="processosEmTramitacao"
+      unidadeMedida=""
+    ></app-donut1>
+  </div>
+
+  <div class="card col-md-5 m-md-5" *ngIf="contratosVigentes">
+    <app-donut1
+      cssClass="h-md-50 mb-5 mb-xl-10"
+      [chartLine]="11"
+      [chartSize]="70"
+      [chartRotate]="145"
+      componentName="comp2"
+      labelDonut="Contratos Vigentes"
+      [dados]="contratosVigentes"
+      unidadeMedida=""
+    ></app-donut1>
+  </div>
+
+    <div class="card col-md-5 m-md-5" *ngIf="atasVigentes">
+        <app-donut1
+          cssClass="h-md-50 mb-5 mb-xl-10"
+          [chartLine]="11"
+          [chartSize]="70"
+          [chartRotate]="145"
+          componentName="comp3"
+          labelDonut="Atas Vigentes"
+          [dados]="atasVigentes"
+          unidadeMedida=""
+        ></app-donut1>
+    </div>
+    <div class="card col-md-5 m-md-5" *ngIf="comprasEmAndamento">
+        <app-donut1
+          cssClass="h-md-50 mb-5 mb-xl-10"
+          [chartLine]="11"
+          [chartSize]="70"
+          [chartRotate]="145"
+          componentName="comp4"
+          labelDonut="Compras em Andamento"
+          [dados]="comprasEmAndamento"
+          unidadeMedida=""
+        ></app-donut1>
+    </div>
+
+    <div class="col-md-11 m-md-5" *ngIf="comprasQuadrimestre">
+      <app-statistics1
+      class="card card-xxl-stretch-50 mb-5 mb-xl-8"
+      chartColor="primary"
+      chartHeight="175px"
+      unidadeMedida=""
+      [data]="dadosColumns"
+      [categories]="meses"
+      >
+      </app-statistics1>
+    </div>
+</div>
+</div>
+
+<button (click)="openFullscreen(element)">Full Screen</button>

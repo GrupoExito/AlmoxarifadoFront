@@ -1,0 +1,174 @@
+<div
+  class="d-flex flex-column flex-column-fluid bgi-position-y-bottom position-x-center bgi-no-repeat bgi-size-contain bgi-attachment-fixed"
+>
+  <!--begin::Content-->
+  <div class="d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20">
+    <a routerLink="/" class="mb-12"><img alt="Logo" src="./assets/media/logos/logo-1.svg" class="h-45px" /></a>
+  </div>
+
+  <div class="container">
+    <div class="card card-xxl-stretch mb-5 mb-xxl-8">
+      <div class="card-body">
+        <div class="row mt-3">
+          <h3>Selecione Município, Cotação e Exercício</h3>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label>Município</label>
+              <ng-select
+                appendTo="body"
+                class="ngSelectDropdown"
+                [items]="clientes"
+                bindLabel="razao_social"
+                bindValue="id"
+                [(ngModel)]="selectedMunicipio"
+                (change)="listarCotacoes()"
+              >
+              </ng-select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label>Cotação*</label>
+              <select class="form-select" [(ngModel)]="selectedCotacao">
+                <option value="" aria-placeholder="Cotação">Selecione</option>
+                <option
+                  *ngFor="let cotacao of cotacoesAberto"
+                  value="{{ cotacao.mov_cotacao_pk }}"
+                  aria-placeholder="exercicio"
+                >
+                  {{ cotacao.mov_cotacao_pk }} -
+                  {{
+                    cotacao.mov_descricao.length > 100
+                      ? (cotacao.mov_descricao | slice: 0:100) + '...'
+                      : cotacao.mov_descricao
+                  }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label>Exercicio*</label>
+              <select class="form-select" [(ngModel)]="selectedExercicio">
+                <option value="" aria-placeholder="Exercício">Selecione</option>
+                <option value="2024" aria-placeholder="Exercício">2024</option>
+                <option value="2023" aria-placeholder="Exercício">2023</option>
+                <option value="2022" aria-placeholder="Exercício">2022</option>
+                <option value="2021" aria-placeholder="Exercício">2021</option>
+                <option value="2020" aria-placeholder="Exercício">2020</option>
+                <option value="2019" aria-placeholder="Exercício">2019</option>
+                <option value="2018" aria-placeholder="Exercício">2018</option>
+                <option value="2017" aria-placeholder="Exercício">2017</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3 align-self-end mb-3">
+            <label *ngIf="arquivoCotacao">Arquivo Selecionado: {{ arquivoCotacao.name }}</label>
+            <div class="form-group">
+              <input #file type="file" style="display: none" accept="*/*" (change)="selecionarFile($event)" />
+              <button (click)="file.click()" class="btn btn-sm btn-primary align-items-end">
+                <span><i class="fa-solid fa-upload"></i>Selecionar Arquivo</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-md-2">
+            <button class="btn btn-success" (click)="enviarCotacao()">Enviar Cotação</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card card-xxl-stretch mb-5 mb-xxl-8">
+      <div class="card-header border-1 pt-5">
+        <h3 class="card-title align-items-start flex-column">
+          <span class="card-label fw-bolder fs-3 mb-1">Cotação de Preços</span>
+        </h3>
+        <div
+          class="card-toolbar"
+          data-bs-toggle="tooltip"
+          data-bs-placement="top"
+          data-bs-trigger="hover"
+          title="Clique para adicionar novo banco"
+        ></div>
+        <div class="mb-2">
+          <!-- <button class="btn btn-success">Cadastrar Preços</button> -->
+        </div>
+      </div>
+      <div class="card-body py-3">
+        <div class="table-responsive">
+          <!-- <table
+            datatable
+            [dtOptions]="dtOptions"
+            [dtTrigger]="dtTrigger"
+            class="table table-hover table-row-dashed table-row-gray-300 align-middle gs-0 gy-1"
+          >
+            <thead>
+              <tr class="fw-bolder text-dark fs-5">
+                <th class="min-w-50px">Código</th>
+                <th class="min-w-140px">Descrição</th>
+                <th class="min-w-100px">Unid</th>
+                <th class="min-w-80px">Quantidade</th>
+                <th class="min-w-150px">Marca</th>
+                <th class="min-w-100px">Valor</th>
+                <th class="min-w-100px">Valor Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let cotacao of cotacoesAberto; trackBy: trackItem">
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="d-flex justify-content-start flex-column">
+                      <span class="text-dark fw-normal fs-5"> {{ item.mov_cotacao_pk }} </span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="d-flex justify-content-start flex-column">
+                      <span class="text-dark fw-normal fs-5"> {{ item.item_descricao }} </span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="d-flex justify-content-start flex-column">
+                      <span class="text-dark fw-normal fs-5"> {{ item.unidade_medida_descricao }} </span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="d-flex justify-content-start flex-column">
+                      <span class="text-dark fw-normal fs-5"> {{ item.quantidade }} </span>
+                    </div>
+                  </div>
+                </td>
+
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="d-flex justify-content-start flex-column">
+                      <span class="text-dark fw-normal fs-5" [attr.id]="'valortotal' + item.id">
+                        {{ item.quantidade * item.valor }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- begin::Footer -->
+  <div class="d-flex flex-center flex-column-auto p-10">
+    <div class="d-flex align-items-center fw-bold fs-6">
+      <a class="text-muted text-hover-primary px-2 cursor-pointer">About</a
+      ><a class="text-muted text-hover-primary px-2 cursor-pointer">Contact</a
+      ><a class="text-muted text-hover-primary px-2 cursor-pointer">Contact Us</a>
+    </div>
+  </div>
+  <!-- end::Footer -->
+</div>

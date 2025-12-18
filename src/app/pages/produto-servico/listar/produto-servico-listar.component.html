@@ -1,0 +1,186 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Produtos/Serviços</span>
+    </h3>
+    <div
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Clique para importar produto ou serviço"
+    >
+    </div>
+    <div
+      class="card-toolbar me-4"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Clique para filtrar produto ou serviço"
+    >
+      <button (click)="openAccordion()" class="btn btn-sm btn-light-primary">
+        <i class="fa fa-light fa-filter" *ngIf="!filtroButton"></i>
+        <i class="fa fa-light fa-filter-circle-xmark" *ngIf="filtroButton"></i>
+        Filtrar
+      </button>
+    </div>
+    <div
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Clique para adicionar produto ou serviço"
+    >
+    </div>
+  </div>
+  <div class="card-body py-3">
+    <div class="row mb-3" *ngIf="filtroButton">
+      <div class="col-md-1">
+        <div class="form-group mb-0">
+          <label>N° Item</label>
+          <input class="form-control" type="text" maxlength="20" [(ngModel)]="idSelecionado" />
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group mb-0">
+          <label>Tipo de produto</label>
+          <select class="form-select" [(ngModel)]="tipoProdutoSelecionado">
+            <option value="">Selecione</option>
+            <option
+              *ngFor="let tipoProduto of tiposProduto"
+              value="{{ tipoProduto.id }}"
+              aria-placeholder="Tipo_produto"
+            >
+              {{ tipoProduto.descricao }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group mb-0">
+          <label>Unidade de medida </label>
+          <select class="form-select" [(ngModel)]="unidadesMedidaSelecionada">
+            <option value="">Selecione</option>
+            <option
+              *ngFor="let unidadeMedida of unidadesMedida"
+              value="{{ unidadeMedida.id }}"
+              aria-placeholder="Unidade_medida"
+            >
+              {{ unidadeMedida.descricao }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group mb-0">
+          <label>Unidade de medida Almoxarifado </label>
+          <select class="form-select" [(ngModel)]="unidadesMedidaAlmoxarifadoSelecionada">
+            <option value="">Selecione</option>
+            <option
+              *ngFor="let unidadeMedida of unidadesMedida"
+              value="{{ unidadeMedida.id }}"
+              aria-placeholder="Unidade_medida"
+            >
+              {{ unidadeMedida.descricao }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="d-flex col-md-12 mb-3 mt-3 align-self-end justify-content-end">
+        <button (click)="filtrar()" class="btn btn-success btn-sm">Filtrar</button>
+        <button (click)="limparFiltros()" class="btn btn-primary btn-sm mx-2">Limpar Filtros</button>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <div class="col-md-2">
+        <input
+          (input)="pesquisarItem()"
+          [(ngModel)]="searchItem"
+          class="form-control form-control-sm"
+          type="search"
+          placeholder="Pesquisar..."
+        />
+      </div>
+      <table class="table table-hover table-row-dashed table-row-gray-300 align-middle gs-0 gy-0">
+        <thead>
+          <tr class="fw-bolder text-dark fs-5">
+            <th class="min-w-100px">Código</th>
+            <th class="min-w-100px">Descrição</th>
+            <th class="min-w-100px">Unidade Medida</th>
+            <th class="min-w-60px text-center">Ações</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="produtoServicos?.length !== 0">
+          <tr *ngFor="let produtoServico of produtoServicos; trackBy: trackItem">
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5 mx-3"> {{ produtoServico.id }} </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5 mx-3"> {{ produtoServico.descricao }} </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5 mx-3"> {{ produtoServico.unidade_medida_descricao }} </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex justify-content-end flex-shrink-0">
+                <button
+                  title="Editar"
+                  [routerLink]="['/produtoservico/editar', produtoServico.id]"
+                  class="btn btn-icon btn-active-color-warning btn-md me-1"
+                >
+                  <span [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'" class="svg-icon svg-icon-3"></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+        <tbody *ngIf="produtoServicos?.length === 0">
+          <tr>
+            <td colspan="4" class="no-data-available">Sem Produtos!</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="row">
+        <div class="col-md-3 align-items-end" style="display: flex">
+          <p>Exibindo</p>
+          <select
+            (change)="mudarPagina()"
+            [(ngModel)]="tamanho_pagina"
+            class="form-select form-select-white form-select-sm w-75px"
+          >
+            <option value="10" selected>10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+          <p>Registros</p>
+        </div>
+        <div class="col-md-6">
+          <ngb-pagination
+            [(page)]="pagina"
+            [pageSize]="tamanho_pagina"
+            [collectionSize]="quantidade_total"
+            [maxSize]="5"
+            (pageChange)="mudarPagina()"
+          ></ngb-pagination>
+        </div>
+        <div class="col-md-3 align-items-end justify-content-end" style="display: flex">
+          <p>Registros de {{ (pagina - 1) * tamanho_pagina + 1 }} até {{ tamanho_pagina }} de {{ quantidade_total }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,156 @@
+<div
+  class="menu menu-lg-rounded menu-column menu-lg-row menu-state-bg menu-title-gray-600 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-400 fw-bold fs-6 my-5 my-lg-0 align-items-stretch"
+  id="#kt_header_menu"
+  data-kt-menu="true"
+>
+  <!-- Cadastros -->
+  <div
+    class="menu-item menu-lg-down-accordion me-lg-1 menu-dropdown"
+    data-kt-menu-trigger="click"
+    data-kt-menu-placement="right-start"
+  >
+    <span class="menu-link py-3">
+      <span class="menu-title">Cadastros</span>
+      <span class="menu-arrow d-lg-none"></span>
+    </span>
+    <div class="menu-sub menu-sub-dropdown w-225px w-lg-275px px-1 py-4" routerLinkActive="menu-active-bg show">
+      <div class="menu-item" routerLinkActive="here show" data-kt-menu-trigger="click">
+        <span class="menu-link">
+          <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+          <span class="menu-title" data-link="/crafted/pages/wizards">Produtos/Serviços</span>
+          <span class="menu-arrow"></span>
+        </span>
+        <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg show">
+          <div class="menu-item">
+            <a class="menu-link" routerLinkActive="active" routerLink="/produtoservico"
+              ><span class="menu-bullet"><span class="bullet bullet-dot"></span></span
+              ><span class="menu-title">Produtos/Serviços</span></a
+            >
+          </div>
+        </div>
+      </div>
+      <div class="menu-item" routerLinkActive="here show" data-kt-menu-trigger="click">
+        <span class="menu-link">
+          <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+          <span class="menu-title" data-link="/crafted/pages/wizards">Almoxarifado</span>
+          <span class="menu-arrow"></span>
+        </span>
+        <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg show">
+          <!--div class="menu-item">
+            <a class="menu-link" routerLinkActive="active" routerLink="/situacaoprodutoservico"
+              ><span class="menu-bullet"><span class="bullet bullet-dot"></span></span
+              ><span class="menu-title">Situação Produto</span></a
+            >
+          </div>
+          <div class="menu-item">
+            <a class="menu-link" routerLinkActive="active" routerLink="/fabricante"
+              ><span class="menu-bullet"><span class="bullet bullet-dot"></span></span
+              ><span class="menu-title">Fabricantes de Serviço</span></a
+            >
+          </div>
+          <div class="menu-item">
+            <a class="menu-link" routerLinkActive="active" routerLink="/localprodutoservico"
+              ><span class="menu-bullet"><span class="bullet bullet-dot"></span></span
+              ><span class="menu-title">Locais de Entrega</span></a
+            >
+          </div>
+          <div class="menu-item">
+            <a class="menu-link" routerLinkActive="active" routerLink="/unidadeexterna"
+              ><span class="menu-bullet"><span class="bullet bullet-dot"></span></span
+              ><span class="menu-title">Unidade Externa</span></a
+            >
+          </div-->
+          <div class="menu-item">
+            <a class="menu-link" routerLinkActive="active" routerLink="/almoxarifado/listar"
+              ><span class="menu-bullet"><span class="bullet bullet-dot"></span></span
+              ><span class="menu-title"> Cadastro Almoxarifado</span></a
+            >
+          </div>
+          <div class="menu-item">
+            <a class="menu-link" routerLinkActive="active" routerLink="/solicitante"
+              ><span class="menu-bullet"><span class="bullet bullet-dot"></span></span
+              ><span class="menu-title">Solicitante Material</span></a
+            >
+          </div>
+          <div class="menu-item">
+            <a class="menu-link" routerLinkActive="active" routerLink="/notificacaofornecedor"
+              ><span class="menu-bullet"><span class="bullet bullet-dot"></span></span
+              ><span class="menu-title">Notificação fornecedor</span></a
+            >
+          </div>
+          <!--div class="menu-item">
+            <a class="menu-link" routerLinkActive="active" routerLink="/cidadao"
+              ><span class="menu-bullet"><span class="bullet bullet-dot"></span></span
+              ><span class="menu-title">Solicitante Cidadão</span></a
+            >
+          </div-->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Almoxarifado -->
+  <div
+    class="menu-item menu-lg-down-accordion me-lg-1 menu-dropdown"
+    data-kt-menu-trigger="click"
+    data-kt-menu-placement="bottom-start"
+  >
+    <span class="menu-link py-3" [ngClass]="calculateMenuItemCssClass('/almoxarifado')">
+      <span class="menu-title">Almoxarifado</span>
+      <span class="menu-arrow d-lg-none"></span>
+    </span>
+    <div class="menu-sub menu-sub-dropdown w-225px w-lg-275px px-1 py-4" routerLinkActive="menu-active-bg show">
+      <div class="menu-item" routerLinkActive="here show" data-kt-menu-trigger="click">
+        <div class="menu-item"  routerLinkActive="menu-active-bg show">
+            <a
+              *appPermission="['Almoxarifado', 'acessar_saida']"
+              class="menu-link"
+              routerLinkActive="active"
+              routerLink="/saidamaterial/listar/porautorizador"
+              ><span class="menu-bullet"><span class="bullet bullet-dot"></span></span
+              ><span class="menu-title">Autorização</span></a
+            >
+          </div>
+          <!--div class="menu-item"  routerLinkActive="menu-active-bg show">
+            <a
+              *appPermission="['Almoxarifado', 'acessar_saida']"
+              class="menu-link"
+              routerLinkActive="active"
+              routerLink="/saidamaterial/listar"
+              ><span class="menu-bullet"><span class="bullet bullet-dot"></span></span
+              ><span class="menu-title">Bloqueio/Reserva</span></a
+            >
+          </div-->
+      </div>
+      <div class="menu-item" routerLinkActive="here show" data-kt-menu-trigger="click">
+        <span class="menu-link">
+          <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+          <span class="menu-title" data-link="/crafted/pages/profile">Movimentação</span>
+          <span class="menu-arrow"></span>
+        </span>
+        <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg show">
+          <div class="menu-item">
+            <a
+              *appPermission="['Almoxarifado', 'acessar_entrada']"
+              class="menu-link"
+              routerLinkActive="active"
+              routerLink="/entradamaterial/listar"
+              ><span class="menu-bullet"><span class="bullet bullet-dot"></span></span
+              ><span class="menu-title">Entrada</span></a
+            >
+          </div>
+          <div class="menu-item">
+            <a
+              *appPermission="['Almoxarifado', 'acessar_saida']"
+              class="menu-link"
+              routerLinkActive="active"
+              routerLink="/saidamaterial/listar"
+              ><span class="menu-bullet"><span class="bullet bullet-dot"></span></span
+              ><span class="menu-title">Saida</span></a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>  
+</div>

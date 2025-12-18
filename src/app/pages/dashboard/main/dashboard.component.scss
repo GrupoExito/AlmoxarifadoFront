@@ -1,0 +1,103 @@
+.card-row {
+    display: flex;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+    flex-direction : row;
+    width: 60%;
+    grid-gap: 10px 50px;
+ }
+
+ .dashboard {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.section {
+  background-color: #fff;
+  padding: 5px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  width: 99%;
+}
+
+.section h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.8em;
+}
+
+.info-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.info-box {
+  margin: 10px;
+  padding: 15px;
+  border-radius: 12px;
+  flex: 1;
+  min-width: 100px;
+  max-width: 130px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.info-box h3 {
+  margin: 0;
+  font-size: 1em;
+}
+
+.info-box p {
+  font-size: 1.2em;
+  margin: 10px 0 0;
+}
+
+.info-box:hover {
+  transform: translateY(-5px);
+}
+
+/* Contratação Section Colors */
+.section-contratacao h2 {
+  color: #2196F3;
+}
+
+.section-contratacao .info-box {
+  background-color: #E3F2FD;
+}
+
+.section-contratacao .info-box h3 {
+  color: #1976D2;
+}
+
+.section-contratacao .info-box p {
+  color: #0D47A1;
+}
+
+.section-contratacao .info-box:hover {
+  background-color: #BBDEFB;
+}
+
+/* Contrato Section Colors */
+.section-contrato h2 {
+  color: #4CAF50;
+}
+
+.section-contrato .info-box {
+  background-color: #E8F5E9;
+}
+
+.section-contrato .info-box h3 {
+  color: #388E3C;
+}
+
+.section-contrato .info-box p {
+  color: #1B5E20;
+}
+
+.section-contrato .info-box:hover {
+  background-color: #C8E6C9;
+}

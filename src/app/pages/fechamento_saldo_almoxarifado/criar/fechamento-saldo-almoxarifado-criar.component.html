@@ -1,0 +1,51 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2 d-flex">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Realizar Fechamento de Saldo</span>
+    </h3>
+    <div
+      class="card-toolbar ms-auto"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Clique para voltar"
+    >
+      <a routerLink="/fechamentosaldoalmoxarifado" class="btn btn-sm btn-light-primary align-items-end">
+        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen058.svg'" class="svg-icon svg-icon-3"></span>
+        Voltar
+      </a>
+    </div>
+  </div>
+  <!-- end::Header -->
+
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <form class="card" [formGroup]="criarFechamentoSaldoAlmoxarifadoForm" (ngSubmit)="criar()">
+        <div class="card-body">
+          <div class="row">
+            <!-- Data (date) -->
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Data fechamento*</label>
+                <input class="form-control" type="date" formControlName="data_fechamento" />
+                <div
+                  *ngIf="criarFechamentoSaldoAlmoxarifadoForm.get('data_fechamento')?.touched &&
+                         criarFechamentoSaldoAlmoxarifadoForm.get('data_fechamento')?.hasError('required')"
+                  class="text text-danger mt-1">
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer text-right">
+          <button type="submit" class="btn btn-success" [disabled]="!criarFechamentoSaldoAlmoxarifadoForm.valid">
+            Cadastrar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

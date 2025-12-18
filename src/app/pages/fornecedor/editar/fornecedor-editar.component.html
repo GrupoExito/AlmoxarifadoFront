@@ -1,0 +1,596 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Editar Fornecedor</span>
+    </h3>
+    <div
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Clique para adicionar novo fornecedor"
+    >
+      <a
+        href="javascript:void(0)"
+        routerLink="/fornecedor/criar"
+        class="btn btn-sm btn-light-primary align-items-end me-3"
+      >
+        <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>
+        Novo Fornecedor
+      </a>
+      <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
+        title="Clique para voltar">
+      <a href="javascript:void(0)" routerLink="/fornecedor" class="btn btn-sm btn-light-primary align-items-end">
+        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen058.svg'" class="svg-icon svg-icon-3"></span>
+        Voltar
+      </a>
+      </div>
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <form class="card" [formGroup]="editarFornecedorForm">
+        <!-- Separador 01 Cadastro-->
+        <div class="card-body">
+          <br />
+          <p><strong>CADASTRO</strong></p>
+          <hr />
+          <!-- Inicio Linha 01 -->
+          <div class="row">
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Tipo*</label>
+                <select class="form-select" formControlName="tipo" aria-label="Tipo">
+                  <option value="1">Consorciado</option>
+                  <option value="2">Consórcio</option>
+                  <option value="3">Participante</option>
+                </select>
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('tipo')?.touched && editarFornecedorForm.get('tipo')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Pessoa*</label>
+                <select
+                class="form-select"
+                [ngClass]="{
+                  'border-danger':
+                  editarFornecedorForm.get('tipo_pessoa')?.hasError('required') &&
+                  editarFornecedorForm.get('tipo_pessoa')?.touched
+                }"
+                formControlName="tipo_pessoa"
+                (change)="
+                  validarPorteEmpresa()
+                "
+              >
+                  <option value="F">Física</option>
+                  <option value="J">Jurídica</option>
+                </select>
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('tipo_pessoa')?.touched &&
+                    editarFornecedorForm.get('tipo_pessoa')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">CNPJ/CPF</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  [mask]="getMaskCNPJouCPF()"
+                  formControlName="cnpj_cpf"
+                  (focusout)="setCNPJouCPFValidator()"
+                  maxlength="20"
+                />
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('cnpj_cpf')?.touched &&
+                    editarFornecedorForm.get('cnpj_cpf')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 20
+                </div>
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('cnpj_cpf')?.touched &&
+                    editarFornecedorForm.get('cnpj_cpf')?.hasError('cpfError')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  CPF Inválido
+                </div>
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('cnpj_cpf')?.touched &&
+                    editarFornecedorForm.get('cnpj_cpf')?.hasError('cnpjError')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  CNPJ Inválido
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Insc. Estadual</label>
+                <input class="form-control" type="text" formControlName="inscricao_estadual" maxlength="20" />
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('inscricao_estadual')?.touched &&
+                    editarFornecedorForm.get('inscricao_estadual')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 20
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Insc. Municipal</label>
+                <input class="form-control" type="text" formControlName="inscricao_municipal" maxlength="20" />
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('inscricao_municipal')?.touched &&
+                    editarFornecedorForm.get('inscricao_municipal')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 20
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Inicio Linha 02 -->
+          <div class="row">
+            <div class="col-md-7">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Razão Social*</label>
+                <input class="form-control" type="text" formControlName="razao_social" maxlength="100" />
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('razao_social')?.touched &&
+                    editarFornecedorForm.get('razao_social')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('razao_social')?.touched &&
+                    editarFornecedorForm.get('razao_social')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 100
+                </div>
+              </div>
+            </div>
+            <div class="col-md-5">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Nome Fantasia</label>
+                <input class="form-control" type="text" formControlName="fantasia" maxlength="50" />
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('fantasia')?.touched &&
+                    editarFornecedorForm.get('fantasia')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 50
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Inicio Linha 03 -->
+          <div class="row">
+            <div class="col-md-7">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Endereço</label>
+                <input class="form-control" type="text" formControlName="endereco" maxlength="80" />
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('endereco')?.touched &&
+                    editarFornecedorForm.get('endereco')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 80
+                </div>
+              </div>
+            </div>
+            <div class="col-md-5">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Bairro</label>
+                <input class="form-control" type="text" formControlName="bairro" maxlength="40" />
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('bairro')?.touched &&
+                    editarFornecedorForm.get('bairro')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 40
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Inicio Linha 04 -->
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Cidade</label>
+                <input class="form-control" type="text" formControlName="cidade" maxlength="40" />
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('cidade')?.touched &&
+                    editarFornecedorForm.get('cidade')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 40
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">UF</label>
+                <select class="form-select" formControlName="uf_id" aria-label="uf_id">
+                  <option *ngFor="let estado of estados" value="{{ estado.id }}">{{ estado.nome }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Porte da Empresa*</label>
+                <select class="form-select" formControlName="porte_empresa" aria-label="porte_empresa">
+                  <option value="1">ME: Microempresa</option>
+                  <option value="2">EPP: Empresa de pequeno porte</option>
+                  <option value="3">Demais: Demais empresas</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">CEP</label>
+                <input
+                  #cep
+                  class="form-control"
+                  type="text"
+                  mask="00.000-000"
+                  formControlName="cep"
+                  (focusout)="consultarCep(cep.value)"
+                  maxlength="10"
+                />
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('cep')?.touched && editarFornecedorForm.get('cep')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 10
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Telefone</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  mask="(00) 0000-0000||(00) 00000-0000"
+                  formControlName="telefone"
+                  maxlength="15"
+                />
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('telefone')?.touched &&
+                    editarFornecedorForm.get('telefone')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 15
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Inicio Linha 05 -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Observações</label>
+                <textarea rows="2" class="form-control" type="text" formControlName="obs" maxlength="255"></textarea>
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('obs')?.touched && editarFornecedorForm.get('obs')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 255
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Fim Linha 05 -->
+
+          <br />
+          <p><strong>INFORMAÇÕES DO RESPONSÁVEL</strong></p>
+          <hr />
+          <!-- Inicio Linha 06 -->
+          <div class="row">
+            <div class="col-md-7">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Nome do Responsável</label>
+                <input class="form-control" type="text" formControlName="responsavel" maxlength="50" />
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('responsavel')?.touched &&
+                    editarFornecedorForm.get('responsavel')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 50
+                </div>
+              </div>
+            </div>
+            <div class="col-md-5">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Endereço de Email</label>
+                <input class="form-control" type="text" formControlName="email" maxlength="50" />
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('email')?.touched &&
+                    editarFornecedorForm.get('email')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 50
+                </div>
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('email')?.touched && editarFornecedorForm.get('email')?.hasError('email')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Endereço de email inválido
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Inicio Linha 07 -->
+          <div class="row">
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">CPF do Responsável</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  mask="000.000.000-00"
+                  formControlName="responsavel_cpf"
+                  maxlength="20"
+                />
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('responsavel_cpf')?.touched &&
+                    editarFornecedorForm.get('responsavel_cpf')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 20
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Registro Geral</label>
+                <input class="form-control" type="text" formControlName="registro_geral" maxlength="15" />
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('registro_geral')?.touched &&
+                    editarFornecedorForm.get('registro_geral')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 15
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Órgão Expedidor</label>
+                <input class="form-control" type="text" formControlName="orgao_exp" maxlength="15" />
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('orgao_exp')?.touched &&
+                    editarFornecedorForm.get('orgao_exp')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 15
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">PIS/PASEP</label>
+                <input class="form-control" type="text" formControlName="pis_pasep_nit" maxlength="20" />
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('pis_pasep_nit')?.touched &&
+                    editarFornecedorForm.get('pis_pasep_nit')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 20
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Registro Médico</label>
+                <input class="form-control" type="text" formControlName="registro_medico" maxlength="10" />
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('registro_medico')?.touched &&
+                    editarFornecedorForm.get('registro_medico')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 10
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Fim Linha 07 -->
+          <br />
+          <p><strong>INFORMAÇÕES BANCÁRIA</strong></p>
+          <hr />
+          <!-- Inicio Linha 08 -->
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-group">
+                <div class="form-group">
+                  <label class="form-label mt-3 mb-1">Banco</label>
+                  <select class="form-select" formControlName="banco_id" aria-label="banco_id">
+                    <option *ngFor="let banco of bancos" value="{{ banco.id }}">{{ banco.nome }}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Agência</label>
+                <input class="form-control" type="text" formControlName="agencia" maxlength="10" />
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('agencia')?.touched &&
+                    editarFornecedorForm.get('agencia')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 10
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Número da Conta</label>
+                <input class="form-control" type="text" formControlName="conta_bancaria" maxlength="10" />
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('conta_bancaria')?.touched &&
+                    editarFornecedorForm.get('conta_bancaria')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 10
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Tipo Conta</label>
+                <select class="form-select" formControlName="tipo_conta" aria-label="tipo_conta">
+                  <option value="C">Corrente</option>
+                  <option value="P">Poupança</option>
+                </select>
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('tipo_conta')?.touched &&
+                    editarFornecedorForm.get('tipo_conta')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 1
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Código GRU</label>
+                <input class="form-control" type="text" formControlName="codigo_gru" maxlength="10" />
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('codigo_gru')?.touched &&
+                    editarFornecedorForm.get('codigo_gru')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 10
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Fim Linha 08 -->
+          <br />
+          <p><strong>ATIVIDADE ECONÔMICA</strong></p>
+          <hr />
+          <!-- Inicio Linha 09 -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Atividade Principal</label>
+                <textarea
+                  rows="5"
+                  class="form-control"
+                  type="text"
+                  formControlName="atividade_principal"
+                  maxlength="7000"
+                ></textarea>
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('atividade_principal')?.touched &&
+                    editarFornecedorForm.get('atividade_principal')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 7000
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Inicio Linha 10 -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Atividade Secundária</label>
+                <textarea rows="5" class="form-control" type="text" formControlName="atividade_secundaria" maxlength="7000"></textarea>
+                <div
+                  *ngIf="
+                    editarFornecedorForm.get('atividade_secundaria')?.touched &&
+                    editarFornecedorForm.get('atividade_secundaria')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 7000
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer text-right">
+          <button class="btn btn-success" [disabled]="!editarFornecedorForm.valid" (click)="editar()">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>

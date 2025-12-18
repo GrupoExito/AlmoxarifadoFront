@@ -1,0 +1,259 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Editar Modelo</span>
+    </h3>
+    <div
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Clique para voltar a listagem"
+    >
+      <a href="javascript:void(0)" routerLink="/modelocampo" class="btn btn-sm btn-light-primary align-items-end">
+        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen058.svg'" class="svg-icon svg-icon-3"></span>
+        Voltar
+      </a>
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <form class="card" [formGroup]="editarModeloCampoForm">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Tipo</label>
+                <select class="form-select form-select-lg" formControlName="tipo" [(ngModel)]="tipo" (Change)="Lista()">
+                  <option value="0">Selecione</option>
+                  <option value="1">Campo</option>
+                  <option value="2">Lista</option>
+                  <option value="3">Sistema</option>
+                  <option value="3">Formula</option>
+                </select>
+
+                <div
+                  *ngIf="
+                    editarModeloCampoForm.get('tipo')?.touched &&
+                    editarModeloCampoForm.get('tipo')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    editarModeloCampoForm.get('tipo')?.touched &&
+                    editarModeloCampoForm.get('tipo')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 15
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Titulo</label>
+                <input class="form-control" type="text" formControlName="titulo" />
+                <div
+                  *ngIf="
+                    editarModeloCampoForm.get('titulo')?.touched &&
+                    editarModeloCampoForm.get('titulo')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    editarModeloCampoForm.get('titulo')?.touched &&
+                    editarModeloCampoForm.get('titulo')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 100
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Nome tabela</label>
+                <input class="form-control" type="text" formControlName="nome_tabela_view" />
+                <div
+                  *ngIf="
+                    editarModeloCampoForm.get('nome_tabela_view')?.touched &&
+                    editarModeloCampoForm.get('nome_tabela_view')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    editarModeloCampoForm.get('nome_tabela_view')?.touched &&
+                    editarModeloCampoForm.get('nome_tabela_view')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 50
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Resultado</label>
+                <input class="form-control" type="text" formControlName="campo_resultado" />
+                <div
+                  *ngIf="
+                    editarModeloCampoForm.get('campo_resultado')?.touched &&
+                    editarModeloCampoForm.get('campo_resultado')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    editarModeloCampoForm.get('campo_resultado')?.touched &&
+                    editarModeloCampoForm.get('campo_resultado')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 25
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Filtro</label>
+                <input class="form-control" type="text" formControlName="campo_filtro" />
+                <div
+                  *ngIf="
+                    editarModeloCampoForm.get('campo_filtro')?.touched &&
+                    editarModeloCampoForm.get('campo_filtro')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    editarModeloCampoForm.get('campo_filtro')?.touched &&
+                    editarModeloCampoForm.get('campo_filtro')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 25
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div *ngIf="tipo == 2" class="col-md-8">
+                <label class="form-label mt-3 mb-1">Alinhamento</label>
+                <input class="form-control" type="text" formControlName="alinhamento" />
+                <div
+                  *ngIf="
+                    editarModeloCampoForm.get('alinhamento')?.touched &&
+                    editarModeloCampoForm.get('alinhamento')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    editarModeloCampoForm.get('alinhamento')?.touched &&
+                    editarModeloCampoForm.get('alinhamento')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 50
+                </div>
+              </div>
+            </div>
+            <div *ngIf="tipo == 2" class="col-md-8">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Formatação</label>
+                <input class="form-control" type="text" formControlName="formatacao" />
+                <div
+                  *ngIf="
+                    editarModeloCampoForm.get('formatacao')?.touched &&
+                    editarModeloCampoForm.get('formatacao')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    editarModeloCampoForm.get('formatacao')?.touched &&
+                    editarModeloCampoForm.get('formatacao')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 50
+                </div>
+              </div>
+            </div>
+            <div *ngIf="tipo == 2" class="col-md-8">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Coluna arquivo</label>
+                <input class="form-control" type="text" formControlName="coluna_arquivo" />
+                <div
+                  *ngIf="
+                    editarModeloCampoForm.get('coluna_arquivo')?.touched &&
+                    editarModeloCampoForm.get('coluna_arquivo')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    editarModeloCampoForm.get('coluna_arquivo')?.touched &&
+                    editarModeloCampoForm.get('coluna_arquivo')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 200
+                </div>
+              </div>
+            </div>
+            <div *ngIf="tipo == 2" class="col-md-8">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Coluna view</label>
+                <input class="form-control" type="text" formControlName="coluna_view" />
+                <div
+                  *ngIf="
+                    editarModeloCampoForm.get('coluna_view')?.touched &&
+                    editarModeloCampoForm.get('coluna_view')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    editarModeloCampoForm.get('coluna_view')?.touched &&
+                    editarModeloCampoForm.get('coluna_view')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 50
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer text-right">
+          <button class="btn btn-success" [disabled]="!editarModeloCampoForm.valid" (click)="editar()">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>

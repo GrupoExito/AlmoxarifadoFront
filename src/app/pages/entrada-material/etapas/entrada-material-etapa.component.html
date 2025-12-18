@@ -1,0 +1,166 @@
+<div class="card px-0">
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Entrada Material</span>
+    </h3>
+    <div class="btn-toolbar" role="toolbar">
+      <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
+        title="Clique para adicionar nova Entrada Material">
+        <a href="javascript:void(0)" routerLink="/entradamaterial/criar"
+          class="btn btn-sm btn-light-primary align-items-end me-4">
+          <i class="fa-solid fa-plus"></i>
+          Nova Entrada
+        </a>
+        <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
+          title="Clique para voltar">
+          <a href="javascript:void(0)" routerLink="/entradamaterial/listar"
+            class="btn btn-sm btn-light-primary align-items-end">
+            <span [inlineSVG]="'./assets/media/icons/duotune/general/gen058.svg'" class="svg-icon svg-icon-3"></span>
+            Voltar
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card px-0">
+    <div class="mt-2">
+      <div class="d-flex flex-column">
+        <div *ngIf="entradaMaterial" class="nav nav-pills d-flex nav-pills-custom mb-0">
+          <div class="card text-dark header-informations mb-3 mx-4 px-0">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <b>Número: {{ id }}</b>
+              </li>
+              <li class="list-group-item">
+                <b>Tipo Entrada: {{ entradaMaterial.tipo_entrada_descricao }}</b>
+              </li>
+            </ul>
+          </div>
+          <div class="card text-dark header-informations mb-3 mx-4 px-0">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <b>Data: {{ entradaMaterial.data_entrada | date : 'dd/MM/yyyy' }}</b>
+              </li>
+              <li class="list-group-item">
+                <b>Status: {{ entradaMaterial.status_descricao }}</b>
+              </li>
+            </ul>
+          </div>
+          <div *ngIf="eMQuantidade" class="card text-dark header-informations mb-3 mx-4 px-0">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <b> Quantidade de Itens: {{ eMQuantidade.quantidade_itens }} </b>
+              </li>
+              <li class="list-group-item">
+                <b> Valor Total da entrada: {{ eMQuantidade.valorTotal | currency : 'BRL' : 'symbol' : '1.2-2' }} </b>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="nav nav-pills d-flex nav-pills-custom mb-0">
+          <div class="nav-item mx-4 mb-3 me-0" role="presentation">
+            <a [ngClass]="{ disabled: !this.id }"
+              class="nav-link nav-link-border-solid btn btn-outline btn-flex flex-column flex-stack pt-9 pb-7 page-bg active"
+              data-bs-toggle="pill" routerLink="cadastro" routerLinkActive="navAtiva" style="width: 90px; height: 130px"
+              role="tab" tabindex="-1">
+              <div class="nav-icon mb-3">
+                <img src="/assets/media/icons/documentos.png" class="icon-config" alt="" />
+              </div>
+              <div class="">
+                <span class="text-gray-800 fw-bold fs-5 d-block">Dados Entrada</span>
+              </div>
+            </a>
+          </div>
+
+          <div class="nav-item mx-4 mb-3 me-0" role="presentation">
+            <a [ngClass]="{ disabled: !this.id }"
+              class="nav-link nav-link-border-solid btn btn-outline btn-flex flex-column flex-stack pt-9 pb-7 page-bg active"
+              data-bs-toggle="pill" routerLink="itens" routerLinkActive="navAtiva" style="width: 90px; height: 130px"
+              aria-selected="false" role="tab" tabindex="-1">
+              <div class="nav-icon mb-3">
+                <img src="/assets/media/icons/items.png" class="icon-config" alt="" />
+              </div>
+              <div class="">
+                <span class="text-gray-800 fw-bold fs-5 d-block">Itens</span>
+                <span class="text-gray-600 fw-semibold fs-3">{{
+                  eMQuantidade ? eMQuantidade.quantidade_itens : '-'
+                  }}</span>
+              </div>
+            </a>
+          </div>
+
+          <div class="nav-item mx-4 mb-3 me-0" role="presentation">
+            <a [ngClass]="{ disabled: !this.id }"
+              class="nav-link nav-link-border-solid btn btn-outline btn-flex flex-column flex-stack pt-9 pb-7 page-bg active"
+              data-bs-toggle="pill" routerLink="historico" routerLinkActive="navAtiva"
+              style="width: 90px; height: 130px" aria-selected="false" role="tab" tabindex="-1">
+              <div class="nav-icon mb-3">
+                <img src="/assets/media/icons/clock.png" class="icon-config" alt="" />
+              </div>
+              <div class="">
+                <span class="text-gray-800 fw-bold fs-5 d-block">Histórico</span>
+                <span class="text-gray-600 fw-semibold fs-3">{{
+                  eMQuantidade ? eMQuantidade.quantidade_historico : '-'
+                  }}</span>
+              </div>
+            </a>
+          </div>
+          <!--begin::Item-->
+          <div class="nav-item mx-4 mb-3 me-0" role="presentation">
+            <!--begin::Nav link-->
+            <a [ngClass]="{ disabled: !this.id }" class="nav-link nav-link-border-solid btn btn-outline btn-flex flex-column flex-stack pt-9 pb-7 page-bg active"
+              data-bs-toggle="pill" routerLink="anexos" routerLinkActive="navAtiva" style="width: 90px; height: 130px"
+              aria-selected="false" role="tab" tabindex="-1">
+              <!--begin::Icon-->
+              <div class="nav-icon mb-3">
+                <img src="/assets/media/icons/folders.png" class="icon-config" alt="" />
+              </div>
+              <!--end::Icon-->
+              <!--begin::Info-->
+              <div class="">
+                <span class="text-gray-800 fw-bold fs-5 d-block">Anexos</span>
+
+              </div>
+              <!--end::Info-->
+            </a>
+            <!--end::Nav link-->
+          </div>
+          <!--end::Item-->
+          <div *ngIf="entradaMaterial.status_id==2" class="nav-item mx-4 mb-3 me-0" role="presentation">
+            <a [ngClass]="{ disabled: !this.id }"
+              class="nav-link nav-link-border-solid btn btn-outline btn-flex flex-column flex-stack pt-9 pb-7 page-bg active"
+              data-bs-toggle="pill" (click)="open(content)" style="width: 90px; height: 130px" aria-selected="false"
+              role="tab" tabindex="-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div class="nav-icon mb-3">
+                <img src="/assets/media/icons/printer.png" class="icon-config" alt="" />
+              </div>
+              <div class="">
+                <span class="text-gray-800 fw-bold fs-5 d-block">Impressão</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Impressão -->
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Impressão do almoxarifado</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group mb-0">
+      <label>Impressões</label>
+      <select class="form-select" [(ngModel)]="selectedImpressao">
+        <option value="0" aria-placeholder="Impressões">Selecione</option>
+        <option value="1" aria-placeholder="Impressões">Movimentação de Material</option>
+      </select>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="imprimir()">Imprimir</button>
+  </div>
+</ng-template>

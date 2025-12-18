@@ -1,0 +1,30 @@
+export interface CotacaoPostGreeSQL {
+  mov_ano_pk: number;
+  mov_cotacao_pk: number;
+  mov_data: string;
+  mov_data_envio_cotacao: string;
+  mov_data_envio_licitacao: string;
+  mov_data_final: string;
+  mov_data_hora_criacao: string;
+  mov_data_inicial: string;
+  mov_descricao: string;
+  mov_forma_pagamento: string;
+  mov_justificativa: string;
+  mov_lote: string;
+  mov_modelo_tr: string;
+  mov_modelo_tr_fk: number;
+  mov_nota_tecnica: string;
+  mov_objeto: string;
+  mov_observacao1: string;
+  mov_observacao2: string;
+  mov_observacao3: string;
+  mov_periodo: string;
+  mov_prazo_entrega: string;
+  mov_prazo_pagamento: string;
+  mov_processo: string;
+  mov_setor_fluxo_fk: number;
+  mov_status: string;
+  mov_usuario_cotacao_fk: number;
+  mov_usuario_criacao_fk: number;
+  mov_usuario_licitacao_fk: number;
+}

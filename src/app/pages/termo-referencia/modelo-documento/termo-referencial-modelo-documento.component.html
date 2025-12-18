@@ -1,0 +1,29 @@
+<div class="card card-xxl-stretch mt-3 mb-5 mb-xxl-8">
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3">Modelo do Termo de Referência</span>
+    </h3>
+  </div>
+
+  <div class="row">
+    <div class="editor-container editor-container_document-editor" #editorContainerElement>
+      <div class="editor-container__menu-bar" #editorMenuBarElement></div>
+      <div class="editor-container__toolbar" #editorToolbarElement></div>
+      <div class="editor-container__editor-wrapper">
+        <div class="editor-container__editor">
+          <div #editorElement>
+            <ckeditor
+              [(ngModel)]="conteudoModelo"
+              [editor]="Editor"
+              [config]="config"
+              (ready)="onReady($event)"
+              *ngIf="isLayoutReady"
+            ></ckeditor>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <editor [(ngModel)]="conteudo" [init]="tinymceInit" [disabled]="false" tinymceScriptSrc="../../../src/assets/tinymce/tinymce.min.js"></editor> -->
+  </div>
+</div>
+<button class="btn btn-success" (click)="atualizarTermoReferencia()">Atualizar Termo Referencial</button>

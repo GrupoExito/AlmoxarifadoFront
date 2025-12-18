@@ -1,0 +1,256 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3">Termos de Referência</span>
+    </h3>
+    <div class="btn-toolbar" role="toolbar">
+      <div
+        class="card-toolbar me-4"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        data-bs-trigger="hover"
+        title="Clique para filtrar TR"
+      >
+        <button (click)="openAccordion()" class="btn btn-sm btn-light-primary">
+          <i class="fa fa-light fa-filter" *ngIf="!filtroButton"></i>
+          <i class="fa fa-light fa-filter-circle-xmark" *ngIf="filtroButton"></i>
+          Filtrar
+        </button>
+      </div>
+      <div
+        class="card-toolbar"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        data-bs-trigger="hover"
+        title="Clique para adicionar novo TR"
+      >
+        <a
+          href="javascript:void(0)"
+          routerLink="/termoreferencial/cadastro"
+          class="btn btn-sm btn-light-primary align-items-end"
+        >
+          <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>
+          Novo TR
+        </a>
+      </div>
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- begin::Body -->
+  <div class="card-body py-3">
+    <div class="row mb-3" *ngIf="filtroButton">
+      <div class="col-md-2">
+        <div class="form-group mb-0">
+          <label>Exercício</label>
+          <select class="form-select" [(ngModel)]="exercicioSelecionado">
+            <option value="">Selecione</option>
+            <option *ngFor="let exercicio of exercicios" value="{{ exercicio.id }}" aria-placeholder="Ano/Exercício">
+              {{ exercicio.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <!--<div class="col-md-5">
+        <div class="form-group mb-0">
+          <label>Secretaria</label>
+          <select class="form-select" [(ngModel)]="secretariaSelecionado">
+            <option value="">Selecione</option>
+            <option *ngFor="let secretaria of secretarias" value="{{ secretaria.id }}" aria-placeholder="Secretaria">
+              {{ secretaria.id_descricao }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group mb-0">
+          <label>Setor</label>
+          <select class="form-select" [(ngModel)]="setorSelecionado">
+            <option value="">Selecione</option>
+            <option *ngFor="let setor of setorFluxo" value="{{ setor.id }}" aria-placeholder="Setores">
+              {{ setor.nome }}
+            </option>
+          </select>
+        </div>
+      </div>-->
+      <div class="col-md-2">
+        <div class="form-group mb-0">
+          <label>Número</label>
+          <input class="form-control" type="text" maxlength="20" [(ngModel)]="numeroSelecionado" />
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="form-group mb-0">
+          <label>Status</label>
+          <select class="form-select" [(ngModel)]="statusSelecionado">
+            <option value="">Selecione</option>
+            <option value="1">Aberto</option>
+            <option value="8">Em Análise</option>
+            <option value="2">Autorizado</option>
+            <option value="16">Concluído</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="form-group mb-0">
+          <label>Data Inicial</label>
+          <input class="form-control" type="date" [(ngModel)]="dataInicialSelecionado" />
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="form-group mb-0">
+          <label>Data Final</label>
+          <input class="form-control" type="date" [(ngModel)]="dataFinalSelecionado" />
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="form-group mb-0">
+          <label>N° PA</label>
+          <input class="form-control" type="text" maxlength="20" [(ngModel)]="numeroPASelecionado" />
+        </div>
+      </div>
+      <!-- <div class="col-md-12">
+        <div class="form-group mb-0">
+          <label>Objeto</label>
+          <input class="form-control" type="text" [(ngModel)]="objetoSelecionado" />
+        </div>
+      </div> -->
+      <!-- <div class="col-md-2">
+        <div class="form-group mb-0">
+          <label>Exercício DFD</label>
+          <select class="form-select" [(ngModel)]="exercicioSDSelecionado">
+            <option value="">Selecione</option>
+            <option *ngFor="let exercicio of exercicios" value="{{ exercicio.id }}" aria-placeholder="Ano/Exercício">
+              {{ exercicio.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="form-group mb-0">
+          <label>Secretaria DFD</label>
+          <select class="form-select" [(ngModel)]="secretariaSDSelecionada">
+            <option value="">Selecione</option>
+            <option *ngFor="let secretaria of secretarias" value="{{ secretaria.id }}" aria-placeholder="Secretaria">
+              {{ secretaria.id_descricao }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="form-group mb-0">
+          <label>DFD</label>
+          <input class="form-control" type="text" maxlength="20" [(ngModel)]="sdSelecionada" />
+        </div>
+      </div> -->
+      <div class="d-flex col-md-12 mb-3 mt-3 align-self-end justify-content-end">
+        <button (click)="filtrar()" class="btn btn-success btn-sm">Filtrar</button>
+        <button (click)="limparFiltros()" class="btn btn-primary btn-sm mx-2">Limpar Filtros</button>
+      </div>
+    </div>
+    <hr *ngIf="filtroButton" />
+    <!-- begin::Table container -->
+    <div class="table-responsive">
+      <!-- begin::Table -->
+      <table
+        datatable
+        [dtOptions]="dtOptions"
+        [dtTrigger]="dtTrigger"
+        class="table table-hover table-row-dashed table-row-gray-300 align-middle gs-0 gy-0"
+      >
+        <!-- begin::Table head -->
+        <thead>
+          <tr class="fw-bolder text-dark fs-5">
+            <th class="min-w-40px">Número</th>
+            <th class="min-w-40px">Exercício</th>
+            <th class="min-w-40px">Justificativa</th>
+            <th class="min-w-240px">Status</th>
+            <th class="min-w-20px">N° PA</th>
+            <th class="min-w-80px text-center">Ações</th>
+          </tr>
+        </thead>
+        <!-- end::Table head -->
+        <!-- begin::Table body -->
+        <tbody>
+          <tr
+            *ngFor="let termoreferenciais of termoreferencia; trackBy: trackItem"
+            (dblclick)="doubleClickRedicionar(termoreferenciais)"
+          >
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5 mx-3"> {{ termoreferenciais.id }} </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5 mx-3"> {{ termoreferenciais.gexercicio_id }} </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span id="tableTR" class="text-dark fw-normal fs-5 mx-3" [title]="termoreferenciais.justificativa">
+                    {{ termoreferenciais.justificativa }}
+                  </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5 mx-3">
+                    {{ termoreferenciais.status }}
+                  </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5 mx-3"> {{ termoreferenciais.numero_pa }} </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex justify-content-start flex-shrink-0">
+                <button
+                  title="Editar Termo Referência"
+                  [routerLink]="['/termoreferencial/view', termoreferenciais.id, 'editar']"
+                  class="btn btn-icon btn-active-color-warning btn-md me-1"
+                >
+                  <span [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'" class="svg-icon svg-icon-3"></span>
+                </button>
+                <button
+                  title="Visualizar Termo Referência"
+                  [routerLink]="['/termoreferencial/view', termoreferenciais.id, 'cadastro']"
+                  class="btn btn-icon btn-active-color-primary btn-md me-1"
+                >
+                  <span><i class="fa-solid fa-eye"></i></span>
+                </button>
+                <button
+                  title="Excluir Termo Referência"
+                  (click)="deletar(termoreferenciais.id)"
+                  href="#"
+                  class="btn btn-icon btn-active-color-danger btn-md"
+                >
+                  <span
+                    [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
+                    class="svg-icon svg-icon-3"
+                  ></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+        <!-- end::Table body -->
+      </table>
+      <!-- end::Table -->
+    </div>
+    <!-- end::Table container -->
+  </div>
+  <!-- begin::Body -->
+</div>

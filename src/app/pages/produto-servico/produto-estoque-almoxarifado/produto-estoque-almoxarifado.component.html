@@ -1,0 +1,154 @@
+<button
+  data-bs-toggle="tooltip"
+  data-bs-placement="top"
+  data-bs-trigger="hover"
+  title="Clique para adicionar uma publicação"
+  class="btn btn-sm btn-primary me-3"
+  (click)="openModalEstoque(estoqueModal)"
+>
+  <i class="fa fa-light fa-shopping-cart"></i>
+  Estoque
+</button>
+
+<ng-template #estoqueModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Quantidade Mínima em Estoque</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form class="card" [formGroup]="ProdutoAlmoxarifadoForm">
+      <h4>Item: {{ produtoServico.descricao }}</h4>
+      <div class="row mt-3 mb-3">
+        <div class="col-md-6 align-self-end">
+          <div class="form-group">
+            <label class="form-label">Almoxarifado</label>
+            <ng-select
+              class="ngSelectDropdown"
+              [items]="almoxarifados"
+              bindLabel="descricao"
+              bindValue="id"
+              formControlName="almoxarifado_id"
+            >
+            </ng-select>
+          </div>
+          <div
+            *ngIf="
+              ProdutoAlmoxarifadoForm.get('almoxarifado_id')?.touched &&
+              ProdutoAlmoxarifadoForm.get('almoxarifado_id')?.hasError('required')
+            "
+            class="text text-danger"
+          >
+            Campo obrigatório!
+          </div>
+        </div>
+        <div class="col-md-2 align-self-end">
+          <div class="form-group">
+            <label class="form-label">Estoque mínimo</label>
+            <input
+              class="form-control mb-0"
+              type="number"
+              formControlName="estoque_minimo"
+              thousandSeparator="."
+              decimalMarker=","
+            />
+          </div>
+          <div
+            *ngIf="
+              ProdutoAlmoxarifadoForm.get('estoque_minimo')?.touched &&
+              ProdutoAlmoxarifadoForm.get('estoque_minimo')?.hasError('required')
+            "
+            class="text text-danger"
+          >
+            Campo obrigatório!
+          </div>
+        </div>
+        <div class="col-md-2 align-self-end">
+          <button class="btn btn-success" [disabled]="!ProdutoAlmoxarifadoForm.valid" (click)="criar()">
+            Cadastrar
+          </button>
+        </div>
+      </div>
+      <!-- <div class="card-footer text-right">
+            <button class="btn btn-success" [disabled]="!ProdutoAlmoxarifadoForm.valid" (click)="criar()">
+              Cadastrar
+            </button>
+          </div> -->
+    </form>
+
+    <div class="table-responsive">
+      <!-- begin::Table -->
+      <table class="table table-hover table-row-dashed table-row-gray-300 align-middle gs-0 gy-0">
+        <!-- begin::Table head -->
+        <thead>
+          <tr class="fw-bolder text-dark fs-5">
+            <!-- <th class="min-w-20px">Codigo Item</th>
+            <th class="min-w-20px">Descrição</th> -->
+            <th class="min-w-10px">Seq</th>
+            <th class="min-w-380px">Almoxarifado</th>
+            <th class="min-w-10px">Estoque mínimo</th>
+            <th class="min-w-10px">Estoque atual</th>
+            <th class="min-w-10px text-center">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let produto of produtoEstoqueAlmoxarifado | sortBy : 'asc' : 'item_descricao';
+              trackBy: trackItem;
+              let i = index
+            "
+          >
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5"> {{ i + 1 }} </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5"> {{ produto.descricao }} </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5"> {{ produto.estoque_minimo }} </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5"> {{ produto.estoque_atual }} </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex flex-shrink-0 justify-content-center">
+                <button
+                  (click)="atualizarQuantidade(produto.id)"
+                  class="btn btn-icon btn-active-color-warning btn-md me-1"
+                >
+                  <span [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'" class="svg-icon svg-icon-4"></span>
+                </button>
+                <button (click)="deletar(produto.id)" class="btn btn-icon btn-active-color-danger btn-md">
+                  <span
+                    [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
+                    class="svg-icon svg-icon-4"
+                  ></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- end::Table -->
+    </div>
+  </div>
+  <div class="modal-footer justify-content-start">
+    <button class="btn btn-danger mt-2 btn-sm" (click)="modal.dismiss('Cross click')">Fechar</button>
+  </div>
+</ng-template>

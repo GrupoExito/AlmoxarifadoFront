@@ -1,0 +1,76 @@
+<div class="card-body">
+  <!-- Aviso de atenção -->
+  <div class="alert alert-info" role="alert">
+    <strong>Atenção: Cadastro de Produtos e Serviços</strong><br /><br />
+    O correto preenchimento das descrições de produtos e serviços é fundamental para o planejamento das contratações do
+    próximo exercício.<br /><br />
+    • Descrições genéricas ou vazias como “materiais permanentes”, “materiais”, “outros materiais” ou “outros serviços”
+    prejudicam diretamente a consolidação das informações no Plano Anual de Contratações (PAC).<br />
+    • Esse tipo de cadastro incorreto impede a classificação adequada por tipo de despesa, inviabilizando relatórios
+    confiáveis para controle de gastos.<br />
+    • A ausência de detalhamento compromete o planejamento estratégico das compras e dificulta a previsão orçamentária
+    para o exercício seguinte.<br /><br />
+    👉 <strong>Recomendação:</strong> sempre detalhar de forma clara e precisa o item cadastrado, especificando sua
+    natureza, finalidade e características principais.
+  </div>
+  <div class="card card-xxl-stretch mb-5 mb-xxl-8">
+    <!-- begin::Header -->
+    <div class="card-header border-1 pt-2">
+      <h3 class="card-title align-items-start flex-column">
+        <span class="card-label fw-bolder fs-3 mb-1">Criar Tipo Objeto</span>
+      </h3>
+      <div
+        class="card-toolbar"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        data-bs-trigger="hover"
+        title="Clique para voltar"
+      >
+        <a href="javascript:void(0)" routerLink="/tipoobjeto" class="btn btn-sm btn-light-primary align-items-end">
+          <span [inlineSVG]="'./assets/media/icons/duotune/general/gen058.svg'" class="svg-icon svg-icon-3"></span>
+          Voltar
+        </a>
+      </div>
+    </div>
+    <!-- end::Header -->
+    <!-- Container-fluid starts-->
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <form class="card" [formGroup]="criarTipoObjetoForm">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-10">
+                <div class="form-group">
+                  <label class="form-label mt-3 mb-1">Descrição*</label>
+                  <input class="form-control" type="text" formControlName="descricao" maxlength="200" />
+                  <div
+                    *ngIf="
+                      criarTipoObjetoForm.get('descricao')?.touched &&
+                      criarTipoObjetoForm.get('descricao')?.hasError('required')
+                    "
+                    class="text text-danger mt-3"
+                  >
+                    Campo obrigatório!
+                  </div>
+                  <div
+                    *ngIf="
+                      criarTipoObjetoForm.get('descricao')?.touched &&
+                      criarTipoObjetoForm.get('descricao')?.hasError('maxlength')
+                    "
+                    class="text text-danger mt-3"
+                  >
+                    Tamanho máximo: 200
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer text-right">
+            <button class="btn btn-success" [disabled]="!criarTipoObjetoForm.valid" (click)="criar()">Cadastrar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- Container-fluid Ends-->
+  </div>
+</div>

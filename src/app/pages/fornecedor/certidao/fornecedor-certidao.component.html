@@ -1,0 +1,185 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Fornecedor Certidão</span>
+    </h3>
+    <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover" title="voltar">
+      <button type="button" class="btn btn-outline-dark btn-light-primary btn-sm" (click)="imprimir()">Imprimir</button>
+      <a href="javascript:void(0)" routerLink="/fornecedor" class="btn btn-sm btn-light-primary align-items-end">
+        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen058.svg'" class="svg-icon svg-icon-3"></span>
+        Voltar
+      </a>
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- begin::Body -->
+  <div class="card-body py-3">
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <form class="card" [formGroup]="fornecedorCertidaoForm">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label class="form-label mt-3 mb-1">ID</label>
+                  <input class="form-control" type="text" formControlName="id" />
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="form-label mt-3 mb-1">CPF/CNPJ</label>
+                  <input
+                    class="form-control"
+                    mask="000.000.000-00||00.000.000/0000-00"
+                    type="text"
+                    formControlName="cnpj_cpf"
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label mt-3 mb-1">Razão Social</label>
+                  <input class="form-control" type="text" formControlName="razao_social" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <form class="card" [formGroup]="addFornecedorCertidaoForm">
+          <div class="card-body">
+            <div class="row mt-3">
+              <h3>Adicionar Certidão*</h3>
+            </div>
+            <div class="row mt-3">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="form-label mt-3 mb-1">Número</label>
+                  <input class="form-control" type="text" formControlName="numero" />
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="form-label mt-3 mb-1">Data de Emissão</label>
+                  <input class="form-control" type="date" formControlName="data_emissao" />
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="form-label mt-3 mb-1">Data de Validade</label>
+                  <input class="form-control" type="date" formControlName="data_validade" />
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label mt-3 mb-1">Tipo Certidão</label>
+                  <ng-select
+                    appendTo="body"
+                    [items]="tiposCertidao"
+                    bindLabel="descricao"
+                    bindValue="id"
+                    [(ngModel)]="selectedFornecedorCertidao"
+                    formControlName="tipo_certidao_id"
+                  >
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-md-6 align-self-end">
+                <input #anexo type="file" style="display: none" accept="*/*" (change)="escolherAnexo($event)" />
+                <button (click)="anexo.click()" class="btn btn-sm btn-primary mt-3 mb-1">
+                  <span><i class="fa-solid fa-upload"></i> Anexar </span>
+                </button>
+                <div class="mt-2" *ngIf="file">
+                  <label class="form-group">Arquivo:</label>
+                  {{ file.name }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="card-footer text-right">
+          <button class="btn btn-success" [disabled]="!addFornecedorCertidaoForm.valid" (click)="adicionar()">
+            Adicionar
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- begin::Table container -->
+    <div class="table-responsive">
+      <!-- begin::Table -->
+      <table class="table table-hover table-row-dashed table-row-gray-300 align-middle gs-0 gy-0">
+        <!-- begin::Table head -->
+        <thead>
+          <tr class="fw-bolder text-dark fs-5">
+            <th class="min-w-120px">Tipo Certidão</th>
+            <th class="min-w-140px">Número</th>
+            <th class="min-w-140px">Data Emissão</th>
+            <th class="min-w-140px">Data Validade</th>
+            <th class="min-w-100px text-end">Ações</th>
+          </tr>
+        </thead>
+        <!-- end::Table head -->
+        <!-- begin::Table body -->
+        <tbody>
+          <tr *ngFor="let fornecedorCertidao of fornecedorCertidoes; trackBy: trackItem">
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5 mx-3"> {{ fornecedorCertidao.tipo_certidao_descricao }} </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5 mx-3"> {{ fornecedorCertidao.numero }} </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5">
+                    {{ fornecedorCertidao.data_emissao | date : 'dd/MM/yyyy' }}
+                  </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5">
+                    {{ fornecedorCertidao.data_validade | date : 'dd/MM/yyyy' }}
+                  </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex justify-content-end flex-shrink-0">
+                <button
+                  (click)="deletar(fornecedorCertidao.id)"
+                  href="#"
+                  class="btn btn-icon btn-active-color-danger btn-md"
+                >
+                  <span
+                    [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
+                    class="svg-icon svg-icon-3"
+                  ></span>
+                </button>
+                <button (click)="download(fornecedorCertidao)" class="btn btn-icon btn-active-color-primary">
+                  <span><i class="fa-solid fa-download"></i></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+        <!-- end::Table body -->
+      </table>
+      <!-- end::Table -->
+    </div>
+    <!-- end::Table container -->
+  </div>
+  <!-- end::Body -->
+</div>

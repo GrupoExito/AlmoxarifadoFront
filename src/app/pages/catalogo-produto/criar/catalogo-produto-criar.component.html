@@ -1,0 +1,162 @@
+<div class="card card-xxl-stretch">
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Criar Produto/Serviço</span>
+    </h3>
+    <div
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Clique para voltar"
+    >
+      <a href="javascript:void(0)" routerLink="/catalogo" class="btn btn-sm btn-light-primary align-items-end">
+        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen058.svg'" class="svg-icon svg-icon-3"></span>
+        Voltar
+      </a>
+    </div>
+  </div>
+
+  <form class="card" [formGroup]="criarCatalogoProdutoForm">
+    <div class="card-body">
+      <br />
+      <p><strong>CADASTRO</strong></p>
+      <hr />
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="form-label mt-3 mb-1">Descrição*</label>
+            <textarea rows="5" class="form-control" formControlName="descricao" maxlength="2000"></textarea>
+            <div
+              *ngIf="
+                criarCatalogoProdutoForm.get('descricao')?.touched &&
+                criarCatalogoProdutoForm.get('descricao')?.hasError('required')
+              "
+              class="text text-danger"
+            >
+              Campo obrigatório!
+            </div>
+            <div
+              *ngIf="
+                criarCatalogoProdutoForm.get('descricao')?.touched &&
+                criarCatalogoProdutoForm.get('descricao')?.hasError('maxlength')
+              "
+              class="text text-danger"
+            >
+              Tamanho máximo: 2000
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label mt-3 mb-1">Tipo produto/serviço*</label>
+            <select class="form-select form-select-lg" formControlName="tipo_de_produto_servico_id">
+              <option value="">Selecione um tipo produto/serviço</option>
+              <option *ngFor="let tipoProduto of tiposProduto" value="{{ tipoProduto.id }}">
+                {{ tipoProduto.descricao }}
+              </option>
+            </select>
+            <div
+              *ngIf="
+                criarCatalogoProdutoForm.get('tipo_de_produto_servico_id')?.touched &&
+                criarCatalogoProdutoForm.get('tipo_de_produto_servico_id')?.hasError('required')
+              "
+              class="text text-danger mt-3"
+            >
+              Campo obrigatório!
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="form-label mt-3 mb-1">Unidade Medida*</label>
+            <select class="form-select form-select-lg" formControlName="unidade_medida_id">
+              <option value="">Selecione uma unidade de medida</option>
+              <option
+                *ngFor="let unidadeMedida of unidadesMedida | sortBy : 'asc' : 'descricao'"
+                value="{{ unidadeMedida.id }}"
+              >
+                {{ unidadeMedida.descricao }}
+              </option>
+            </select>
+            <div
+              *ngIf="
+                criarCatalogoProdutoForm.get('unidade_medida_id')?.touched &&
+                criarCatalogoProdutoForm.get('unidade_medida_id')?.hasError('required')
+              "
+              class="text text-danger mt-3"
+            >
+              Campo obrigatório!
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="form-group">
+            <label class="form-label mt-3 mb-1">Valor Referência*</label>
+            <input class="form-control" type="number" formControlName="valor_referencia" />
+            <div
+              *ngIf="
+                criarCatalogoProdutoForm.get('valor_referencia')?.touched &&
+                criarCatalogoProdutoForm.get('valor_referencia')?.hasError('required')
+              "
+              class="text text-danger"
+            >
+              Campo obrigatório!
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label class="form-label mt-3 mb-1">Qtd casas dec. da quantidade*</label>
+            <input class="form-control" type="number" formControlName="qtd_casas_decimais_quantidade" />
+            <div
+              *ngIf="
+                criarCatalogoProdutoForm.get('qtd_casas_decimais_quantidade')?.touched &&
+                criarCatalogoProdutoForm.get('qtd_casas_decimais_quantidade')?.hasError('required')
+              "
+              class="text text-danger"
+            >
+              Campo obrigatório!
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label class="form-label mt-3 mb-1">Qtd casas dec. do valor*</label>
+            <input class="form-control" type="number" formControlName="qtd_casas_decimais_valor" />
+            <div
+              *ngIf="
+                criarCatalogoProdutoForm.get('qtd_casas_decimais_valor')?.touched &&
+                criarCatalogoProdutoForm.get('qtd_casas_decimais_valor')?.hasError('required')
+              "
+              class="text text-danger"
+            >
+              Campo obrigatório!
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <ngx-dropzone (change)="onSelect($event)">
+        <ngx-dropzone-label>Selecione as imagens do produto!</ngx-dropzone-label>
+        <ngx-dropzone-image-preview
+          ngProjectAs="ngx-dropzone-preview"
+          *ngFor="let f of files"
+          [file]="f"
+          [removable]="true"
+          (removed)="onRemove(f)"
+        >
+          <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+        </ngx-dropzone-image-preview>
+      </ngx-dropzone>
+    </div>
+    <div class="card-footer text-right">
+      <button class="btn btn-success" [disabled]="!criarCatalogoProdutoForm.valid" (click)="criar()">Cadastrar</button>
+    </div>
+  </form>
+</div>

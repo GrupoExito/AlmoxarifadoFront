@@ -1,0 +1,29 @@
+export interface SecretariaFundo {
+  id?: number;
+  descricao: string;
+  descricaoresumida: string;
+  sigla: string;
+  fundo: boolean;
+  cep?: string;
+  logradouro?: string;
+  complemento?: string;
+  municipio_id: number;
+  bairro?: string;
+  cnpj?: string;
+  secretaria_fundo_id?: number;
+  grupo_secretaria_id: number;
+  orgao_id: number;
+  codigo_tcm?: number;
+  ativo?: string;
+  usuario_exclusao_id?: string;
+  data_exclusao?: string;
+  municipio_nome?: string;
+  secretaria_filho_id?: string;
+  secretaria_filho_descricao?: string;
+  grupo_secretaria_descricao?: string;
+  orgao_descricao?: string;
+  id_descricao?: string;
+  gpessoa_responsavel_id?: number;
+  usuario_id?: number;
+  unidade_prefeitura?: boolean;
+}

@@ -1,0 +1,436 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Criar Saída Material</span>
+    </h3>
+
+    <!--div
+      *ngIf="saidaMaterial?.status_id === 1"
+      class="card-toolbar ms-auto"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Confirmar a saída de material"
+    >
+      <a
+        *appPermission="['Almoxarifado', 'emAnalise_saida']"
+        (click)="emAnalise()"
+        class="btn btn-sm btn-light-success align-items-end me-4"
+      >
+        <span [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'" class="svg-icon svg-icon-3"></span>
+        Em análise
+      </a>
+    </div-->
+
+    <div
+      *ngIf="saidaMaterial?.status_id === 8"
+      class="card-toolbar ms-auto"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Confirmar a saída de material"
+    >
+      <a
+        *appPermission="['Almoxarifado', 'autorizar_saida']"
+        (click)="autorizarSaida()"
+        class="btn btn-sm btn-light-success align-items-end me-4"
+      >
+        <span [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'" class="svg-icon svg-icon-3"></span>
+        Autorizar
+      </a>
+    </div>
+
+    <!--div
+      *ngIf="saidaMaterial?.status_id === 2"
+      class="card-toolbar ms-auto"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Processar a saída de material"
+    >
+      <a
+        *appPermission="['Almoxarifado', 'processar_saida']"
+        (click)="processarSaida()"
+        class="btn btn-sm btn-light-success align-items-end me-4"
+      >
+        <span [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'" class="svg-icon svg-icon-3"></span>
+        Processar
+      </a>
+    </div>
+
+    <div
+      *ngIf="saidaMaterial?.status_id === 2"
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Cancelar a saída de material"
+    >
+      <a
+        *appPermission="['Almoxarifado', 'cancelar_saida']"
+        (click)="cancelar()"
+        class="btn btn-sm btn-light-danger align-items-end me-4"
+      >
+        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'" class="svg-icon svg-icon-3"></span>
+        Cancelar
+      </a>
+    </div>
+
+    <div
+      *ngIf="saidaMaterial?.status_id === 2"
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="reabrir a saída de material"
+    >
+      <a
+        *appPermission="['Almoxarifado', 'reabrir_saida']"
+        (click)="reabrirSaida()"
+        class="btn btn-sm btn-light-warning align-items-end me-4"
+      >
+        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'" class="svg-icon svg-icon-3"></span>
+        reabrir
+      </a>
+    </div>
+
+    <div
+      *ngIf="saidaMaterial?.status_id === 5 && saidaMaterial?.tipo_saida_id !== 2"
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Cancelar a saída de material"
+    >
+      <a
+        *appPermission="['Almoxarifado', 'extornar_saida']"
+        (click)="abrirModalExtorno()"
+        class="btn btn-sm btn-light-warning align-items-end me-4"
+      >
+        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'" class="svg-icon svg-icon-3"></span>
+        Extornar
+      </a>
+    </div>
+
+    <div
+      *ngIf="saidaMaterial?.status_id === 1"
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Clique para editar a saída material"
+    >
+      <a
+        href="javascript:void(0)"
+        [routerLink]="['/saidamaterial/view', this.id, 'editar']"
+        class="btn btn-sm btn-light-primary align-items-end"
+      >
+        <span [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'" class="svg-icon svg-icon-3"></span>
+        Editar
+      </a>
+    </div-->
+  </div>
+
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <form class="card" [formGroup]="criarSaidaMaterialForm">
+        <div class="card-body">
+          <div class="row mt-2">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-group">Almoxarifado</label>
+                <ng-select
+                  class="ngSelectDropdown"
+                  [items]="almoxarifados"
+                  bindLabel="descricao"
+                  bindValue="id"
+                  formControlName="almoxarifado_id"
+                >
+                </ng-select>
+
+                <div
+                  *ngIf="
+                    criarSaidaMaterialForm.get('almoxarifado_id')?.touched &&
+                    criarSaidaMaterialForm.get('almoxarifado_id')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-group">Secretaria</label>
+                <ng-select
+                  #sec
+                  class="ngSelectDropdown"
+                  [items]="secretarias"
+                  bindLabel="descricao"
+                  bindValue="id"
+                  formControlName="secretaria_id"
+                  (change)="carregarDropdownSetor(sec)"
+                >
+                </ng-select>
+                <div
+                  *ngIf="
+                    criarSaidaMaterialForm.get('secretaria_id')?.touched &&
+                    criarSaidaMaterialForm.get('secretaria_id')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-group">Setor*</label>
+                <ng-select
+                  class="ngSelectDropdown"
+                  [items]="setores"
+                  bindLabel="nome"
+                  bindValue="id"
+                  formControlName="setor_id"
+                  (change)="carregarDropdownSolicitantePorSetor($event)"
+                >
+                </ng-select>
+                <div
+                  *ngIf="
+                    criarSaidaMaterialForm.get('setor_id')?.touched &&
+                    criarSaidaMaterialForm.get('setor_id')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-group">Solicitante*</label>
+                <ng-select
+                  class="ngSelectDropdown"
+                  [items]="solicitantes"
+                  bindLabel="nome"
+                  bindValue="id"
+                  formControlName="solicitante_id"
+                >
+                </ng-select>
+                <div
+                  *ngIf="
+                    criarSaidaMaterialForm.get('solicitante_id')?.touched &&
+                    criarSaidaMaterialForm.get('solicitante_id')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mb-2">Tipo de saída* </label>
+                <select
+                  class="form-select"
+                  formControlName="tipo_saida_id"
+                  aria-label="Tipo"
+                  (change)="onTipoSaidaChange()"
+                  [(ngModel)]="tipoSaida"
+                >
+                  <!--option value="N">Normal</option>
+                  <option value="D">Doação</option>
+                  <option value="E">Emprestimo Interno</option>
+                  <option value="X">Emprestimo Externo</option>
+                  <option value="Q">Quebra/Dano</option>
+                  <option value="V">Vencimento/Validade</option>
+                  <option value="T">Transferencia</option-->
+
+                  <option value="1">Requisição de Consumo</option>
+                  <option value="2">Transferência</option>
+                  <option value="3">Devolução de Empréstimo</option>
+                  <option value="4">Empréstimo/Cessão</option>
+                  <option value="5">Perda/Avaria/Inutilização</option>
+                  <option value="6">Devolução ao Fornecedor</option>
+                  <option value="7">Doação</option>
+                  <option value="8">Ajuste</option>
+                </select>
+                <div
+                  *ngIf="
+                    criarSaidaMaterialForm.get('tipo_saida_id')?.touched &&
+                    criarSaidaMaterialForm.get('tipo_saida_id')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-group">Centro Custo*</label>
+                <ng-select
+                  class="ngSelectDropdown mt-3"
+                  [items]="centroCustos"
+                  bindLabel="descricao"
+                  bindValue="id"
+                  formControlName="centro_custo_id"
+                >
+                </ng-select>
+                <div
+                  *ngIf="
+                    criarSaidaMaterialForm.get('centro_custo_id')?.touched &&
+                    criarSaidaMaterialForm.get('centro_custo_id')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-group">Responsável Retirada*</label>
+                <ng-select
+                  class="ngSelectDropdown mt-3"
+                  [items]="solicitantes"
+                  bindLabel="nome"
+                  bindValue="id"
+                  formControlName="responsavel_retirada_id"
+                >
+                </ng-select>
+                <div
+                  *ngIf="
+                    criarSaidaMaterialForm.get('responsavel_retirada_id')?.touched &&
+                    criarSaidaMaterialForm.get('responsavel_retirada_id')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label">Conta Contábil</label>
+                <input class="form-control" type="text" formControlName="conta_contabil" maxlength="30" />
+              </div>
+            </div>
+
+            <div class="col-md-2">
+              <div class="form-group mt-2">
+                <label>Data saída*</label>
+                <input class="form-control" type="date" formControlName="data_solicitacao" />
+                <div
+                  *ngIf="
+                    criarSaidaMaterialForm.get('data_solicitacao')?.touched &&
+                    criarSaidaMaterialForm.get('data_solicitacao')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div *ngIf="tipoSaida === 4" class="col-md-6">
+              <div class="form-group">
+                <label class="form-group">Unidade Externa</label>
+                <ng-select
+                  class="ngSelectDropdown"
+                  [items]="unidadesExterna"
+                  bindLabel="descricao"
+                  bindValue="id"
+                  formControlName="unidade_externa_id"
+                >
+                </ng-select>
+
+                <div
+                  *ngIf="
+                    criarSaidaMaterialForm.get('unidade_externa_id')?.touched &&
+                    criarSaidaMaterialForm.get('unidade_externa_id')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="tipoSaida === 2" class="col-md-6">
+              <div class="form-group">
+                <label class="form-group">Almoxarifado Destino</label>
+                <ng-select
+                  class="ngSelectDropdown"
+                  [items]="almoxarifados"
+                  bindLabel="descricao"
+                  bindValue="id"
+                  formControlName="almoxarifado_destino_id"
+                >
+                </ng-select>
+
+                <div
+                  *ngIf="
+                    criarSaidaMaterialForm.get('almoxarifado_destino_id')?.touched &&
+                    criarSaidaMaterialForm.get('almoxarifado_destino_id')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div *ngIf="tipoSaida === 2" class="col-md-6">
+              <div class="form-group">
+                <label class="form-group">Secretaria Destino</label>
+                <ng-select
+                  class="ngSelectDropdown"
+                  [items]="secretarias"
+                  bindLabel="descricao"
+                  bindValue="id"
+                  formControlName="secretaria_destino_id"
+                >
+                </ng-select>
+                <div
+                  *ngIf="
+                    criarSaidaMaterialForm.get('secretaria_destino_id')?.touched &&
+                    criarSaidaMaterialForm.get('secretaria_destino_id')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="row mt-2">
+              <div class="form-group mb-0">
+                <label>Observação</label>
+                <textarea
+                  class="form-control"
+                  id="floatingTextarea3"
+                  style="height: 100px"
+                  formControlName="observacao"
+                  name="Observacao"
+                  cols="30"
+                  rows="2"
+                >
+                </textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer text-right" *ngIf="!id">
+          <button class="btn btn-success" [disabled]="!criarSaidaMaterialForm.valid" (click)="criar()">
+            Cadastrar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>

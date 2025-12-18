@@ -1,0 +1,365 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Criar Produto/Serviço</span>
+    </h3>
+    <div
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Clique para voltar a listagem"
+    >
+      <a href="javascript:void(0)" routerLink="/produtoservico" class="btn btn-sm btn-light-primary align-items-end">
+        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen058.svg'" class="svg-icon svg-icon-3"></span>
+        Voltar
+      </a>
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <form class="card" [formGroup]="criarProdutoServicoForm">
+        <div class="card-body">
+          <br />
+          <p><strong>CADASTRO</strong></p>
+          <hr />
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Descrição*</label>
+                <textarea rows="5" class="form-control" formControlName="descricao" maxlength="5000"></textarea>
+                <div
+                  *ngIf="
+                    criarProdutoServicoForm.get('descricao')?.touched &&
+                    criarProdutoServicoForm.get('descricao')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    criarProdutoServicoForm.get('descricao')?.touched &&
+                    criarProdutoServicoForm.get('descricao')?.hasError('maxlength')
+                  "
+                  class="text text-danger"
+                >
+                  Tamanho máximo: 5000
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Tipo produto/serviço*</label>
+                <select class="form-select form-select-lg" formControlName="tipo_de_produto_servico_id">
+                  <option value="">Selecione um tipo produto/serviço</option>
+                  <option *ngFor="let tipoProduto of tiposProduto" value="{{ tipoProduto.id }}">
+                    {{ tipoProduto.descricao }}
+                  </option>
+                </select>
+                <div
+                  *ngIf="
+                    criarProdutoServicoForm.get('tipo_de_produto_servico_id')?.touched &&
+                    criarProdutoServicoForm.get('tipo_de_produto_servico_id')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Unidade Medida*</label>
+                <select class="form-select form-select-lg" formControlName="unidade_medida_id">
+                  <option value="">Selecione uma unidade de medida</option>
+                  <option
+                    *ngFor="let unidadeMedida of unidadesMedida | sortBy: 'asc':'descricao'"
+                    value="{{ unidadeMedida.id }}"
+                  >
+                    {{ unidadeMedida.descricao }}
+                  </option>
+                </select>
+                <div
+                  *ngIf="
+                    criarProdutoServicoForm.get('unidade_medida_id')?.touched &&
+                    criarProdutoServicoForm.get('unidade_medida_id')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Valor Referência*</label>
+                <input class="form-control" type="number" formControlName="valor_referencia" />
+                <div
+                  *ngIf="
+                    criarProdutoServicoForm.get('valor_referencia')?.touched &&
+                    criarProdutoServicoForm.get('valor_referencia')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Qtd casas dec. da quantidade*</label>
+                <input class="form-control" type="number" formControlName="qtd_casas_decimais_quantidade" />
+                <div
+                  *ngIf="
+                    criarProdutoServicoForm.get('qtd_casas_decimais_quantidade')?.touched &&
+                    criarProdutoServicoForm.get('qtd_casas_decimais_quantidade')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Qtd casas dec. do valor*</label>
+                <input class="form-control" type="number" formControlName="qtd_casas_decimais_valor" />
+                <div
+                  *ngIf="
+                    criarProdutoServicoForm.get('qtd_casas_decimais_valor')?.touched &&
+                    criarProdutoServicoForm.get('qtd_casas_decimais_valor')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <span class="form-label">Ativo no almoxarifado</span>
+              <div class="form-group mt-4">
+                <div class="form-check form-check-inline">
+                  <input
+                    (click)="validarAlmoxarifado(1)"
+                    class="form-check-input-sm"
+                    type="radio"
+                    name="ativo_almoxarifado"
+                    formControlName="ativo_almoxarifado"
+                    [value]="1"
+                    [(ngModel)]="ativoAlmoxarifado"
+                  />
+                  <label class="form-check-label fs-7" for="almoxarifadosim">Sim</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    (click)="validarAlmoxarifado(0)"
+                    class="form-check-input-sm"
+                    type="radio"
+                    name="ativo_almoxarifado"
+                    formControlName="ativo_almoxarifado"
+                    [value]="0"
+                    [(ngModel)]="ativoAlmoxarifado"
+                  />
+                  <label class="form-check-label fs-7" for="almoxarifadonao">Não</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <span class="form-label">Confirmado</span>
+              <div class="form-group mt-4">
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input-sm"
+                    type="radio"
+                    name="confirmado"
+                    formControlName="confirmado"
+                    [value]="1"
+                    [(ngModel)]="confirmado"
+                  />
+                  <label class="form-check-label" for="confirmadosim">Sim</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input-sm"
+                    type="radio"
+                    name="confirmado"
+                    formControlName="confirmado"
+                    [value]="0"
+                    [(ngModel)]="confirmado"
+                  />
+                  <label class="form-check-label" for="confirmadonao">Não</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Código de Barras</label>
+                <input class="form-control" type="text" formControlName="codigo_barra" />
+              </div>
+          </div>
+
+          <br *ngIf="ativoAlmoxarifado" />
+          <p *ngIf="ativoAlmoxarifado"><strong>INFORMAÇÕES DO ALMOXARIFADO</strong></p>
+          <hr *ngIf="ativoAlmoxarifado" />
+          <div *ngIf="ativoAlmoxarifado" class="row mt-3">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Descrição Almoxarifado*</label>
+                <textarea
+                  rows="5"
+                  class="form-control"
+                  formControlName="descricao_almoxarifado"
+                  maxlength="2000"
+                ></textarea>
+                <div
+                  *ngIf="
+                    criarProdutoServicoForm.get('descricao_almoxarifado')?.touched &&
+                    criarProdutoServicoForm.get('descricao_almoxarifado')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    criarProdutoServicoForm.get('descricao_almoxarifado')?.touched &&
+                    criarProdutoServicoForm.get('descricao_almoxarifado')?.hasError('maxlength')
+                  "
+                  class="text text-danger"
+                >
+                  Tamanho máximo: 2000
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="ativoAlmoxarifado" class="row mt-3">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Unidade medida do almoxarifado*</label>
+                <select class="form-select form-select-lg" formControlName="unidade_medida_almoxarifado_id">
+                  <option value="">Selecione uma unidade de medida</option>
+                  <option
+                    *ngFor="let unidadeMedida of unidadesMedida | sortBy: 'asc':'descricao'"
+                    value="{{ unidadeMedida.id }}"
+                  >
+                    {{ unidadeMedida.descricao }}
+                  </option>
+                </select>
+                <div
+                  *ngIf="
+                    criarProdutoServicoForm.get('unidade_medida_almoxarifado_id')?.touched &&
+                    criarProdutoServicoForm.get('unidade_medida_almoxarifado_id')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Quantidade do principal*</label>
+                <input class="form-control" type="number" formControlName="qtde_do_principal" />
+                <div
+                  *ngIf="
+                    criarProdutoServicoForm.get('qtde_do_principal')?.touched &&
+                    criarProdutoServicoForm.get('qtde_do_principal')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <span class="form-label">Usa data de Validade</span>
+              <div class="form-group mt-4">
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input-sm"
+                    type="radio"
+                    name="usadataValidade"
+                    formControlName="usadataValidade"
+                    [value]="1"
+                    [(ngModel)]="dataValidade"
+                  />
+                  <label class="form-check-label fs-7" for="usadataValidadesim">Sim</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input-sm"
+                    type="radio"
+                    name="usadataValidade"
+                    formControlName="usadataValidade"
+                    [value]="0"
+                    [(ngModel)]="dataValidade"
+                  />
+                  <label class="form-check-label fs-7" for="usadataValidadenao">Não</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <span class="form-label">Usa data lote de fabricação</span>
+              <div class="form-group mt-4">
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input-sm"
+                    type="radio"
+                    name="usalotefabricacao"
+                    formControlName="usalotefabricacao"
+                    [value]="1"
+                    [(ngModel)]="dataLote"
+                  />
+                  <label class="form-check-label fs-7" for="usalotefabricacaosim">Sim</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input-sm"
+                    type="radio"
+                    name="usalotefabricacao"
+                    formControlName="usalotefabricacao"
+                    [value]="0"
+                    [(ngModel)]="dataLote"
+                  />
+                  <label class="form-check-label fs-7" for="usalotefabricacaonao">Não</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br />
+          <p><strong>INFORMAÇÕES DO BANCO DO BRASIL</strong></p>
+          <hr />
+          <div class="row mt-3">
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Código BB</label>
+                <input class="form-control" type="number" formControlName="codigobb" />
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Mercadoria BB</label>
+                <input class="form-control" type="number" formControlName="mercadoriabb" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer text-right">
+          <button class="btn btn-success" [disabled]="!criarProdutoServicoForm.valid" (click)="criar()">
+            Cadastrar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>

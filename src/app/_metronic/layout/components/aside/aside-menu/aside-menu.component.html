@@ -1,0 +1,63 @@
+<div
+  class="menu menu-column --bs-white fw-normal fs-2 flex-column-fluid btn-active-color-primary"
+  id="kt_aside_menu"
+  data-kt-menu="true"
+>
+    <!-- Dashboard -->
+  <div class="menu-item py-3" routerLinkActive="here show">
+    <a class="menu-center ms-2 me-xl-2 py-4" routerLink="/dashboard" routerLinkActive="show">
+      <span class="">
+        <img src="./assets/media/icons/business-report.png" class="h-25px px-1" />
+        <span class="menu-title">Painel/Dashboard</span>
+      </span>
+    </a>
+  </div>
+
+  <div class="menu-item py-3" routerLinkActive="here show" *ngIf="usaBI">
+    <a class="menu-center ms-2 me-xl-2 py-4" routerLink="/bi" routerLinkActive="show">
+      <span class="">
+        <img src="./assets/media/icons/business-report.png" class="h-25px px-1" />
+        <span class="menu-title">BI</span>
+      </span>
+    </a>
+  </div>
+
+
+  <!-- Almoxarifado -->
+  <div class="menu-item py-3" routerLinkActive="here show">
+    <a class="menu-center" routerLink="/almoxarifado/listar" routerLinkActive="show">
+      <span class="menu-icon ms-2 me-xl-2 py-4">
+        <img src="./assets/media/icons/almox.png" class="h-25px px-1" />
+        <span class="menu-title">Almoxarifado</span>
+      </span>
+    </a>
+  </div>
+
+  <!-- Almoxarifado -->
+  <div class="menu-item py-3" routerLinkActive="here show">
+    <a class="menu-center" routerLink="/entradamaterial/listar" routerLinkActive="show">
+      <span class="menu-icon ms-2 me-xl-2 py-4">
+        <img src="./assets/media/icons/task.png" class="h-25px px-1" />
+        <span class="menu-title">Movimentação - Entrada</span>
+      </span>
+    </a>
+  </div>
+  <div class="menu-item py-3" routerLinkActive="here show">
+    <a class="menu-center" routerLink="/saidamaterial/listar" routerLinkActive="show">
+      <span class="menu-icon ms-2 me-xl-2 py-4">
+        <img src="./assets/media/icons/sending.png" class="h-25px px-1" />
+        <span class="menu-title">Movimentação - Saída</span>
+      </span>
+    </a>
+  </div>
+
+  <!-- Relatorios -->
+  <div class="menu-item py-3" routerLinkActive="here show">
+    <a class="menu-center" routerLink="/relatorio" routerLinkActive="show">
+      <span class="menu-icon ms-2 me-xl-2 py-4">
+        <img src="./assets/media/icons/documentos.png" class="h-25px px-1" />
+        <span class="menu-title">Relatórios</span>
+      </span>
+    </a>
+  </div>
+</div>

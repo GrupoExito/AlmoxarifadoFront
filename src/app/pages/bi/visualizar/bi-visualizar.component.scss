@@ -1,0 +1,37 @@
+:root {
+  --app-header-h: 88px; // sincronizado via TS
+}
+
+/* Card simples e sem bordas pesadas */
+.bi-card {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.06);
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+/* Barra superior compacta */
+.bi-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  padding: .75rem 1rem;
+  border-bottom: 1px solid rgba(0,0,0,.06);
+
+  .title { display: flex; align-items: center; gap: .5rem; }
+}
+
+/* Área do iframe ocupa a altura útil da tela */
+.bi-frame {
+  /* altura: viewport - header global da app - toolbar do card - margens de página (~24px) */
+  min-height: calc(100vh - var(--app-header-h) - 56px - 24px);
+  background: #fff;
+
+  iframe {
+    width: 100%;
+    height: calc(100vh - var(--app-header-h) - 56px - 24px);
+    border: 0;
+    display: block;
+  }
+}

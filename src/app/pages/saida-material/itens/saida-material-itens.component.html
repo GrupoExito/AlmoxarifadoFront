@@ -1,0 +1,338 @@
+<div id="adicionarItem"></div>
+<div *appPermission="['Almoxarifado', 'adicionar_item_saida']" class="card mt-3">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="card-body" *ngIf="saidaMaterial?.status_id === 1">
+        <div class="row">
+          <div class="col-md-9">
+            <h3><span>Adicionar itens</span></h3>
+          </div>
+          <div *appPermission="['Almoxarifado', 'saida_por_pedido']" class="col-md-3">
+            <button class="mt-3 btn btn-primary" (click)="listarItensPedido()">Saída Por Pedido Adicionar</button>
+            <div class="btn-toolbar" role="toolbar"></div>
+          </div>
+        </div>
+        <div class="row mt-3" *ngIf="saldoGeralItem">
+          <div class="col-md-3">
+            <div class="input-group">
+              <span class="form-label input-group-text">Quantidade entrada</span>
+              <input
+                type="text"
+                class="form-control"
+                [value]="saldoGeralItem.quantidade_entrada ? saldoGeralItem.quantidade_entrada : 0"
+                disabled
+              />
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="input-group">
+              <span class="form-label input-group-text">Quantidade saída</span>
+              <input
+                type="text"
+                class="form-control"
+                [value]="saldoGeralItem.quantidade_saida ? saldoGeralItem.quantidade_saida : 0"
+                disabled
+              />
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="input-group">
+              <span class="form-label input-group-text">Saldo Geral</span>
+              <input type="text" class="form-control" [value]="saldoGeralItem.saldo" disabled />
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="input-group">
+              <span class="form-label input-group-text">Saldo por lote - Data validade</span>
+              <input type="text" class="form-control" [value]="saldoItemLoteData?.saldo_lote_data_validade" disabled />
+            </div>
+          </div>
+        </div>
+        <form [formGroup]="addProdutoForm">
+  <div class="row mt-3">
+    <!-- Select de Itens (sem ngModel) -->
+    <div class="col-12">
+      <div class="form-group">
+        <label class="form-label">Itens</label>
+        <ng-select
+          appendTo="body"
+          class="ngSelectDropdown"
+          [virtualScroll]="true"
+          [items]="itemDisponivel"
+          bindLabel="descricao"
+          bindValue="id"
+          formControlName="produto_servico_id"
+          (change)="onSelectItem($event)"
+          placeholder="Selecione um item"
+        >
+          <ng-template ng-option-tmp let-item="item">
+            <div [attr.data-title]="item.descricao">
+              {{ item.descricao }}
+            </div>
+          </ng-template>
+        </ng-select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabela de Lotes/Validades do produto selecionado -->
+  <div class="row mt-4" *ngIf="exibirTabelaLotes">
+    <div class="col-12">
+      <div class="card card-bordered">
+        <div class="card-header py-3">
+          <h5 class="mb-0">
+            Lotes / Validades do item selecionado
+            <small *ngIf="selectedDescricao" class="text-muted">— {{ selectedDescricao }}</small>
+          </h5>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="bg-light">
+                <tr>
+                  <th class="min-w-100px">Lote</th>
+                  <th class="min-w-120px">Validade</th>
+                  <th class="min-w-120px">Saldo Total</th>
+                  <th class="min-w-140px">Saldo Disponível</th>
+                  <th class="min-w-160px">Quantidade</th>
+                </tr>
+              </thead>
+
+              <!-- FormArray "lotes" -->
+              <tbody formArrayName="lotes" *ngIf="lotesFormArray?.length; else semLotes">
+                <tr *ngFor="let loteGroup of lotesControls; let i = index" [formGroupName]="i">
+                  <td>
+                    <span class="text-dark fw-normal">
+                      {{ loteGroup.value.numero_lote }}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="text-dark fw-normal">
+                      {{ loteGroup.value.data_validade | date : 'dd/MM/yyyy' }}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="text-dark fw-normal">
+                      {{ loteGroup.value.saldo_total }}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="text-dark fw-normal">
+                      {{ loteGroup.value.saldo_disponivel }}
+                    </span>
+                  </td>
+                  <td style="max-width: 180px;">
+                    <input
+                      class="form-control"
+                      type="text"
+                      formControlName="quantidade"
+                      mask="separator,2"
+                      [allowNegativeNumbers]="false"
+                      thousandSeparator="."
+                      decimalMarker=","
+                      placeholder="0,00"
+                    />
+                    <div class="form-text text-muted">
+                      Máx: {{ loteGroup.value.saldo_disponivel }}
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+
+              <ng-template #semLotes>
+                <tbody>
+                  <tr>
+                    <td colspan="6" class="text-center py-4">
+                      <em>Nenhum lote disponível para o item selecionado.</em>
+                    </td>
+                  </tr>
+                </tbody>
+              </ng-template>
+            </table>
+          </div>
+        </div>
+
+        <!-- Botão Adicionar vinculado à tabela -->
+        <div class="card-footer d-flex justify-content-end">
+          <button class="btn btn-success"
+                  (click)="adicionar()"
+                  [disabled]="!temQuantidadeParaAdicionar">
+            Adicionar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card card-xxl-stretch mb-5 mb-xxl-8 mt-3">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Itens</span>
+    </h3>
+  </div>
+  <!-- end::Header -->
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="card-body py-3">
+        <!-- begin::Table container -->
+        <div class="table-responsive">
+          <!-- begin::Table -->
+          <table
+            datatable
+            [dtOptions]="dtOptions"
+            [dtTrigger]="dtTrigger"
+            class="table table-hover table-row-dashed table-row-gray-300 align-middle gs-0 gy-0"
+          >
+            <!-- begin::Table head -->
+            <thead>
+              <tr class="fw-bolder text-dark fs-5">
+                <th class="min-w-20px">Seq</th>
+                <th class="min-w-20px">Código</th>
+                <th class="min-w-240px">Descrição</th>
+                <th class="min-w-20px">Und</th>
+                <th class="min-w-20px">Quantidade</th>
+                <th class="min-w-20px">Valor</th>
+                <th class="min-w-20px">Valor Total</th>
+                <th class="min-w-20px">Data validade</th>
+                <th class="min-w-20px">Lote</th>
+                <th class="min-w-20px text-center">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let item of saidaItens | sortBy : 'asc' : 'item_descricao'; trackBy: trackItem; let i = index"
+              >
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="d-flex justify-content-start flex-column">
+                      <span class="text-dark fw-normal fs-5"> {{ i + 1 }} </span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="d-flex justify-content-start flex-column">
+                      <span class="text-dark fw-normal fs-5"> {{ item.item_codigo }} </span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="d-flex justify-content-start flex-column">
+                      <span class="text-dark fw-normal fs-5"> {{ item.item_descricao }} </span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="d-flex justify-content-start flex-column">
+                      <span class="text-dark fw-normal fs-5"> {{ item.und_descricao }} </span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="d-flex justify-content-start flex-column">
+                      <span class="text-dark fw-normal fs-5"> {{ item.quantidade }} </span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex">
+                    <div class="d-flex">
+                      <span class="text-dark fw-normal py-0 fs-4">
+                        {{ item.valor | currency : 'BRL' : 'symbol' : '1.2-2' }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex">
+                    <div class="d-flex">
+                      <span class="text-dark fw-normal py-0 fs-4">
+                        {{ item.valor_total | currency : 'BRL' : 'symbol' : '1.2-2' }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="d-flex justify-content-start flex-column">
+                      <span class="text-dark fw-normal fs-5"> {{ item.data_validade | date : 'dd/MM/yyyy' }} </span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="d-flex justify-content-start flex-column">
+                      <span class="text-dark fw-normal fs-5"> {{ item.numero_lote }} </span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex flex-shrink-0 justify-content-center" *ngIf="saidaMaterial?.status_id === 1">
+                    <button
+                      (click)="atualizarQuantidade(item)"
+                      class="btn btn-icon btn-active-color-warning btn-md me-1"
+                    >
+                      <span
+                        [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'"
+                        class="svg-icon svg-icon-4"
+                      ></span>
+                    </button>
+                    <button (click)="deletar(item.id)" class="btn btn-icon btn-active-color-danger btn-md">
+                      <span
+                        [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
+                        class="svg-icon svg-icon-4"
+                      ></span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <!-- end::Table body -->
+          </table>
+          <!-- end::Table -->
+        </div>
+        <!-- end::Table container -->
+      </div>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>
+
+<div class="modal fade" id="modalSaidaPedido" tabindex="-1" aria-labelledby="modalSaidaPedidoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalSaidaPedidoLabel">Pedidos de compra</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="pedidoSelect">Escolha um Pedido</label>
+          <ng-select
+            id="pedidoSelect"
+            [items]="compras"
+            bindLabel="pedido_informacao"
+            bindValue="id"
+            [(ngModel)]="selectedPedidoId"
+            placeholder="Selecione um pedido"
+          >
+          </ng-select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        <button type="button" class="btn btn-primary" (click)="adicionarItensPedido()">Adicionar itens</button>
+      </div>
+    </div>
+  </div>
+</div>

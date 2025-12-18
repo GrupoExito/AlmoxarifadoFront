@@ -1,0 +1,130 @@
+<!--begin::Content-->
+<div class="d-flex flex-center flex-column flex-column-fluid mt-6">
+  <a routerLink="/" class="mb-12"><img alt="Logo" src="./assets/media/logos/logo-1.svg" class="h-45px" /></a>
+</div>
+
+<div class="card-toolbar mb-3 ms-6">
+  <div class="row">
+    <h1>Legenda</h1>
+  </div>
+  <button type="button" class="btn btn-primary me-3">Post</button>
+  <button type="button" class="btn btn-secondary me-3">Put</button>
+  <button type="button" class="btn btn-warning me-3">Delete</button>
+  <button type="button" class="btn btn-danger">Error</button>
+</div>
+
+<div class="container-fluid">
+  <div class="card card-xxl-stretch mb-5 mb-xxl-8">
+    <div class="card-header border-1 pt-5">
+      <h3 class="card-title">
+        <span class="card-label fw-bolder fs-3 mb-1">Logs</span>
+      </h3>
+    </div>
+    <div class="card-body py-3">
+      <div class="table-responsive">
+        <table
+          datatable
+          [dtOptions]="dtOptions"
+          [dtTrigger]="dtTrigger"
+          class="table table-hover table-row-gray-300 align-middle"
+        >
+          <thead>
+            <tr class="fw-bolder fs-3">
+              <th class="">Usuário</th>
+              <th class="">Cliente</th>
+              <th class="">Rota</th>
+              <th class="">Metodo</th>
+              <th class="min-w-150px">Payload</th>
+              <th class="">Data</th>
+              <th class="">IP</th>
+              <th class="">Função</th>
+              <th class="">Erro</th>
+              <th class="">Observação</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr [@enterAnimation] *ngFor="let log of logs; trackBy: trackItem" [ngClass]="{ 'bg-danger': log.error }">
+              <td class="text-center">
+                <span class="text-dark fw-normal fs-5"> {{ log.usuario_id }} </span>
+              </td>
+              <td>
+                <span class="text-dark fw-normal fs-5"> {{ log.db_cliente }} </span>
+              </td>
+              <td>
+                <span class="text-dark fw-normal fs-5"> {{ log.rota }} </span>
+              </td>
+              <td>
+                <span class="text-dark fw-normal fs-5"> {{ log.metodo }} </span>
+              </td>
+              <td>
+                <button
+                  *ngIf="log.body !== 'null'"
+                  type="button"
+                  class="btn btn-primary btn-sm"
+                  (click)="open(payloadModal, log.body)"
+                >
+                  Ver Payload
+                </button>
+              </td>
+              <td>
+                <span class="text-dark fw-normal fs-5">
+                  {{ log.data | date: 'dd/MM/yyyy' }} <br />
+                  {{ log.data | date: 'HH:mm' }}
+                </span>
+              </td>
+              <td>
+                <span class="text-dark fw-normal fs-5"> {{ log.ip }} </span>
+              </td>
+              <td class="">
+                <span class="text-dark fw-normal fs-5"> {{ log.funcao }} </span>
+              </td>
+              <td>
+                <span class="text-dark fw-normal fs-5"> {{ log.error_message }} </span>
+              </td>
+              <td>
+                <span class="text-dark fw-normal fs-5"> {{ log.observacao }} </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- begin::Footer -->
+<div class="d-flex flex-center flex-column-auto p-10">
+  <div class="d-flex align-items-center fw-bold fs-6">
+    <a class="text-muted text-hover-primary px-2 cursor-pointer">About</a
+    ><a class="text-muted text-hover-primary px-2 cursor-pointer">Contact</a
+    ><a class="text-muted text-hover-primary px-2 cursor-pointer">Contact Us</a>
+  </div>
+</div>
+<!-- end::Footer -->
+
+<!--
+<td>
+  <div class="d-flex align-items-center">
+    <div class="d-flex justify-content-start flex-column">
+      <span class="text-dark fw-normal fs-5"> {{ log.funcao }} </span>
+    </div>
+  </div>
+</td> -->
+
+<!-- Modal -->
+<ng-template #payloadModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Payload</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <span style="overflow: auto">
+      <ul>
+        <li *ngFor="let item of getObjectProperties()">{{ item[0] }}: {{ item[1] }}</li>
+      </ul>
+    </span>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-dark" (click)="modal.dismiss('Cross click')">fechar</button>
+  </div>
+</ng-template>

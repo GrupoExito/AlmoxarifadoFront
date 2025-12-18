@@ -1,0 +1,298 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Criar Responsável/Colaborador/Gestor</span>
+    </h3>
+    <div
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Clique para voltar a listagem"
+    >
+      <a href="javascript:void(0)" routerLink="/pessoa" class="btn btn-sm btn-light-primary align-items-end">
+        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen058.svg'" class="svg-icon svg-icon-3"></span>
+        Voltar
+      </a>
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <form class="card" [formGroup]="criarPessoaForm">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Nome*</label>
+                <input class="form-control" type="text" formControlName="nome" />
+                <div
+                  *ngIf="criarPessoaForm.get('nome')?.touched && criarPessoaForm.get('nome')?.hasError('required')"
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="criarPessoaForm.get('pessoa')?.touched && criarPessoaForm.get('pessoa')?.hasError('maxlength')"
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 50
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Usuário</label>
+                <select class="form-select form-select-lg" formControlName="usuario_id">
+                  <option value="">selecione</option>
+                  <option *ngFor="let usuario of usuarios" value="{{ usuario.id }}">{{ usuario.nome }}</option>
+                </select>
+                <div
+                  *ngIf="
+                    criarPessoaForm.get('usuario_id')?.touched &&
+                    criarPessoaForm.get('usuario_id')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Sexo*</label>
+                <select class="form-select" formControlName="sexo_id" aria-label="Sexo">
+                  <option value="1">Masculino</option>
+                  <option value="2">Feminino</option>
+                  <option value="3">Outros</option>
+                </select>
+                <div
+                  *ngIf="
+                    criarPessoaForm.get('sexo_id')?.touched && criarPessoaForm.get('sexo_id')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">CPF*</label>
+                <input
+                  (focusout)="setCPFValidator()"
+                  mask="000.000.000-00"
+                  class="form-control"
+                  type="text"
+                  formControlName="cpf"
+                />
+                <div
+                  *ngIf="criarPessoaForm.get('cpf')?.touched && criarPessoaForm.get('cpf')?.hasError('maxlength')"
+                  class="text text-danger"
+                >
+                  Tamanho máximo: 15
+                </div>
+                <div
+                  *ngIf="criarPessoaForm.get('cpf')?.touched && criarPessoaForm.get('cpf')?.hasError('cpfError')"
+                  class="text text-danger"
+                >
+                  CPF Inválido
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">RG</label>
+                <input class="form-control" type="text" formControlName="rg" />
+                <div
+                  *ngIf="criarPessoaForm.get('rg')?.touched && criarPessoaForm.get('rg')?.hasError('maxlength')"
+                  class="text text-danger"
+                >
+                  Tamanho máximo: 15
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Órgão Expedidor</label>
+                <input class="form-control" type="text" formControlName="orgao_expeditor_rg" />
+                <div
+                  *ngIf="
+                    criarPessoaForm.get('orgao_expeditor_rg')?.touched &&
+                    criarPessoaForm.get('orgao_expeditor_rg')?.hasError('maxlength')
+                  "
+                  class="text text-danger"
+                >
+                  Tamanho máximo: 15
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Data de Nascimento</label>
+                <input class="form-control" type="date" formControlName="nascimento" />
+                <div
+                  *ngIf="
+                    criarPessoaForm.get('nascimento')?.touched &&
+                    criarPessoaForm.get('nascimento')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Telefone</label>
+                <input mask="(00) 0000-0000" class="form-control" type="text" formControlName="telefone" />
+                <div
+                  *ngIf="
+                    criarPessoaForm.get('telefone')?.touched && criarPessoaForm.get('telefone')?.hasError('maxlength')
+                  "
+                  class="text text-danger"
+                >
+                  Tamanho máximo: 15
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Celular</label>
+                <input mask="(00) 00000-0000" class="form-control" type="text" formControlName="celular" />
+                <div
+                  *ngIf="
+                    criarPessoaForm.get('celular')?.touched && criarPessoaForm.get('celular')?.hasError('maxlength')
+                  "
+                  class="text text-danger"
+                >
+                  Tamanho máximo: 15
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Tipo*</label>
+                <select class="form-select" formControlName="tipo" aria-label="Tipo">
+                  <option value="1">Outros</option>
+                  <option value="2">Prefeito</option>
+                  <option value="3">Secretário</option>
+                </select>
+                <div
+                  *ngIf="criarPessoaForm.get('tipo')?.touched && criarPessoaForm.get('tipo')?.hasError('required')"
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label mt-3 mb-1">Responsável</label>
+              <div class="form-group mt-3">
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="responsavel"
+                    formControlName="responsavel"
+                    [value]="1"
+                  />
+                  <label class="form-check-label fs-7" for="responsavelsim">Sim</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="responsavel"
+                    formControlName="responsavel"
+                    [value]="0"
+                  />
+                  <label class="form-check-label fs-7" for="responsavelnao">Não</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">E-mail</label>
+                <input class="form-control" type="text" formControlName="email" />
+                <div
+                  *ngIf="criarPessoaForm.get('email')?.touched && criarPessoaForm.get('email')?.hasError('required')"
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="criarPessoaForm.get('email')?.touched && criarPessoaForm.get('email')?.hasError('maxlength')"
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 50
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Cargo</label>
+                <select class="form-select form-select-lg" formControlName="gcargo_id">
+                  <option value="">selecione</option>
+                  <option *ngFor="let cargo of cargos" value="{{ cargo.id }}">{{ cargo.descricao }}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Fiscal:</label>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="fiscal_contrato"
+                    formControlName="fiscal_contrato"
+                  />
+                  <label class="form-check-label" for="fiscal_contrato"> Fiscal Contrato </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <hr />
+          <div class="row">
+            <div class="row mt-3">
+              <div class="col-md-4 mt-3">
+                <input #imgLogo type="file" (change)="mostrarImagem($event)" style="display: none" accept="image/*" />
+                <button class="btn btn-secondary" (click)="imgLogo.click()">
+                  <span class="ml-2 mr-1">Assinatura</span>
+                </button>
+              </div>
+
+              <div class="col-md-4 mt-3">
+                <img src="{{ imgFile }}" class="img-fluid" alt="" style="max-height: 120px" />
+              </div>
+            </div>
+          </div>
+          <hr /> -->
+        </div>
+        <div class="card-footer text-right">
+          <button class="btn btn-success" [disabled]="!criarPessoaForm.valid" (click)="salvar()">Cadastrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>

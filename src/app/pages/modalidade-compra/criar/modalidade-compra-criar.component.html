@@ -1,0 +1,110 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Criar Modalidade</span>
+    </h3>
+    <div
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Clique para voltar"
+    >
+      <a href="javascript:void(0)" routerLink="/modalidadecompra" class="btn btn-sm btn-light-primary align-items-end">
+        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen058.svg'" class="svg-icon svg-icon-3"></span>
+        Voltar
+      </a>
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <form class="card" [formGroup]="criarModalidadeCompraForm">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Descrição</label>
+                <input class="form-control" type="text" formControlName="descricao" />
+                <div
+                  *ngIf="
+                    criarModalidadeCompraForm.get('descricao')?.touched &&
+                    criarModalidadeCompraForm.get('descricao')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    criarModalidadeCompraForm.get('descricao')?.touched &&
+                    criarModalidadeCompraForm.get('descricao')?.hasError('maxlength')
+                  "
+                  class="text text-danger"
+                >
+                  Tamanho máximo: 10
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Modalidade TCE</label>
+                <input mask="9*" class="form-control" type="text" formControlName="gmodalidade_tce" />
+                <div
+                  *ngIf="
+                    criarModalidadeCompraForm.get('gmodalidade_tce')?.touched &&
+                    criarModalidadeCompraForm.get('gmodalidade_tce')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    criarModalidadeCompraForm.get('gmodalidade_tce')?.touched &&
+                    criarModalidadeCompraForm.get('gmodalidade_tce')?.hasError('maxlength')
+                  "
+                  class="text text-danger"
+                >
+                  Tamanho máximo: 5
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Modalidade TCM</label>
+                <input mask="9*" class="form-control" type="text" formControlName="gmodalidade_tcm" />
+                <div
+                  *ngIf="
+                    criarModalidadeCompraForm.get('gmodalidade_tcm')?.touched &&
+                    criarModalidadeCompraForm.get('gmodalidade_tcm')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    criarModalidadeCompraForm.get('gmodalidade_tcm')?.touched &&
+                    criarModalidadeCompraForm.get('gmodalidade_tcm')?.hasError('maxlength')
+                  "
+                  class="text text-danger"
+                >
+                  Tamanho máximo: 5
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer text-right">
+          <button class="btn btn-success" [disabled]="!criarModalidadeCompraForm.valid" (click)="criar()">
+            Cadastrar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>

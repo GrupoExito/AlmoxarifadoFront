@@ -1,0 +1,196 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8 mt-3">
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Adicionar Observação</span>
+    </h3>
+  </div>
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <form class="card" [formGroup]="historicoForm">
+        <div class="card-body px-0 py-2">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="form-group">
+                <div class="row mt-2">
+                  <div class="form-group">
+                    <label>Observação*</label>
+                    <textarea
+                      class="form-control"
+                      id="floatingTextarea3"
+                      formControlName="historico"
+                      name="historico"
+                      cols="30"
+                      rows="2"
+                    ></textarea>
+                  </div>
+                </div>
+                <div
+                  *ngIf="
+                    historicoForm.get('historico')?.touched && historicoForm.get('historico')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">Gerar pendência?</label>
+              <div class="form-group mt-1">
+                <div class="form-check form-check-inline">
+                  <input
+                    [(ngModel)]="gerarPendencia"
+                    formControlName="pendencia"
+                    class="form-check-input-sm"
+                    type="radio"
+                    name="pendencia"
+                    [value]="1"
+                  />
+                  <label class="form-check-label fs-7 ml-1" for="pendenciasim">Sim</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    [(ngModel)]="gerarPendencia"
+                    formControlName="pendencia"
+                    class="form-check-input-sm"
+                    type="radio"
+                    name="pendencia"
+                    [value]="0"
+                  />
+                  <label class="form-check-label fs-7 ml-1" for="pendencianao">Não</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2 text-end align-self-end">
+              <button class="btn btn-success btn-sm" [disabled]="!historicoForm.valid" (click)="criar()">
+                Adicionar Observação
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-5 mb-xxl-8">
+  <!-- begin::Header-->
+  <div class="card-header align-items-center border-0">
+    <h3 class="card-title align-items-start flex-column mt-4">
+      <span class="fw-bolder mb-2 text-dark">Histórico</span>
+      <span class="text-body fw-bold fs-7" *ngIf="historicos">{{ historicos.length }} Registros</span>
+    </h3>
+  </div>
+
+  <!-- Histórico -->
+  <div class="card-body pt-5" *ngIf="historicos">
+    <div class="timeline-label">
+      <div class="timeline-item" *ngFor="let cotacaoHistorico of historicos">
+        <div class="timeline-label fw-bolder text-gray-800 fs-6">
+          {{ cotacaoHistorico.data_historico | date : 'dd/MM/yyyy' }} <br />
+          {{ cotacaoHistorico.data_historico | date : 'HH:mm' }}
+        </div>
+        <div class="timeline-badge">
+          <i
+            *ngIf="cotacaoHistorico.pendencia && !cotacaoHistorico.pendencia_resolvida; else iconsuccess"
+            class="fa fa-genderless text-danger fs-1"
+          ></i>
+
+          <ng-template #iconsuccess>
+            <i class="fa fa-genderless text-success fs-1"></i>
+          </ng-template>
+        </div>
+        <div class="fw-mormal timeline-content text-dark ps-3">
+          <!-- <div>{{ cotacaoHistorico.num_dias_duracao ? cotacaoHistorico.num_dias_duracao + ' Dia(s)' : '' }}</div> -->
+          <span class="badge rounded-pill bg-primary fs-7">
+            {{
+              cotacaoHistorico.historico !== 'Abertura de SD' ? cotacaoHistorico.setor_descricao : 'Início do Processo'
+            }}
+          </span>
+          <span class="ms-2 badge rounded-pill bg-primary fs-7">
+            {{ cotacaoHistorico.usuario_nome }}
+          </span>
+          <span class="ms-2 badge rounded-pill bg-primary fs-7">
+            {{ cotacaoHistorico.status_descricao }}
+          </span>
+
+          <button
+            *ngIf="cotacaoHistorico.pendencia && !cotacaoHistorico.pendencia_resolvida"
+            class="ms-2 btn btn-primary btn-sm rounded-pill"
+            (click)="open(modalSolucionarProblema, cotacaoHistorico.id!)"
+          >
+            Solucionar pendência
+          </button>
+          <br />
+          <span
+            *ngIf="cotacaoHistorico.historico"
+            [ngClass]="{ 'bg-danger': cotacaoHistorico.pendencia && !cotacaoHistorico.pendencia_resolvida }"
+            class="badge rounded-pill bg-info mt-2 fs-7"
+          >
+            {{ cotacaoHistorico.historico }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #modalSolucionarProblema let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Solucionar Pendência</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <label class="form-label">Deseja alterar status?</label>
+    <div class="form-group mt-1">
+      <div class="form-check form-check-inline">
+        <input [(ngModel)]="alterarStatus" class="form-check-input-sm" type="radio" name="sim" [value]="1" />
+        <label class="form-check-label fs-7 ml-1" for="sim">Sim</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input [(ngModel)]="alterarStatus" class="form-check-input-sm" type="radio" name="nao" [value]="0" />
+        <label class="form-check-label fs-7 ml-1" for="nao">Não</label>
+      </div>
+    </div>
+
+    <div class="form-group mb-0" *ngIf="alterarStatus">
+      <label>Status</label>
+      <select class="form-select" [(ngModel)]="selectedStatusTermoReferencia">
+        <option value="0" aria-placeholder="Status">Selecione</option>
+        <option *ngFor="let status of statusFluxos" value="{{ status.id }}" aria-placeholder="Status">
+          {{ status.descricao }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group mb-0">
+      <label>Selecionar Setor</label>
+      <select class="form-select" [(ngModel)]="selectedSetor">
+        <option value="0" aria-placeholder="Setores">Selecione</option>
+        <option *ngFor="let setor of setores" value="{{ setor.id }}" aria-placeholder="Setores">
+          {{ setor.nome }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Observação</label>
+      <textarea class="form-control" name="historico" cols="30" rows="2" [(ngModel)]="observacao"></textarea>
+    </div>
+
+    <label class="form-label">Gerar pendência?</label>
+    <div class="form-group mt-1">
+      <div class="form-check form-check-inline">
+        <input [(ngModel)]="gerarPendencia" class="form-check-input-sm" type="radio" name="pendenciasim" [value]="1" />
+        <label class="form-check-label fs-7 ml-1" for="pendenciasim">Sim</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input [(ngModel)]="gerarPendencia" class="form-check-input-sm" type="radio" name="pendencianao" [value]="0" />
+        <label class="form-check-label fs-7 ml-1" for="pendencianao">Não</label>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="solucionarPendencia()">Salvar</button>
+  </div>
+</ng-template>

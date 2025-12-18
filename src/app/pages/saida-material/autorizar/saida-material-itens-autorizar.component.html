@@ -1,0 +1,145 @@
+<div id="adicionarItem"></div>
+<div class="card card-xxl-stretch mb-5 mb-xxl-8 mt-3">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Itens</span>
+    </h3>
+  </div>
+  <!-- end::Header -->
+
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="card-body py-3">
+
+        <!-- Form da tabela de autorização -->
+        <form [formGroup]="autorizacaoForm">
+          <div class="table-responsive">
+            <table class="table table-hover table-row-dashed table-row-gray-300 align-middle gs-0 gy-0">
+              <thead>
+                <tr class="fw-bolder text-dark fs-5">
+                  <th class="min-w-20px">Seq</th>
+                  <th class="min-w-60px">Código</th>
+                  <th class="min-w-240px">Descrição</th>
+                  <th class="min-w-40px">Und</th>
+                  <th class="min-w-80px">Qtd. solicitada</th>
+                  <th class="min-w-120px">Qtd. autorizada</th>
+                </tr>
+              </thead>
+
+              <!-- FormArray "itens" -->
+              <tbody formArrayName="itens">
+                <tr *ngFor="let itemGroup of itensControls; let i = index" [formGroupName]="i">
+                  <!-- Seq -->
+                  <td>
+                    <span class="text-dark fw-normal fs-6">
+                      {{ i + 1 }}
+                    </span>
+                  </td>
+
+                  <!-- Código -->
+                  <td>
+                    <span class="text-dark fw-normal fs-6">
+                      {{ itemGroup.value.item_codigo }}
+                    </span>
+                  </td>
+
+                  <!-- Descrição -->
+                  <td>
+                    <span class="text-dark fw-normal fs-6">
+                      {{ itemGroup.value.item_descricao }}
+                    </span>
+                  </td>
+
+                  <!-- Und -->
+                  <td>
+                    <span class="text-dark fw-normal fs-6">
+                      {{ itemGroup.value.und_descricao }}
+                    </span>
+                  </td>
+
+                  <!-- Quantidade solicitada -->
+                  <td *ngIf="this.saidaMaterial.status_id === 2">
+                    <span class="text-dark fw-normal fs-6">
+                      {{ itemGroup.value.quantidade_solicitada }}
+                    </span>
+                  </td>
+                  <td *ngIf="this.saidaMaterial.status_id === 3">
+                    <span class="text-dark fw-normal fs-6">
+                      {{ itemGroup.value.qtd_solicitada }}
+                    </span>
+                  </td>
+
+                  <!-- Quantidade autorizada (editável) -->
+                  <td style="max-width: 180px;" *ngIf="this.saidaMaterial.status_id === 2">
+                    <input
+                      type="text"
+                      class="form-control text-end"
+                      formControlName="quantidade_autorizada"
+                      mask="separator.4"
+                      [allowNegativeNumbers]="false"
+                      thousandSeparator="."
+                      decimalMarker=","
+                      placeholder="0,0000"
+                    />
+                    <div class="form-text text-muted">
+                      Max: {{ itemGroup.value.quantidade_solicitada }}
+                    </div>
+                  </td>
+                  <td style="max-width: 180px;" *ngIf="this.saidaMaterial.status_id === 3">
+                    <span class="text-dark fw-normal fs-6">
+                      {{ itemGroup.value.qtd_autorizada }}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Botão Autorizar -->
+          <div class="d-flex justify-content-end mt-3">
+            <button *ngIf="this.saidaMaterial.status_id === 2"
+              type="button"
+              class="btn btn-success"
+              (click)="autorizar()"
+              [disabled]="!autorizacaoForm.valid"
+            >
+              Autorizar
+            </button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="modalSaidaPedido" tabindex="-1" aria-labelledby="modalSaidaPedidoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalSaidaPedidoLabel">Pedidos de compra</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="pedidoSelect">Escolha um Pedido</label>
+          <ng-select
+            id="pedidoSelect"
+            [items]="compras"
+            bindLabel="pedido_informacao"
+            bindValue="id"
+            [(ngModel)]="selectedPedidoId"
+            placeholder="Selecione um pedido"
+          >
+          </ng-select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        <button type="button" class="btn btn-primary" (click)="adicionarItensPedido()">Adicionar itens</button>
+      </div>
+    </div>
+  </div>
+</div>

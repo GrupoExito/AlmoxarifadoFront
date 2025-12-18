@@ -1,0 +1,302 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-5">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Saidas de Material</span>
+    </h3>
+    <div class="btn-toolbar" role="toolbar">
+      <!--div
+        *appPermission="['Almoxarifado', 'filtrar_saida']"
+        class="card-toolbar me-4"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        data-bs-trigger="hover"
+        title="Clique para filtrar"
+      >
+        <button (click)="openAccordion()" class="btn btn-sm btn-light-primary">
+          <i class="fa fa-light fa-filter" *ngIf="!filtroButton"></i>
+          <i class="fa fa-light fa-filter-circle-xmark" *ngIf="filtroButton"></i>
+          Filtrar
+        </button>
+      </div-->
+      <div
+        class="card-toolbar"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        data-bs-trigger="hover"
+        title="Clique para adicionar nova Saída de Material"
+      >
+        <a
+          *appPermission="['Almoxarifado', 'nova_saida']"
+          href="javascript:void(0)"
+          routerLink="/saidamaterial/criar"
+          class="btn btn-sm btn-light-primary align-items-end"
+        >
+          <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>
+          Nova Saída
+        </a>
+      </div>
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- begin::Body -->
+  <div class="card-body py-3">
+    <div class="row mb-3" *ngIf="filtroButton">
+      <div class="col-md-1">
+        <div class="form-group mb-0">
+          <label>N° Entrada</label>
+          <input class="form-control" type="text" maxlength="20" [(ngModel)]="idSelecionado" />
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group mb-0">
+          <label>Secretaria</label>
+          <select class="form-select" [(ngModel)]="secretariaSelecionada">
+            <option value="">Selecione</option>
+            <option *ngFor="let secretaria of secretarias" value="{{ secretaria.id }}" aria-placeholder="Secretaria">
+              {{ secretaria.descricao }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group mb-0">
+          <label>Almoxarifado</label>
+          <select class="form-select" [(ngModel)]="almoxarifadoSelecionado">
+            <option value="">Selecione</option>
+            <option
+              *ngFor="let almoxarifado of almoxarifados"
+              value="{{ almoxarifado.id }}"
+              aria-placeholder="Almoxarifado"
+            >
+              {{ almoxarifado.descricao }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="form-group mb-0">
+          <label>Solicitante</label>
+          <select class="form-select" [(ngModel)]="solicitanteSelecionado">
+            <option value="">Selecione</option>
+            <option
+              *ngFor="let solicitante of solicitantes"
+              value="{{ solicitante.id }}"
+              aria-placeholder="Solicitante"
+            >
+              {{ solicitante.nome }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group mb-0">
+          <label>Setor</label>
+          <select class="form-select" [(ngModel)]="setorSelecionado">
+            <option value="">Selecione</option>
+            <option *ngFor="let setor of setores" value="{{ setor.id }}" aria-placeholder="Setor">
+              {{ setor.nome }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="form-group mb-0">
+          <label>Status</label>
+          <select class="form-select" [(ngModel)]="statusSelecionado">
+            <option value="">Selecione</option>
+            <option value="1">Aberto</option>
+            <option value="2">Autorizado</option>
+            <option value="5">Processando</option>
+            <option value="8">Em Análise</option>
+            <option value="12">Cancelado</option>
+            <option value="14">Extornado</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="form-group mb-0">
+          <label>Tipo Saída</label>
+          <select class="form-select" [(ngModel)]="tipoSelecionado">
+            <option value="">Selecione</option>
+            <option value="N">Normal</option>
+            <option value="D">Doação</option>
+            <option value="E">Emprestimo</option>
+            <option value="Q">Quebra/Dano</option>
+            <option value="V">Vencimento/Validade</option>
+            <option value="T">Transferencia</option>
+          </select>
+        </div>
+      </div>
+      <!-- <div class="col-md-4">
+        <div class="form-group mb-0">
+          <label>Produto</label>
+          <select class="form-select" [(ngModel)]="ItemSelecionado">
+            <option value="">Selecione</option>
+            <option
+              *ngFor="let itemMovimentacao of itensMovimentacao"
+              value="{{ itemMovimentacao.codigo_item }}"
+              aria-placeholder="Item"
+            >
+              {{ itemMovimentacao.descricao }}
+            </option>
+          </select>
+        </div>
+      </div> -->
+      <div class="col-md-4">
+        <div class="form-group mb-0">
+          <label>Produto</label>
+          <ng-select
+            class="ngSelectDropdown"
+            [items]="itensMovimentacao"
+            bindLabel="descricao"
+            bindValue="codigo_item"
+            [(ngModel)]="ItemSelecionado"
+            [multiple]="true"
+          >
+          </ng-select>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="form-group mb-0">
+          <label>Data Inicial</label>
+          <input class="form-control" type="date" [(ngModel)]="dataInicialSelecionado" />
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="form-group mb-0">
+          <label>Data Final</label>
+          <input class="form-control" type="date" [(ngModel)]="dataFinalSelecionado" />
+        </div>
+      </div>
+
+      <div class="d-flex col-md-12 mb-3 mt-3 align-self-end justify-content-end">
+        <button (click)="filtrar()" class="btn btn-success btn-sm">Filtrar</button>
+        <button (click)="limparFiltros()" class="btn btn-primary btn-sm mx-2">Limpar Filtros</button>
+      </div>
+    </div>
+    <!-- begin::Table container -->
+    <div class="table-responsive">
+      <!-- begin::Table -->
+      <table
+        datatable
+        [dtOptions]="dtOptions"
+        [dtTrigger]="dtTrigger"
+        class="table table-hover table-row-dashed table-row-gray-300 align-middle gs-0 gy-1"
+      >
+        <!-- begin::Table head -->
+        <thead>
+          <tr class="fw-bolder text-dark fs-5">
+            <th class="min-w-10px">Código</th>
+            <th class="min-w-30px">Almoxarifado</th>
+            <th class="min-w-30px">Secretaria</th>
+            <th class="min-w-30px">Setor</th>
+            <th class="min-w-180px">Observação</th>
+            <th class="min-w-30px">Status</th>
+            <th class="min-w-30px">Tipo Saída</th>
+            <th class="min-w-30px">Data</th>
+            <th class="min-w-60px text-center">Ações</th>
+          </tr>
+        </thead>
+        <!-- end::Table head -->
+        <!-- begin::Table body -->
+        <tbody>
+          <tr *ngFor="let saidaMaterial of saidasMaterial; trackBy: trackItem">
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5 mx-3"> {{ saidaMaterial.id }} </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span href="#" class="text-dark fw-normal d-block fs-5">{{ saidaMaterial.almoxarifado }}</span>
+            </td>
+            <td>
+              <span href="#" class="text-dark fw-normal d-block fs-5">{{ saidaMaterial.secretaria }}</span>
+            </td>
+            <td>
+              <span href="#" class="text-dark fw-normal d-block fs-5">{{ saidaMaterial.setor }}</span>
+            </td>
+            <td>
+              <span href="#" class="text-dark fw-normal d-block fs-5">{{ saidaMaterial.observacao }}</span>
+            </td>
+            <td>
+              <span href="#" class="text-dark fw-normal d-block fs-5">{{ saidaMaterial.status }}</span>
+            </td>
+            <td>
+              <span href="#" class="text-dark fw-normal d-block fs-5">{{ saidaMaterial.tipo_saida_descricao }}</span>
+            </td>
+            <td class="text-content-start">
+              <div class="d-flex flex-column w-100 me-2">
+                <span href="#" class="text-dark fw-normal d-block fs-5">
+                  {{ saidaMaterial.data_solicitacao | date : 'dd/MM/yyyy' }}
+                </span>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex justify-content-end flex-shrink-0">
+                  <!--button
+                    *ngIf="saidaMaterial?.status_id === 1"
+                    [routerLink]="['/saidamaterial/view', saidaMaterial.id, 'editar']"
+                    class="btn btn-icon btn-active-color-warning btn-md me-1"
+                  >
+                    <span
+                      [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'"
+                      class="svg-icon svg-icon-3"
+                    ></span>
+                  </button-->
+                  <button title="Enviar Solicitação"
+                  *ngIf="saidaMaterial?.status_id == 1"
+                  (click)="enviar(saidaMaterial.id)"
+                  href="#"
+                  class="btn btn-icon btn-active-color-danger btn-md"
+                >
+                  <span alt="Enviar solicitação"
+                    [inlineSVG]="'./assets/media/icons/duotune/general/gen037.svg'"
+                    class="svg-icon svg-icon-3"
+                  ></span>
+                </button>
+                <button title="Adicionar itens"
+                *ngIf="saidaMaterial?.status_id === 1"
+                  [routerLink]="['/saidamaterial/view', saidaMaterial.id, 'cadastro']"
+                  class="btn btn-icon btn-active-color-primary btn-md me-1"
+                >
+                  <span
+                    [inlineSVG]="'./assets/media/icons/duotune/general/gen035.svg'"
+                    class="svg-icon svg-icon-3"
+                  ></span>
+                </button>
+                <button title="Visualizar itens"
+                *ngIf="saidaMaterial?.status_id === 2 || saidaMaterial?.status_id === 3"
+                  [routerLink]="['/saidamaterial/view', saidaMaterial.id, 'cadastro']"
+                  class="btn btn-icon btn-active-color-primary btn-md me-1"
+                >
+                  <span
+                    [inlineSVG]="'./assets/media/icons/duotune/general/gen021.svg'"
+                    class="svg-icon svg-icon-3"
+                  ></span>
+                </button>
+                <button title="Apagar"
+                  *ngIf="saidaMaterial?.status_id === 1"
+                  (click)="deletar(saidaMaterial.id)"
+                  href="#"
+                  class="btn btn-icon btn-active-color-danger btn-md"
+                >
+                  <span
+                    [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
+                    class="svg-icon svg-icon-3"
+                  ></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+        <!-- end::Table body -->
+      </table>
+      <!-- end::Table -->
+    </div>
+    <!-- end::Table container -->
+  </div>
+  <!-- begin::Body -->
+</div>

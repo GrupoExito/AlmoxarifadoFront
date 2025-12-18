@@ -1,0 +1,108 @@
+<div
+  [ngClass]="headerContainerCssClasses"
+  class="d-flex align-items-stretch justify-content-between"
+  style="background-color: #343c80"
+>
+  <!-- begin::Aside mobile toggle -->
+  <ng-container *ngIf="asideDisplay">
+    <div class="d-flex align-items-center d-lg-none ms-n3 me-1" title="Show aside menu">
+      <div class="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px" id="kt_aside_toggle">
+        <span [inlineSVG]="'./assets/media/icons/duotune/abstract/abs015.svg'" class="svg-icon svg-icon-1"></span>
+      </div>
+    </div>
+  </ng-container>
+  <!-- end::Aside mobile toggle -->
+
+  <!-- begin::Logo -->
+  <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0 mb-0">
+    <a routerLink="/dashboard" class="d-lg-none">
+      <img src="./assets/media/logos/logo-2.svg" class="h-50px" />
+    </a>
+  </div>
+  <!-- end::Logo -->
+
+  <!-- begin::Wrapper -->
+  <div class="d-flex align-items-stretch justify-content-between flex-lg-grow-1">
+    <!--begin::Page title-->
+    <div class="flex-grow-1 flex-shrink-0 me-5">
+      <!--begin::Page title-->
+      <div class="page-title d-flex align-items-center flex-wrap mx-auto my-lg-5">
+        <ng-container>
+          <div
+            id="kt_aside_toggle"
+            class="btn btn-icon w-auto px-0 btn-active-color-primary aside-toggle mx-3"
+            data-kt-toggle="true"
+            data-kt-toggle-state="active"
+            data-kt-toggle-target="body"
+            data-kt-toggle-name="aside-minimize"
+          >
+            <span
+              [inlineSVG]="'./assets/media/icons/duotune/arrows/arr079.svg'"
+              class="svg-icon svg-icon-1 rotate-180"
+            ></span>
+          </div>
+        </ng-container>
+
+        <!--begin::Title-->
+        <h2 class="d-flex align-items-center text-light fw-bolder my-1 fs-5">
+          {{ token?.cliente_nome }}
+        </h2>
+        <!--begin::Separator-->
+        <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
+        <!--end::Separator-->
+        <!--begin::Description-->
+        <small class="text-muted fs-7 fw-bold my-1 ms-1">Olá {{ token?.unique_name }}</small>
+        <!--end::Description-->
+        <!--end::Title-->
+      </div>
+      <!--end::Page title-->
+    </div>
+  </div>
+
+  <div class="d-flex align-items-stretch justify-content-end flex-lg-grow-1">
+    <!-- begin::Navbar -->
+
+    <div
+      *ngIf="!token"
+      class="d-flex align-items-center justify-content-center flex-lg-grow-1"
+      style="background-color: yellow"
+    >
+      <div class="row text-center">
+        <h2>AMBIENTE DE HOMOLOGAÇÃO</h2>
+      </div>
+    </div>
+
+    <div class="d-flex align-items-stretch flex-shrink-0">
+      <app-topbar class="d-flex align-items-stretch flex-shrink-0"></app-topbar>
+    </div>
+  </div>
+  <div class="toolbar py-5 mb-10" id="kt_toolbar">
+    <div [ngClass]="headerContainerCssClasses" class="d-flex align-items-stretch justify-content-between">
+      <ng-container *ngIf="headerLeft === 'menu'">
+        <div class="d-flex align-items-stretch" id="kt_header_nav">
+          <div
+            class="header-menu align-items-stretch"
+            data-kt-drawer="true"
+            data-kt-drawer-name="header-menu"
+            data-kt-drawer-activate="{default: true, lg: false}"
+            data-kt-drawer-overlay="true"
+            data-kt-drawer-width="{default:'200px', '300px': '250px'}"
+            data-kt-drawer-direction="end"
+            data-kt-drawer-toggle="#kt_header_menu_mobile_toggle"
+            data-kt-swapper="true"
+            data-kt-swapper-mode="prepend"
+            data-kt-swapper-parent="{default: '#kt_body', lg: '#kt_header_nav'}"
+          >
+            <app-header-menu
+              class="menu menu-lg-rounded menu-column menu-lg-row menu-state-bg menu-title-gray-700 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-400 fw-bold my-5 my-lg-0 align-items-stretch"
+              id="#kt_header_menu"
+              data-kt-menu="true"
+            ></app-header-menu>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <hr />
+  </div>
+  <!-- end::Wrapper -->
+</div>

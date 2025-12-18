@@ -1,0 +1,31 @@
+.navAtiva {
+  border-color: #009EF7 !important;
+  border-width: 2px !important;
+}
+
+.fa-2xl {
+  font-size: 2em !important;
+  line-height: .03125em !important;
+  vertical-align: -.1875em !important;
+}
+
+.ng-select.ngSelectDropdown ::ng-deep {
+  border:0px;
+  min-height: 0px;
+  border-radius: 1;
+  background: azure;
+}
+
+.ng-select.ngSelectDropdown ::ng-deep .ng-select-container  {
+  min-height: 42.94px;
+  border-radius: 1;
+  background: azure;
+}
+
+::ng-deep ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
+  background-color: #8cb8e1!important;
+}
+
+.inputSizeMax{
+  max-width: 130px;
+}

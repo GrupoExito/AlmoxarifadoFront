@@ -1,0 +1,285 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-5">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Entradas de Material</span>
+    </h3>
+    <div class="btn-toolbar" role="toolbar">
+      <!--div
+        class="card-toolbar me-4"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        data-bs-trigger="hover"
+        title="Clique para filtrar"
+      >
+        <button
+          *appPermission="['Almoxarifado', 'filtrar_entrada']"
+          (click)="openAccordion()"
+          class="btn btn-sm btn-light-primary"
+        >
+          <i class="fa fa-light fa-filter" *ngIf="!filtroButton"></i>
+          <i class="fa fa-light fa-filter-circle-xmark" *ngIf="filtroButton"></i>
+          Filtrar
+        </button>
+      </div-->
+      <div
+        class="card-toolbar"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        data-bs-trigger="hover"
+        title="Clique para adicionar nova Entrada de Material"
+      >
+        <a
+          *appPermission="['Almoxarifado', 'nova_entrada']"
+          href="javascript:void(0)"
+          routerLink="/entradamaterial/criar"
+          class="btn btn-sm btn-light-primary align-items-end"
+        >
+          <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>
+          Nova Entrada
+        </a>
+      </div>
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- begin::Body -->
+  <div class="card-body py-3">
+    <div class="row mb-3" *ngIf="filtroButton">
+      <div class="col-md-1">
+        <div class="form-group mb-0">
+          <label>N° Entrada</label>
+          <input class="form-control" type="text" maxlength="20" [(ngModel)]="idSelecionado" />
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group mb-0">
+          <label>Secretaria</label>
+          <select class="form-select" [(ngModel)]="secretariaSelecionada">
+            <option value="">Selecione</option>
+            <option *ngFor="let secretaria of secretarias" value="{{ secretaria.id }}" aria-placeholder="Secretaria">
+              {{ secretaria.descricao }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group mb-0">
+          <label>Almoxarifado</label>
+          <select class="form-select" [(ngModel)]="almoxarifadoSelecionado">
+            <option value="">Selecione</option>
+            <option
+              *ngFor="let almoxarifado of almoxarifados"
+              value="{{ almoxarifado.id }}"
+              aria-placeholder="Almoxarifado"
+            >
+              {{ almoxarifado.descricao }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group mb-0">
+          <label>Fornecedor</label>
+          <select class="form-select" [(ngModel)]="fornecedorSelecionado">
+            <option value="">Selecione</option>
+            <option *ngFor="let fornecedor of fornecedores" value="{{ fornecedor.id }}" aria-placeholder="Almoxarifado">
+              {{ fornecedor.razao_social }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="form-group mb-0">
+          <label>Status</label>
+          <select class="form-select" [(ngModel)]="statusSelecionado">
+            <option value="">Selecione</option>
+            <option value="1">Em cadastramento</option>
+            <option value="13">Confirmado</option>
+            <option value="12">Cancelado</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="form-group mb-0">
+          <label>Tipo Entrada</label>
+          <select class="form-select" [(ngModel)]="tipoSelecionado">
+            <option value="">Selecione</option>
+                  <option [ngValue]="1">Compra</option>
+                  <option [ngValue]="2">Transferência</option>
+                  <option [ngValue]="3">Doação/Convênio</option>
+                  <option [ngValue]="4">Devolução</option>
+                  <option [ngValue]="5">Produção própria/Reaproveitamento</option>
+                  <option [ngValue]="6">Ajuste de inventário</option>
+                  <option [ngValue]="7">Empréstimo/Cessão/Comodato</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-1">
+        <div class="form-group mb-0">
+          <label>N° Nota</label>
+          <input class="form-control" type="text" maxlength="20" [(ngModel)]="Nota" />
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group mb-0">
+          <label>Produto</label>
+          <ng-select
+            class="ngSelectDropdown"
+            [items]="itensMovimentacao"
+            bindLabel="descricao"
+            bindValue="codigo_item"
+            [(ngModel)]="ItemSelecionado"
+            [multiple]="true"
+          >
+          </ng-select>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="form-group mb-0">
+          <label>Data Inicial</label>
+          <input class="form-control" type="date" [(ngModel)]="dataInicialSelecionado" />
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="form-group mb-0">
+          <label>Data Final</label>
+          <input class="form-control" type="date" [(ngModel)]="dataFinalSelecionado" />
+        </div>
+      </div>
+
+      <div class="d-flex col-md-12 mb-3 mt-3 align-self-end justify-content-end">
+        <button (click)="filtrar()" class="btn btn-success btn-sm">Filtrar</button>
+        <button (click)="limparFiltros()" class="btn btn-primary btn-sm mx-2">Limpar Filtros</button>
+      </div>
+    </div>
+    <hr *ngIf="filtroButton" />
+    <!-- begin::Table container -->
+    <div class="table-responsive">
+      <!-- begin::Table -->
+      <table
+        datatable
+        [dtOptions]="dtOptions"
+        [dtTrigger]="dtTrigger"
+        class="table table-hover table-row-dashed table-row-gray-300 align-middle gs-0 gy-1"
+      >
+        <!-- begin::Table head -->
+        <thead>
+          <tr class="fw-bolder text-dark fs-5">
+            <th class="min-w-10px">Código</th>
+            <th class="min-w-280px">Almoxarifado</th>
+            <th class="min-w-180px">Fornecedor</th>
+            <th class="min-w-180px">Secretaria</th>
+            <th class="min-w-180px">Status</th>
+            <th class="min-w-10px">Tipo</th>
+            <th class="min-w-10px">Nota</th>
+            <th class="min-w-180px">Data</th>
+            <th class="min-w-60px text-center">Ações</th>
+          </tr>
+        </thead>
+        <!-- end::Table head -->
+        <!-- begin::Table body -->
+        <tbody>
+          <tr *ngFor="let entradaMaterial of entradasMaterial; trackBy: trackItem">
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5 mx-3"> {{ entradaMaterial.id }} </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span href="#" class="text-dark fw-normal d-block fs-5">{{ entradaMaterial.almoxarifado }}</span>
+            </td>
+            <td class="text-content-start">
+              <div class="d-flex flex-column w-100 me-2">
+                <span href="#" class="text-dark fw-normal d-block fs-5"> {{ entradaMaterial.fornecedor }} </span>
+              </div>
+            </td>
+            <td class="text-content-start">
+              <div class="d-flex flex-column w-100 me-2">
+                <span href="#" class="text-dark fw-normal d-block fs-5"> {{ entradaMaterial.secretaria }} </span>
+              </div>
+            </td>
+            <td class="text-content-start">
+              <div class="d-flex flex-column w-100 me-2">
+                <span href="#" class="text-dark fw-normal d-block fs-5"> {{ entradaMaterial.status }} </span>
+              </div>
+            </td>
+            <td class="text-content-start">
+              <div class="d-flex flex-column w-100 me-2">
+                <span href="#" class="text-dark fw-normal d-block fs-5">
+                  {{ entradaMaterial.tipo_entrada_descricao }}
+                </span>
+              </div>
+            </td>
+            <td class="text-content-start">
+              <div class="d-flex flex-column w-100 me-2">
+                <span href="#" class="text-dark fw-normal d-block fs-5"> {{ entradaMaterial.nota }} </span>
+              </div>
+            </td>
+            <td class="text-content-start">
+              <div class="d-flex flex-column w-100 me-2">
+                <span href="#" class="text-dark fw-normal d-block fs-5">
+                  {{ entradaMaterial.data_entrada | date : 'dd/MM/yyyy' }}
+                </span>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex justify-content-end flex-shrink-0">
+                <button
+                  title="Confirmar"
+                  *ngIf="entradaMaterial.status_id === 1"
+                  (click)="confirmar(entradaMaterial.id)"
+                  href="#"
+                  class="btn btn-icon btn-active-color-danger btn-md"
+                >
+                  <span
+                    [inlineSVG]="'./assets/media/icons/duotune/general/gen037.svg'"
+                    class="svg-icon svg-icon-3"
+                  ></span>
+                </button>
+                <div *appPermission="['Almoxarifado', 'editar_entrada']">
+                  <button
+                    title="Editar"
+                    *ngIf="entradaMaterial.status_id === 1"
+                    [routerLink]="['/entradamaterial/view', entradaMaterial.id, 'editar']"
+                    class="btn btn-icon btn-active-color-warning btn-md me-1"
+                  >
+                    <span
+                      [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'"
+                      class="svg-icon svg-icon-3"
+                    ></span>
+                  </button>
+                </div>                
+                <button
+                  title="Visualizar"
+                  *appPermission="['Almoxarifado', 'visualizar_entrada']"
+                  [routerLink]="['/entradamaterial/view', entradaMaterial.id, 'cadastro']"
+                  class="btn btn-icon btn-active-color-primary btn-md me-1"
+                >
+                  <span><i class="fa-solid fa-eye"></i></span>
+                </button>
+                <!-- <button
+                  *ngIf="entradaMaterial.id_status === 1"
+                  (click)="deletar(entradaMaterial.id)"
+                  href="#"
+                  class="btn btn-icon btn-active-color-danger btn-md"
+                >
+                  <span
+                    [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
+                    class="svg-icon svg-icon-3"
+                  ></span>
+                </button> -->
+              </div>
+            </td>
+          </tr>
+        </tbody>
+
+        <!-- end::Table body -->
+      </table>
+      <!-- end::Table -->
+    </div>
+    <!-- end::Table container -->
+  </div>
+  <!-- begin::Body -->
+</div>

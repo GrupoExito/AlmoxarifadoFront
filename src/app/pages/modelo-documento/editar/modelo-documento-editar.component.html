@@ -1,0 +1,103 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Editar Modelo Documento</span>
+    </h3>
+    <div
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Clique para voltar a listagem"
+    >
+      <a href="javascript:void(0)" routerLink="/modelodocumento" class="btn btn-sm btn-light-primary align-items-end">
+        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen058.svg'" class="svg-icon svg-icon-3"></span>
+        Voltar
+      </a>
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <form class="card" [formGroup]="editarModeloDocumentoForm">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Descrição*</label>
+                <input class="form-control" type="text" formControlName="descricao" />
+                <div
+                  *ngIf="
+                    editarModeloDocumentoForm.get('descricao')?.touched &&
+                    editarModeloDocumentoForm.get('descricao')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    editarModeloDocumentoForm.get('descricao')?.touched &&
+                    editarModeloDocumentoForm.get('descricao')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 50
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 mt-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Tipo*</label>
+                <select class="form-select form-select-lg" formControlName="tipo">
+                  <option value="">Selecione um tipo</option>
+                  <option value="1">Modelo de TR</option>
+                  <option value="2">Modelo de Notificação</option>
+                  <option value="3">Modelo de Documentos</option>
+                  <option value="4">Modelo de SD</option>
+                  <option value="5">Modelo de Processo Adm</option>
+                  <option value="6">Modelo de Despacho</option>
+                  <option value="7">Modelo de Pedido de Compra</option>
+                  <option value="8">Modelo de Termo de Dispensa</option>
+                  <option value="9">Modelo de Termo de Inexigibilidade</option>
+                </select>
+                <div
+                  *ngIf="
+                    editarModeloDocumentoForm.get('tipo')?.touched &&
+                    editarModeloDocumentoForm.get('tipo')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="row">
+        <div class="">
+          <div class="editor">
+            <!-- <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
+            <ngx-editor [(ngModel)]="htmlContent" [editor]="editor" [mention]="items"></ngx-editor> -->
+            <ckeditor
+              [(ngModel)]="mycontent"
+              #myckeditor="ngModel"
+              name="myckeditor"
+              required
+              [config]="ckeConfig"
+              debounce="500"
+            >
+            </ckeditor>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-right mt-5">
+        <button class="btn btn-warning" [disabled]="!editarModeloDocumentoForm.valid" (click)="editar()">Salvar</button>
+      </div>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>

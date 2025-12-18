@@ -1,0 +1,370 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Editar Responsável/Colaborador/Gestor</span>
+    </h3>
+    <div
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Clique para adicionar colaborador"
+    >
+      <a href="javascript:void(0)" routerLink="/pessoa/criar" class="btn btn-sm btn-light-primary align-items-end me-3">
+        <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>
+        Novo colaborador
+      </a>
+      <div
+        class="card-toolbar"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        data-bs-trigger="hover"
+        title="Clique para voltar"
+      >
+        <a href="javascript:void(0)" routerLink="/pessoa" class="btn btn-sm btn-light-primary align-items-end">
+          <span [inlineSVG]="'./assets/media/icons/duotune/general/gen058.svg'" class="svg-icon svg-icon-3"></span>
+          Voltar
+        </a>
+      </div>
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <form class="card" [formGroup]="editarPessoaForm">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Nome*</label>
+                <input class="form-control" type="text" formControlName="nome" />
+                <div
+                  *ngIf="editarPessoaForm.get('nome')?.touched && editarPessoaForm.get('nome')?.hasError('required')"
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    editarPessoaForm.get('pessoa')?.touched && editarPessoaForm.get('pessoa')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 50
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Usuário</label>
+                <select class="form-select form-select-lg" formControlName="usuario_id">
+                  <option value="">selecione</option>
+                  <option *ngFor="let usuario of usuarios" value="{{ usuario.id }}">{{ usuario.nome }}</option>
+                </select>
+                <div
+                  *ngIf="
+                    editarPessoaForm.get('usuario_id')?.touched &&
+                    editarPessoaForm.get('usuario_id')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Sexo*</label>
+                <select class="form-select" formControlName="sexo_id" aria-label="Sexo">
+                  <option value="1">Masculino</option>
+                  <option value="2">Feminino</option>
+                  <option value="3">Outros</option>
+                </select>
+                <div
+                  *ngIf="
+                    editarPessoaForm.get('sexo_id')?.touched && editarPessoaForm.get('sexo_id')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">CPF*</label>
+                <input
+                  (focusout)="setCPFValidator()"
+                  mask="000.000.000.00"
+                  class="form-control"
+                  type="text"
+                  formControlName="cpf"
+                />
+                <div
+                  *ngIf="editarPessoaForm.get('cpf')?.touched && editarPessoaForm.get('cpf')?.hasError('maxlength')"
+                  class="text text-danger"
+                >
+                  Tamanho máximo: 15
+                </div>
+                <div
+                  *ngIf="editarPessoaForm.get('cpf')?.touched && editarPessoaForm.get('cpf')?.hasError('cpfError')"
+                  class="text text-danger"
+                >
+                  CPF Inválido
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">RG</label>
+                <input class="form-control" type="text" formControlName="rg" />
+                <div
+                  *ngIf="editarPessoaForm.get('rg')?.touched && editarPessoaForm.get('rg')?.hasError('maxlength')"
+                  class="text text-danger"
+                >
+                  Tamanho máximo: 15
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Órgão Expeditor</label>
+                <input class="form-control" type="text" formControlName="orgao_expeditor_rg" />
+                <div
+                  *ngIf="
+                    editarPessoaForm.get('orgao_expeditor_rg')?.touched &&
+                    editarPessoaForm.get('orgao_expeditor_rg')?.hasError('maxlength')
+                  "
+                  class="text text-danger"
+                >
+                  Tamanho máximo: 15
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Data de Nascimento</label>
+                <input class="form-control" type="date" formControlName="nascimento" />
+                <div
+                  *ngIf="
+                    editarPessoaForm.get('nascimento')?.touched &&
+                    editarPessoaForm.get('nascimento')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Telefone</label>
+                <input mask="(00) 0000-0000" class="form-control" type="text" formControlName="telefone" />
+                <div
+                  *ngIf="
+                    editarPessoaForm.get('telefone')?.touched && editarPessoaForm.get('telefone')?.hasError('maxlength')
+                  "
+                  class="text text-danger"
+                >
+                  Tamanho máximo: 15
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Celular</label>
+                <input mask="(00) 00000-0000" class="form-control" type="text" formControlName="celular" />
+                <div
+                  *ngIf="
+                    editarPessoaForm.get('celular')?.touched && editarPessoaForm.get('celular')?.hasError('maxlength')
+                  "
+                  class="text text-danger"
+                >
+                  Tamanho máximo: 15
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Tipo*</label>
+                <select class="form-select" formControlName="tipo" aria-label="Tipo">
+                  <option value="1">Outros</option>
+                  <option value="2">Prefeito</option>
+                  <option value="3">Secretario</option>
+                </select>
+                <div
+                  *ngIf="editarPessoaForm.get('tipo')?.touched && editarPessoaForm.get('tipo')?.hasError('required')"
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label mt-3 mb-1">Responsável</label>
+              <div class="form-group mt-3">
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="responsavel"
+                    formControlName="responsavel"
+                    [value]="1"
+                  />
+                  <label class="form-check-label fs-7" for="responsavelsim">Sim</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="responsavel"
+                    formControlName="responsavel"
+                    [value]="0"
+                  />
+                  <label class="form-check-label fs-7" for="responsavelnao">Não</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">E-mail</label>
+                <input class="form-control" type="text" formControlName="email" />
+                <div
+                  *ngIf="editarPessoaForm.get('email')?.touched && editarPessoaForm.get('email')?.hasError('required')"
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="editarPessoaForm.get('email')?.touched && editarPessoaForm.get('email')?.hasError('maxlength')"
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 50
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Cargo</label>
+                <select class="form-select form-select-lg" formControlName="gcargo_id">
+                  <option value="">selecione</option>
+                  <option *ngFor="let cargo of cargos" value="{{ cargo.id }}">{{ cargo.descricao }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Fiscal:</label>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="fiscal_contrato"
+                    formControlName="fiscal_contrato"
+                  />
+                  <label class="form-check-label" for="fiscal_contrato"> Fiscal Contrato </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="row">
+            <div class="row mt-3">
+              <div class="col-md-4 mt-3">
+                <input #imgLogo type="file" (change)="mostrarImagem($event)" style="display: none" accept="images/*" />
+                <button class="btn btn-secondary" (click)="imgLogo.click()">
+                  <span class="ml-2 mr-1">Assinatura</span>
+                </button>
+              </div>
+
+              <div class="col-md-4 mt-3">
+                <img src="{{ imgFile }}" class="img-fluid" alt="" style="max-height: 120px" />
+              </div>
+            </div>
+          </div>
+          <hr /> -->
+          <div class="card-footer text-right">
+            <button class="btn btn-success" [disabled]="!editarPessoaForm.valid" (click)="salvar()">Atualizar</button>
+          </div>
+
+          <h3 class="card-title align-items-start flex-column">
+            <span class="card-label fw-bolder fs-3 mb-1">Data de Vigência</span>
+          </h3>
+        <div class="container-fluid">
+          <div class="row justify-content-center">
+            <form class="card" [formGroup]="gestaoForm">
+              <div class="card-body">
+                <div class="row align-items-end">
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label class="form-label mt-3 mb-1">Data Início</label>
+                      <input class="form-control" type="date" formControlName="data_inicio" />
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label class="form-label mt-3 mb-1">Data Fim</label>
+                      <input class="form-control" type="date" formControlName="data_fim" />
+                    </div>
+                  </div>
+                  <div class="col-md-4 text-right">
+                    <button class="btn btn-success" [disabled]="!gestaoForm.valid" (click)="adicionarDataVigencia()">
+                      Salvar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        </div>
+        
+         
+
+        <div class="card-body py-3">
+          <div class="table-responsive">
+            <table class="table table-hover table-row-dashed table-row-gray-300 align-middle gs-0 gy-0">
+              <thead>
+                <tr class="fw-bolder text-dark fs-5">
+                  <th class="min-w-140px text-center">Data Início</th>
+                  <th class="min-w-140px text-center">Data Fim</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let gestao of pessoaGestao; trackBy: trackItem; let i = index">
+                  <td class="text-center">
+                    <span class="text-dark fw-normal fs-5">
+                      {{ gestao.data_inicio | date : 'dd/MM/yyyy' }}
+                    </span>
+                  </td>
+                  <td class="text-center">
+                    <span class="text-dark fw-normal fs-5">
+                      {{ gestao.data_fim | date : 'dd/MM/yyyy' }}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,120 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Alterar Senha</span>
+    </h3>
+    <div
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Clique para adicionar novo usuário"
+    >
+      <a href="javascript:void(0)" routerLink="/dashboard" class="btn btn-sm btn-light-primary align-items-end">
+        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen058.svg'" class="svg-icon svg-icon-3"></span>
+        Voltar
+      </a>
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <form class="card" [formGroup]="editarUsuarioForm">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Nome*</label>
+                <br /><b>{{ usuario.nome }}</b>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Telefone*</label>
+                <br /><b>{{ usuario.telefone }}</b>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Email*</label>
+                <br /><b>{{ usuario.email }}</b>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Perfil*</label>
+                <br /><b>{{ perfil }}</b>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Senha*</label>
+                <input class="form-control" type="password" formControlName="password" maxlength="25" />
+                <div
+                  *ngIf="
+                    editarUsuarioForm.get('password')?.touched &&
+                    editarUsuarioForm.get('password')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Repetir Senha*</label>
+                <input class="form-control" type="password" formControlName="repetirSenha" maxlength="25" />
+                <div
+                  *ngIf="
+                    editarUsuarioForm.get('repetirSenha')?.touched &&
+                    editarUsuarioForm.get('repetirSenha')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div *ngIf="editarUsuarioForm.hasError('senhasDiferentes')">Senhas devem ser iguais.</div>
+              </div>
+            </div>
+          </div>
+
+          <button
+            class="btn btn-success mt-3"
+            [disabled]="!editarUsuarioForm.valid"
+            (click)="salvar(editarUsuarioForm.value)"
+          >
+            Salvar
+          </button>
+          <hr />
+          <div class="row">
+            <div class="row mt-3">
+              <div class="col-md-3 mt-3">
+                <input #imgLogo type="file" (change)="mostrarImagem($event)" style="display: none" accept="image/*" />
+                <button class="btn btn-secondary" (click)="imgLogo.click()">
+                  <span class="ml-2 mr-1">Assinatura</span>
+                </button>
+              </div>
+              <div class="col-md-3 mt-3">
+                <button class="btn btn-primary" (click)="salvarAssinatura()">
+                  <span class="ml-2 mr-1">Salvar Assinatura</span>
+                </button>
+              </div>
+            </div>
+            <div class="col-md-6 mt-3">
+              <img src="{{ imgFile }}" class="img-fluid" alt="" style="max-height: 120px" />
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

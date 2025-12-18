@@ -1,0 +1,79 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8 mt-3">
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3">Preço Referencial</span>
+    </h3>
+  </div>
+
+  <div class="card-body py-3">
+    <div class="table-responsive">
+      <table
+        datatable
+        [dtOptions]="dtOptions"
+        [dtTrigger]="dtTrigger"
+        class="table table-hover table-row-dashed table-row-gray-300 align-middle gs-0 gy-0"
+      >
+        <thead>
+          <tr class="fw-bolder text-dark fs-5">
+            <th class="min-w-20px">Código</th>
+            <th class="min-w-160px">Descrição do Produto/Serviço</th>
+            <th class="min-w-20px">Und</th>
+            <th class="min-w-20px">Quantidade</th>
+            <th class="min-w-20px">Preço Referencial</th>
+            <th class="min-w-20px">Valor Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of itens; trackBy: trackItem; let i = index">
+            <td>
+              <div class="d-flex">
+                <div class="d-flex">
+                  <span class="text-dark fw-normal py-0 fs-4"> {{ item.gproduto_servico_id }} </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5 mx-3"> {{ item.item_descricao }} </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5 mx-3"> {{ item.sigla }} </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5 mx-3"> {{ item.quantidade }} </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5 mx-3">
+                    {{ item.preco_mediano | currency : 'BRL' : 'symbol' : '1.2-2' }}
+                  </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5 mx-3">
+                    {{ item.preco_mediano * item.quantidade | currency : 'BRL' : 'symbol' : '1.2-2' }}
+                  </span>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

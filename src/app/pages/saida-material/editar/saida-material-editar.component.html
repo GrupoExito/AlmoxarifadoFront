@@ -1,0 +1,336 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Editar Saída Material</span>
+    </h3>
+  </div>
+  <!-- end::Header -->
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <form class="card" [formGroup]="editarMaterialSaidaForm">
+        <div class="card-body">
+          <div class="row mt-2">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-group">Almoxarifado*</label>
+                <ng-select
+                  class="ngSelectDropdown"
+                  [items]="almoxarifados"
+                  bindLabel="descricao"
+                  bindValue="id"
+                  [(ngModel)]="selectedAlmoxarifado"
+                  formControlName="almoxarifado_id"
+                >
+                </ng-select>
+
+                <div
+                  *ngIf="
+                    editarMaterialSaidaForm.get('almoxarifado_id')?.touched &&
+                    editarMaterialSaidaForm.get('almoxarifado_id')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-group">Secretaria*</label>
+                <ng-select
+                  #sec
+                  class="ngSelectDropdown"
+                  [items]="secretarias"
+                  bindLabel="descricao"
+                  bindValue="id"
+                  [(ngModel)]="selectedSecretaria"
+                  formControlName="secretaria_id"
+                  (change)="carregarDropdownSetor(sec)"
+                >
+                </ng-select>
+                <div
+                  *ngIf="
+                    editarMaterialSaidaForm.get('secretaria_id')?.touched &&
+                    editarMaterialSaidaForm.get('secretaria_id')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-group">Setor*</label>
+                <ng-select
+                  class="ngSelectDropdown"
+                  [items]="setores"
+                  bindLabel="nome"
+                  bindValue="id"
+                  [(ngModel)]="selectedSetor"
+                  formControlName="setor_id"
+                  (change)="carregarDropdownSolicitantePorSetor($event)"
+                >
+                </ng-select>
+                <div
+                  *ngIf="
+                    editarMaterialSaidaForm.get('setor_id')?.touched &&
+                    editarMaterialSaidaForm.get('setor_id')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-group">Solicitante*</label>
+                <ng-select
+                  class="ngSelectDropdown"
+                  [items]="solicitantes"
+                  bindLabel="nome"
+                  bindValue="id"
+                  [(ngModel)]="selectedSolicitante"
+                  formControlName="solicitante_id"
+                >
+                </ng-select>
+                <div
+                  *ngIf="
+                    editarMaterialSaidaForm.get('solicitante_id')?.touched &&
+                    editarMaterialSaidaForm.get('solicitante_id')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mb-2">Tipo Saída*</label>
+                <select
+                  class="form-select"
+                  formControlName="tipo_saida_id"
+                  aria-label="Tipo"
+                  (change)="onTipoSaidaChange()"
+                  [(ngModel)]="tipoSaida"
+                >
+                  <option value="1">Requisição de Consumo</option>
+                  <option value="2">Transferência</option>
+                  <option value="3">Devolução de Empréstimo</option>
+                  <option value="4">Empréstimo/Cessão</option>
+                  <option value="5">Perda/Avaria/Inutilização</option>
+                  <option value="6">Devolução ao Fornecedor</option>
+                  <option value="7">Doação</option>
+                  <option value="8">Ajuste</option>
+                </select>
+                <div
+                  *ngIf="
+                    editarMaterialSaidaForm.get('tipo_saida_id')?.touched &&
+                    editarMaterialSaidaForm.get('tipo_saida_id')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-group">Centro Custo*</label>
+                <ng-select
+                  class="ngSelectDropdown mt-3"
+                  [items]="centrosCusto"
+                  bindLabel="descricao"
+                  bindValue="id"
+                  [(ngModel)]="selectedCentroCusto"
+                  formControlName="centro_custo_id"
+                >
+                </ng-select>
+                <div
+                  *ngIf="
+                    editarMaterialSaidaForm.get('centro_custo_id')?.touched &&
+                    editarMaterialSaidaForm.get('centro_custo_id')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-group">Responsável Retirada*</label>
+                <ng-select
+                  class="ngSelectDropdown mt-3"
+                  [items]="solicitantes"
+                  bindLabel="nome"
+                  bindValue="id"
+                  formControlName="responsavel_retirada_id"
+                >
+                </ng-select>
+                <div
+                  *ngIf="
+                    editarMaterialSaidaForm.get('responsavel_retirada_id')?.touched &&
+                    editarMaterialSaidaForm.get('responsavel_retirada_id')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label">Conta Contábil*</label>
+                <input class="form-control" type="text" formControlName="conta_contabil" maxlength="30" />
+                <div
+                  *ngIf="
+                    editarMaterialSaidaForm.get('conta_contabil')?.touched &&
+                    editarMaterialSaidaForm.get('conta_contabil')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group mb-0">
+                <label>Data</label>
+                <input class="form-control" type="date" formControlName="data" />
+                <div
+                  *ngIf="
+                    editarMaterialSaidaForm.get('data')?.touched &&
+                    editarMaterialSaidaForm.get('data')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-group">Cidadão</label>
+                <ng-select
+                  class="ngSelectDropdown"
+                  [items]="cidadaos"
+                  bindLabel="nome"
+                  bindValue="id"
+                  formControlName="cidadao_id"
+                >
+                </ng-select>
+                <div
+                  *ngIf="
+                    editarMaterialSaidaForm.get('cidadao_id')?.touched &&
+                    editarMaterialSaidaForm.get('cidadao_id')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div *ngIf="tipoSaida === 'X'" class="col-md-6">
+              <div class="form-group">
+                <label class="form-group">Unidade Externa</label>
+                <ng-select
+                  class="ngSelectDropdown"
+                  [items]="unidadesExterna"
+                  bindLabel="descricao"
+                  bindValue="id"
+                  [(ngModel)]="selectedUnidadeExterna"
+                  formControlName="unidade_externa_id"
+                >
+                </ng-select>
+                <div
+                  *ngIf="
+                    editarMaterialSaidaForm.get('unidade_externa_id')?.touched &&
+                    editarMaterialSaidaForm.get('unidade_externa_id')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="tipoSaida === 'T'" class="col-md-6">
+              <div class="form-group">
+                <label class="form-group">Almoxarifado Destino</label>
+                <ng-select
+                  class="ngSelectDropdown"
+                  [items]="almoxarifados"
+                  bindLabel="descricao"
+                  bindValue="id"
+                  [(ngModel)]="selectedAlmoxarifadoDestino"
+                  formControlName="almoxarifado_destino_id"
+                >
+                </ng-select>
+
+                <div
+                  *ngIf="
+                    editarMaterialSaidaForm.get('almoxarifado_destino_id')?.touched &&
+                    editarMaterialSaidaForm.get('almoxarifado_destino_id')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div *ngIf="tipoSaida === 'T'" class="col-md-6">
+              <div class="form-group">
+                <label class="form-group">Secretaria Destino</label>
+                <ng-select
+                  class="ngSelectDropdown"
+                  [items]="secretarias"
+                  bindLabel="descricao"
+                  bindValue="id"
+                  [(ngModel)]="selectedSecretariaDestino"
+                  formControlName="secretaria_destino_id"
+                >
+                </ng-select>
+                <div
+                  *ngIf="
+                    editarMaterialSaidaForm.get('secretaria_destino_id')?.touched &&
+                    editarMaterialSaidaForm.get('secretaria_destino_id')?.hasError('required')
+                  "
+                  class="text text-danger"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="row mt-2">
+              <div class="form-group mb-0">
+                <label>Observação</label>
+                <textarea
+                  class="form-control"
+                  id="floatingTextarea3"
+                  style="height: 100px"
+                  formControlName="observacao"
+                  name="Observacao"
+                  cols="30"
+                  rows="2"
+                >
+                </textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer text-right">
+          <button class="btn btn-success" [disabled]="!editarMaterialSaidaForm.valid" (click)="editar()">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,119 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8 mt-3">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Anexo</span>
+    </h3>
+    <button (click)="open(content)" class="btn btn-sm btn-light-primary mb-2">
+      <span><i class="fa-solid fa-plus"></i> Adicionar </span>
+    </button>
+  </div>
+  <!-- end::Header -->
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="card-body py-3">
+        <!-- begin::Table container -->
+        <div class="table-responsive">
+          <!-- begin::Table -->
+          <table class="table table-hover table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+            <!-- begin::Table head -->
+            <thead>
+              <tr class="fw-bolder text-dark">
+                <th class="min-w-50px">Código</th>
+                <th class="min-w-400px">Nome Arquivo</th>
+                <th class="min-w-100px">Tipo Documento</th>
+                <th class="min-w-10px text-center">Ações</th>
+              </tr>
+            </thead>
+            <!-- end::Table head -->
+            <!-- begin::Table body -->
+            <tbody>
+              <tr *ngFor="let anexo of saidaMaterialAnexo; trackBy: trackItem">
+                <td>
+                  <div class="d-flex">
+                    <div class="d-flex">
+                      <span class="text-dark fw-normal py-0 fs-4"> {{ anexo.id }} </span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex">
+                    <div class="d-flex">
+                      <span class="text-dark fw-normal py-0 fs-4"> {{ anexo.nome_arquivo }} </span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex">
+                    <div class="d-flex">
+                      <span class="text-dark fw-normal py-0 fs-4"> {{ anexo.descricao_documento }} </span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex flex-shrink-0 justify-content-center">
+                    <button
+                      (click)="download(anexo)"
+                      class="btn btn-icon btn-secondary btn-bg-light btn-active-color-primary"
+                    >
+                      <span><i class="fa-solid fa-download"></i></span>
+                    </button>
+                    <button (click)="deletar(anexo.id)" href="#" class="btn btn-icon btn-active-color-danger btn-md">
+                      <span
+                        [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
+                        class="svg-icon svg-icon-4"
+                      ></span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <!-- end::Table body -->
+          </table>
+          <!-- end::Table -->
+        </div>
+        <!-- end::Table container -->
+      </div>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>
+
+<!-- Modal Impressão -->
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Anexo</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <label class="form-group">Tipo Documento</label>
+    <ng-select
+      class="ngSelectDropdown"
+      [items]="tipoDocumentos"
+      bindLabel="descricao"
+      bindValue="id"
+      [(ngModel)]="selectedTipo"
+    >
+    </ng-select>
+
+    <!-- Campo para exibir o documento escolhido -->
+
+    <div class="row mt-3">
+      <div class="col-6">
+        <input #anexo type="file" style="display: none" accept="*/*" (change)="escolherAnexo($event)" />
+        <button (click)="anexo.click()" class="btn btn-sm btn-primary">
+          <span><i class="fa-solid fa-upload"></i> Anexar </span>
+        </button>
+        <div class="mt-2" *ngIf="file">
+          <label class="form-group">Arquivo</label>
+          {{ file.files![0].name }}
+        </div>
+      </div>
+
+      <div class="col-6 text-end">
+        <button class="btn btn-success btn-sm" (click)="uploadAnexo()">Salvar</button>
+      </div>
+    </div>
+  </div>
+</ng-template>

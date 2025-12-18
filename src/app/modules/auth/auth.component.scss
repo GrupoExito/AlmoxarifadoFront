@@ -1,0 +1,27 @@
+:host {
+  height: 100%;
+}
+
+.bg_login{
+    width: 600px;
+    margin: auto;
+    background-image: url(./../../../assets/media/patterns/bg_login.svg);
+    background-repeat:no-repeat;
+    background-position: top center ;
+    background-size: 580PX;
+
+    @media (max-width: 768px) {
+      width: 100%;
+      background-image: url(./../../../assets/media/patterns/bg_login.svg);
+      background-repeat:no-repeat;
+      background-position: top center;
+      background-size: 1000PX;
+    }
+  }
+
+  .text_white{
+    color: white;
+  }
+  button.btn-magenta{
+    background-color: #EC268F!important;
+  }

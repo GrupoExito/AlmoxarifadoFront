@@ -1,0 +1,150 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Modelo planejamento - Produtos e Serviços</span>
+    </h3>
+    <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover" title="voltar">
+      <a
+        href="javascript:void(0)"
+        routerLink="/modeloplanejamento"
+        class="btn btn-sm btn-light-primary align-items-end"
+      >
+        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen058.svg'" class="svg-icon svg-icon-3"></span>
+        Voltar
+      </a>
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- begin::Body -->
+  <div class="card-body py-3">
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <form class="card" [formGroup]="produtoModeloPlanejamentoForm">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label class="form-label mt-3 mb-1">Descrição</label>
+                  <input class="form-control" type="text" formControlName="descricao" />
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label mt-3 mb-1">População aproximada</label>
+                  <input class="form-control" type="number" formControlName="populacao_aproximada" />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label mt-3 mb-1">Objeto</label>
+                  <select class="form-select" formControlName="objeto_id" aria-label="objeto_id">
+                    <option *ngFor="let objeto of objetos" value="{{ objeto.id }}">
+                      {{ objeto.descricao }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <form class="card" [formGroup]="addProdutoModeloPlanejamentoForm">
+          <div class="row mt-6">
+            <h3>Adicionar Produto Serviço</h3>
+          </div>
+          <div class="row mt-3">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Quantidade</label>
+                <input class="form-control" type="number" formControlName="quantidade" />
+              </div>
+            </div>
+            <div class="col-md-9">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Produto/Serviço</label>
+                <ng-select
+                  [items]="produtosServico"
+                  bindLabel="descricao"
+                  bindValue="id"
+                  [(ngModel)]="selectedProdutoServico"
+                  formControlName="produto_servico_id"
+                >
+                </ng-select>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="card-footer d-flex">
+          <button class="btn btn-success" [disabled]="!addProdutoModeloPlanejamentoForm.valid" (click)="adicionar()">
+            Adicionar
+          </button>
+          <input #importFile type="file" class="mx-auto" (change)="importarExcel($event)" />
+        </div>
+      </div>
+    </div>
+    <!-- begin::Table container -->
+    <div class="table-responsive">
+      <!-- begin::Table -->
+      <table class="table table-hover table-row-dashed table-row-gray-300 align-middle gs-0 gy-0">
+        <!-- begin::Table head -->
+        <thead>
+          <tr class="fw-bolder text-dark fs-5">
+            <th class="min-w-140px">Descrição</th>
+            <th class="min-w-140px">Unidade de Medida</th>
+            <th class="min-w-140px">Quantidade</th>
+            <th class="min-w-100px text-end">Ações</th>
+          </tr>
+        </thead>
+        <!-- end::Table head -->
+        <!-- begin::Table body -->
+        <tbody>
+          <tr *ngFor="let modeloPlanejamentoProduto of modelosPlanejamentoProduto; trackBy: trackItem">
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5">
+                    {{ modeloPlanejamentoProduto.produto_servico_descricao }}
+                  </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5 mx-3"> {{ modeloPlanejamentoProduto.unidade_medida }} </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5 mx-3"> {{ modeloPlanejamentoProduto.quantidade }} </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex justify-content-end flex-shrink-0">
+                <button
+                  (click)="deletar(modeloPlanejamentoProduto.id)"
+                  href="#"
+                  class="btn btn-icon btn-active-color-danger btn-md"
+                >
+                  <span
+                    [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
+                    class="svg-icon svg-icon-3"
+                  ></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+        <!-- end::Table body -->
+      </table>
+      <!-- end::Table -->
+    </div>
+    <!-- end::Table container -->
+  </div>
+  <!-- end::Body -->
+</div>

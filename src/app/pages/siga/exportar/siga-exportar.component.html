@@ -1,0 +1,68 @@
+<div class="card mt-3 mb-3">
+  <form class="card" [formGroup]="exportarForm">
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Siga - Exportação</span>
+    </h3>
+  </div>
+  <div class="card mt-3">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-2">
+          <div class="form-group">
+          <label class="form-label mt-3 mb-1">Ano*</label>
+          <select class="form-select form-select-lg" formControlName="ano">
+            <option value="">selecione</option>
+            <option *ngFor="let item of anos" value="{{ item }}">{{ item }}</option>
+          </select>
+          <div
+          *ngIf="
+            exportarForm.get('ano')?.touched &&
+            exportarForm.get('ano')?.hasError('required')
+          "
+          class="text text-danger"
+        >
+          Campo obrigatório!
+        </div>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="form-group mb-0">
+          <label class="form-label mt-3 mb-1">Mês*</label>
+          <select class="form-select form-select-lg" formControlName="mes">
+            <option value="">selecione</option>
+            <option *ngFor="let item of meses" value="{{ item.codigo }}">{{ item.valor }}</option>
+          </select>
+          <div
+          *ngIf="
+            exportarForm.get('mes')?.touched &&
+            exportarForm.get('mes')?.hasError('required')
+          "
+          class="text text-danger"
+        >
+          Campo obrigatório!
+        </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group mb-0">
+          <label class="form-label mt-3 mb-1">Tipo*</label>
+          <ng-select class="ngSelectDropdown"
+          [items]="tipos"
+          bindLabel="valor"
+          bindValue="codigo"
+          [(ngModel)]="tiposInt"
+          [multiple]="true"
+          [ngModelOptions]="{standalone: true}"
+        >
+        </ng-select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer text-right">
+      <button (click)="exportar(this.exportarForm.value)" class="btn btn-success btn-lg" [disabled]="!this.validarForm()">Exportar</button>
+  </div>
+</div>
+</form>
+</div>

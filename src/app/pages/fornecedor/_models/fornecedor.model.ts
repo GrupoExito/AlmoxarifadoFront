@@ -1,0 +1,36 @@
+export interface Fornecedor {
+  id?: number;
+  razao_social: string;
+  tipo_pessoa: string;
+  fantasia: string;
+  cnpj_cpf: string;
+  inscricao_estadual: string;
+  endereco: string;
+  cidade: string;
+  bairro: string;
+  uf_id?: number;
+  cep: string;
+  telefone: string;
+  email: string;
+  inscricao_municipal: string;
+  obs: string;
+  data_cadastro: string;
+  responsavel: string;
+  responsavel_cpf: string;
+  registro_medico: string;
+  tipo: number;
+  codigo_gru: string;
+  banco_id?: number;
+  agencia: string;
+  conta_bancaria: string;
+  tipo_conta: string;
+  pis_pasep_nit: string;
+  registro_geral: string;
+  orgao_exp: string;
+  atividade_principal: string;
+  atividade_secundaria: string;
+  micro_empresa?: string;
+  uuid?: string;
+  id_razao_social?: string;
+  porte_empresa: number;
+}

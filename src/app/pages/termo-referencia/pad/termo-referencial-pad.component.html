@@ -1,0 +1,101 @@
+<div class="card mt-3">
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3">Processo Administrativo</span>
+    </h3>
+  </div>
+  <div class="card-body py-3">
+    <div class="row">
+      <div class="col-md-9">
+        <div class="form-group">
+          <ng-select
+            [disabled]="inputPADisabled"
+            appendTo="body"
+            class="ngSelectDropdown"
+            [items]="processoAdministrativos"
+            bindLabel="numero_objeto"
+            bindValue="pad_id"
+            [(ngModel)]="selectedProcessoAdministrativo"
+          >
+          </ng-select>
+        </div>
+      </div>
+      <ng-container>
+        <div class="col-md-3 align-self-end" *ngIf="!inputPADisabled">
+          <button class="btn btn-success btn-sm" (click)="adicionar()">Adicionar</button>
+        </div>
+      </ng-container>
+      <ng-container>
+        <div class="col-md-3 align-self-end" *ngIf="inputPADisabled">
+          <button class="btn btn-danger btn-sm" (click)="deletar()">Excluir</button>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+<div class="card card-xxl-stretch mt-3 mb-5 mb-xxl-8">
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3">Documento de Formalização de Demanda</span>
+    </h3>
+  </div>
+
+  <div class="card-body py-3">
+    <div class="table-responsive">
+      <table
+        datatable
+        [dtOptions]="dtOptions"
+        [dtTrigger]="dtTrigger"
+        class="table table-hover table-row-dashed table-row-gray-300 align-middle gs-0 gy-0"
+      >
+        <thead>
+          <tr class="fw-bolder text-dark fs-5">
+            <th class="min-w-20px">Sequência</th>
+            <th class="min-w-20px">DFD</th>
+            <th class="min-w-140px">Exercício</th>
+            <th class="min-w-140px">Secretaria</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let sd of termoReferenciaPA; trackBy: trackItem; let i = index">
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5 mx-3"> {{ i + 1 }} </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <a
+                    href="/solicitacaodespesa/view/{{ sd.sd_id }}/cadastro"
+                    class="btn btn-sm btn-light-primary align-items-end fs-5"
+                  >
+                    <u>{{ sd.sd_id }}</u>
+                  </a>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5 mx-3"> {{ sd.gexercicio_id }} </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5 mx-3"> {{ sd.sd_secretaria_descricao }} </span>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

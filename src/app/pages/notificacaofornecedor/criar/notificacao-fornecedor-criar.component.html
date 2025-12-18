@@ -1,0 +1,99 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2 d-flex">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Criar Notificação de Fornecedor</span>
+    </h3>
+    <div
+      class="card-toolbar ms-auto"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Clique para voltar"
+    >
+      <a routerLink="/solicitante" class="btn btn-sm btn-light-primary align-items-end">
+        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen058.svg'" class="svg-icon svg-icon-3"></span>
+        Voltar
+      </a>
+    </div>
+  </div>
+  <!-- end::Header -->
+
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <form class="card" [formGroup]="criarNotificacaoFornecedorForm" (ngSubmit)="criar()">
+        <div class="card-body">
+          <div class="row">
+            <!-- Fornecedor (ng-select) -->
+            <div class="col-md-8">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Fornecedor*</label>
+
+                <ng-select
+                  class="ngSelectDropdown"
+                  [items]="fornecedores"
+                  bindLabel="razao_social"
+                  bindValue="id"
+                  placeholder="Selecione um fornecedor"
+                  formControlName="fornecedor_id">
+                </ng-select>
+
+                <div
+                  *ngIf="criarNotificacaoFornecedorForm.get('fornecedor_id')?.touched &&
+                         criarNotificacaoFornecedorForm.get('fornecedor_id')?.hasError('required')"
+                  class="text text-danger mt-1">
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+
+            <!-- Data (date) -->
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Data*</label>
+                <input class="form-control" type="date" formControlName="data_notificacao" />
+                <div
+                  *ngIf="criarNotificacaoFornecedorForm.get('data_notificacao')?.touched &&
+                         criarNotificacaoFornecedorForm.get('data_notificacao')?.hasError('required')"
+                  class="text text-danger mt-1">
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+
+            <!-- Observação (textarea) -->
+            <div class="col-md-12">
+              <div class="row mt-3">
+                <div class="form-group mb-0">
+                  <label>Observação</label>
+                  <textarea
+                    class="form-control"
+                    id="floatingTextarea3"
+                    style="height: 100px"
+                    formControlName="observacao"
+                    name="Observacao"
+                    cols="30"
+                    rows="2">
+                  </textarea>
+                  <div
+                    *ngIf="criarNotificacaoFornecedorForm.get('observacao')?.touched &&
+                           criarNotificacaoFornecedorForm.get('observacao')?.hasError('maxlength')"
+                    class="text text-danger mt-1">
+                    Tamanho máximo: 3000
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="card-footer text-right">
+          <button type="submit" class="btn btn-success" [disabled]="!criarNotificacaoFornecedorForm.valid">
+            Cadastrar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

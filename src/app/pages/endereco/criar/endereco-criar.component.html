@@ -1,0 +1,157 @@
+<div class="card card-xxl-stretch">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Criar Endereço</span>
+    </h3>
+    <div
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Clique para voltar"
+      *ngIf="DFD !== 'dfd'"
+    >
+      <a href="javascript:void(0)" routerLink="/endereco" class="btn btn-sm btn-light-primary align-items-end">
+        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen058.svg'" class="svg-icon svg-icon-3"></span>
+        Voltar
+      </a>
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <form class="card" [formGroup]="criarEnderecoForm">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Endereço</label>
+                <input class="form-control" type="text" formControlName="endereco" />
+                <div
+                  *ngIf="
+                    criarEnderecoForm.get('endereco')?.touched &&
+                    criarEnderecoForm.get('endereco')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    criarEnderecoForm.get('endereco')?.touched &&
+                    criarEnderecoForm.get('endereco')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 150
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">N° Logradouro</label>
+                <input class="form-control" type="text" formControlName="nrologradouro" />
+                <div
+                  *ngIf="
+                    criarEnderecoForm.get('nrologradouro')?.touched &&
+                    criarEnderecoForm.get('nrologradouro')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    criarEnderecoForm.get('nrologradouro')?.touched &&
+                    criarEnderecoForm.get('nrologradouro')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 20
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Complemento</label>
+                <input class="form-control" type="text" formControlName="complemento" />
+                <div
+                  *ngIf="
+                    criarEnderecoForm.get('complemento')?.touched &&
+                    criarEnderecoForm.get('complemento')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    criarEnderecoForm.get('complemento')?.touched &&
+                    criarEnderecoForm.get('complemento')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 80
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Bairro</label>
+                <input class="form-control" type="text" formControlName="bairro" />
+                <div
+                  *ngIf="
+                    criarEnderecoForm.get('bairro')?.touched && criarEnderecoForm.get('bairro')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    criarEnderecoForm.get('bairro')?.touched && criarEnderecoForm.get('bairro')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 30
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Município</label>
+                <select class="form-select form-select-lg" formControlName="municipio_id">
+                  <option value="">Selecione um Município</option>
+                  <option *ngFor="let municipio of municipios" value="{{ municipio.id }}">{{ municipio.nome }}</option>
+                </select>
+                <div
+                  *ngIf="
+                    criarEnderecoForm.get('municipio_id')?.touched &&
+                    criarEnderecoForm.get('municipio_id')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label mt-3 mb-1">CEP</label>
+                  <input #cep class="form-control" type="text" mask="00.000-000" formControlName="cep" (focusout)="consultarCep(cep.value)" maxlength="10" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer text-right">
+          <button class="btn btn-success" [disabled]="!criarEnderecoForm.valid" (click)="criar()">Cadastrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>

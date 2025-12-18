@@ -1,0 +1,230 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8 mt-3">
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Processo</span>
+    </h3>
+  </div>
+  <form [formGroup]="cadastroForm">
+    <div class="card-body py-0">
+      <div class="row mt-2">
+        <div class="col-md-2">
+          <div class="form-group mb-0">
+            <label>Exercício*</label>
+            <select class="form-select" formControlName="gexercicio_id">
+              <option value="">Ano/Exercício</option>
+              <option *ngFor="let exercicio of exercicios" value="{{ exercicio.id }}" aria-placeholder="Ano/Exercício">
+                {{ exercicio.id }}
+              </option>
+            </select>
+            <div
+              *ngIf="
+                cadastroForm.get('gexercicio_id')?.touched && cadastroForm.get('gexercicio_id')?.hasError('required')
+              "
+              class="text text-danger"
+            >
+              Campo obrigatório!
+            </div>
+          </div>
+        </div>
+        <!-- <div class="col-md-4">
+          <div class="form-group mb-0">
+            <label>Setor*</label>
+            <span
+              class="tooltip-toggle-right"
+              aria-label="Exibe o(s) setor(es) cadastrados. Para adicionar um novo setor
+                  vá até a página de setores em: 'Cadastros', 'Básico' e 'Setores',
+                  utilize o botão '+ Novo Setor' e em seguida preencha as informações solicitadas pelo sistema."
+              tabindex="1"
+            >
+              <i class="px-1 py-2 fa fa-lg fa-solid fa-circle-question"> </i>
+            </span>
+            <select class="form-select" formControlName="flsetor_id">
+              <option value="">--Selecione--</option>
+              <option *ngFor="let setor of setores" value="{{ setor.id }}" aria-placeholder="Setor">
+                {{ setor.nome }}
+              </option>
+            </select>
+            <div
+              *ngIf="cadastroForm.get('flsetor_id')?.touched && cadastroForm.get('flsetor_id')?.hasError('required')"
+              class="text text-danger"
+            >
+              Campo obrigatório!
+            </div>
+          </div>
+        </div> -->
+        <!-- <div class="col-md-4">
+          <div class="form-group mb-0">
+            <label>Modelo*</label>
+            <span
+              class="tooltip-toggle-right"
+              aria-label="'Modelo*' refere-se ao que o 'Objeto*' do Termo Referência
+                              se classifica. Como por exemplo: Material, serviço, dentre outros."
+              tabindex="1"
+            >
+              <i class="px-1 py-2 fa fa-lg fa-solid fa-circle-question"> </i>
+            </span>
+            <select class="form-select" formControlName="modelo_tr_id">
+              <option value="">--Selecione--</option>
+              <option *ngFor="let modelos of modeloDocumentos" value="{{ modelos.id }}" aria-placeholder="Modelos">
+                {{ modelos.descricao }}
+              </option>
+            </select>
+            <div
+              *ngIf="
+                cadastroForm.get('modelo_tr_id')?.touched && cadastroForm.get('modelo_tr_id')?.hasError('required')
+              "
+              class="text text-danger"
+            >
+              Campo obrigatório!
+            </div>
+          </div>
+        </div> -->
+        <div class="col-md-2">
+          <div class="form-group mb-0">
+            <label>Data*</label>
+            <input class="form-control" type="date" formControlName="data_tr" />
+            <div
+              *ngIf="cadastroForm.get('data_tr')?.touched && cadastroForm.get('data_tr')?.hasError('required')"
+              class="text text-danger mt-3"
+            >
+              Campo obrigatório!
+            </div>
+          </div>
+        </div>
+        <!-- <div class="col-md-2">
+          <div class="form-group mb-0">
+            <label>Prazo De Entrega (dias)*</label>
+            <span
+              class="tooltip-toggle-right"
+              aria-label="Preencha aqui um prazo em dias para que o(s) bem(ns) ou serviço(s) seja(m) entregue(s)."
+              tabindex="1"
+            >
+              <i class="px-1 py-2 fa fa-lg fa-solid fa-circle-question"> </i>
+            </span>
+            <input class="form-control" type="number" maxlength="2" formControlName="prazo_entrega_dias" />
+
+            <div
+              *ngIf="
+                cadastroForm.get('prazo_entrega_dias')?.touched &&
+                cadastroForm.get('prazo_entrega_dias')?.hasError('required')
+              "
+              class="text text-danger"
+            >
+              Campo obrigatório!
+            </div>
+          </div>
+        </div> -->
+        <!-- <div class="col-md-3">
+          <div class="form-group mb-0">
+            <label>Forma Pagamento</label>
+            <input class="form-control" type="text" maxlength="50" formControlName="forma_pagamento" />
+
+            <div
+              *ngIf="
+                cadastroForm.get('forma_pagamento')?.touched &&
+                cadastroForm.get('forma_pagamento')?.hasError('maxlength')
+              "
+              class="text text-danger"
+            >
+              Tamanho máximo: 50
+            </div>
+          </div>
+        </div> -->
+        <!-- <div class="col-md-3">
+          <div class="form-group mb-0">
+            <label>Prazo Pagamento</label>
+            <input class="form-control" type="text" maxlength="50" formControlName="prazo_pagamento" />
+
+            <div
+              *ngIf="
+                cadastroForm.get('prazo_pagamento')?.touched &&
+                cadastroForm.get('prazo_pagamento')?.hasError('maxlength')
+              "
+              class="text text-danger"
+            >
+              Tamanho máximo: 50
+            </div>
+          </div>
+        </div> -->
+      </div>
+      <div class="row mt-2">
+        <div class="form-group mb-0">
+          <label>Objeto</label>
+          <span
+            class="tooltip-toggle-right"
+            aria-label="Descreva o objeto do 'Termo Referência'. Escreva de forma clara e sucinta."
+            tabindex="1"
+          >
+            <i class="px-1 py-2 fa fa-lg fa-solid fa-circle-question"> </i>
+          </span>
+          <textarea
+            class="form-control"
+            id="floatingTextarea3"
+            style="height: 100px"
+            formControlName="objeto"
+            name="objeto"
+            cols="30"
+            rows="4"
+          >
+          </textarea>
+          <div
+            *ngIf="cadastroForm.get('objeto')?.touched && cadastroForm.get('objeto')?.hasError('required')"
+            class="text text-danger"
+          >
+            Campo obrigatório!
+          </div>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="form-group mb-0">
+          <label>Justificativa*</label>
+          <span
+            class="tooltip-toggle-right"
+            aria-label="Descreva de forma clara e objetiva a justificativa ou descrição do termo de referência."
+            tabindex="1"
+          >
+            <i class="px-1 py-2 fa fa-lg fa-solid fa-circle-question"> </i>
+          </span>
+          <textarea
+            class="form-control"
+            id="floatingTextarea3"
+            style="height: 100px"
+            formControlName="justificativa"
+            name="justificativa"
+            cols="30"
+            rows="4"
+          >
+          </textarea>
+          <div
+            *ngIf="
+              cadastroForm.get('justificativa')?.touched && cadastroForm.get('justificativa')?.hasError('required')
+            "
+            class="text text-danger"
+          >
+            Campo obrigatório!
+          </div>
+        </div>
+      </div>
+      <!-- <div class="row mt-2">
+        <div class="form-group mb-0">
+          <label>Termo Referência</label>
+          <textarea
+            class="form-control"
+            id="floatingTextarea3"
+            style="height: 100px"
+            formControlName="termo_referencia"
+            name="termo_referencia"
+            cols="30"
+            rows="4"
+          >
+          </textarea>
+        </div>
+      </div> -->
+    </div>
+    <div class="card-footer text-right" *ngIf="!id">
+      <button class="btn btn-success" [disabled]="!cadastroForm.valid" (click)="criar()">
+        Cadastrar Termo Referencial
+      </button>
+    </div>
+  </form>
+</div>

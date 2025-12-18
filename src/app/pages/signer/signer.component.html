@@ -1,0 +1,42 @@
+<div class="card mt-3 mb-3">
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Visualizar</span>
+    </h3>
+  </div>
+  <div class="card mt-3">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-2">
+          <div #paginasTumb class="form-group div-imagem"></div>
+        </div>
+
+        <div class="col-md-10">
+          <div #container class="form-group mb-0 div-paginaView">
+            <img
+              #pagina
+              class="paginaView"
+              src="../../../assets/media/misc/pagina1.jpg"
+              alt="Página selecionada"
+              (mousedown)="onMouseDown($event)"
+              (mousemove)="onMouseMove($event)"
+              (mouseup)="onMouseUp($event)"
+              [style.left.px]="pageOffsetX"
+              [style.top.px]="pageOffsetY"
+            />
+            <div
+              #divRetangular
+              [style.left.px]="offsetX"
+              [style.top.px]="offsetY"
+              style="width: 208px; height: 50px; background-color: rgba(255, 0, 0, 0.5); position: absolute"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer text-right">
+    <button (click)="assinar(this)" class="btn btn-success me-3">Assinar</button>
+    <button (click)="download()" class="btn btn-success">Baixar arquivo</button>
+  </div>
+</div>

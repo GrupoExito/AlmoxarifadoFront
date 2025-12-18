@@ -1,0 +1,394 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Editar Usuário</span>
+    </h3>
+    <div
+      class="card-toolbar"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      title="Clique para adicionar novo usuário"
+    >
+      <a
+        href="javascript:void(0)"
+        routerLink="/usuario/criar"
+        class="btn btn-sm btn-light-primary align-items-end me-3"
+      >
+        <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>
+        Novo usuário
+      </a>
+      <div
+        class="card-toolbar"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        data-bs-trigger="hover"
+        title="Clique para voltar"
+      >
+        <a href="javascript:void(0)" routerLink="/usuario" class="btn btn-sm btn-light-primary align-items-end">
+          <span [inlineSVG]="'./assets/media/icons/duotune/general/gen058.svg'" class="svg-icon svg-icon-3"></span>
+          Voltar
+        </a>
+      </div>
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <form class="card" [formGroup]="editarUsuarioForm">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Nome*</label>
+                <input class="form-control" type="text" formControlName="nome" maxlength="100" />
+                <div
+                  *ngIf="editarUsuarioForm.get('nome')?.touched && editarUsuarioForm.get('nome')?.hasError('required')"
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="editarUsuarioForm.get('nome')?.touched && editarUsuarioForm.get('nome')?.hasError('minlength')"
+                  class="text text-danger mt-3"
+                >
+                  Nome deve ter no mínimo 2 caracteres!
+                </div>
+                <div
+                  *ngIf="editarUsuarioForm.get('nome')?.touched && editarUsuarioForm.get('nome')?.hasError('maxlength')"
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 100
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Telefone*</label>
+                <input
+                  mask="(00) 0000-0000||(00) 00000-0000"
+                  class="form-control"
+                  type="text"
+                  formControlName="telefone"
+                  maxlength="15"
+                />
+                <div
+                  *ngIf="
+                    editarUsuarioForm.get('telefone')?.touched &&
+                    editarUsuarioForm.get('telefone')?.hasError('maxlength')
+                  "
+                  class="text text-danger"
+                >
+                  Tamanho máximo: 15
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Email</label>
+                <input class="form-control" type="text" formControlName="email" maxlength="126" />
+                <div
+                  *ngIf="editarUsuarioForm.get('email')?.touched && editarUsuarioForm.get('email')?.hasError('email')"
+                  class="text text-danger"
+                >
+                  Email inválido!
+                </div>
+                <div
+                  *ngIf="
+                    editarUsuarioForm.get('email')?.touched && editarUsuarioForm.get('email')?.hasError('maxlength')
+                  "
+                  class="text text-danger"
+                >
+                  Tamanho máximo: 126
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Perfil*</label>
+                <select class="form-select form-select-lg" formControlName="perfil_id">
+                  <option value="">selecione</option>
+                  <option *ngFor="let perfil of perfis" value="{{ perfil.id }}">{{ perfil.nome }}</option>
+                </select>
+                <div
+                  *ngIf="
+                    editarUsuarioForm.get('perfil_id')?.touched &&
+                    editarUsuarioForm.get('perfil_id')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Login*</label>
+                <input class="form-control" type="text" formControlName="login" maxlength="126" />
+                <div
+                  *ngIf="
+                    editarUsuarioForm.get('login')?.touched && editarUsuarioForm.get('login')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+                <div
+                  *ngIf="
+                    editarUsuarioForm.get('login')?.touched && editarUsuarioForm.get('login')?.hasError('maxlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Tamanho máximo: 50
+                </div>
+                <div
+                  *ngIf="
+                    editarUsuarioForm.get('login')?.touched && editarUsuarioForm.get('login')?.hasError('minlength')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Nome deve ter no mínimo 5 caracteres!
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="form-label mt-3 mb-1">Data Limite Acesso*</label>
+                <input class="form-control" type="date" formControlName="dataLimiteAcesso" />
+                <div
+                  *ngIf="
+                    editarUsuarioForm.get('dataLimiteAcesso')?.touched &&
+                    editarUsuarioForm.get('dataLimiteAcesso')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr />
+          <ng-container *appPermission="['Usuário', 'alterar_senha_outro_usuario']">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label class="form-label mt-3 mb-1">Senha</label>
+                  <input class="form-control" type="password" formControlName="password" maxlength="25" />
+                  <div
+                    *ngIf="
+                      editarUsuarioForm.get('password')?.touched &&
+                      editarUsuarioForm.get('password')?.hasError('required')
+                    "
+                    class="text text-danger mt-3"
+                  >
+                    Campo obrigatório!
+                  </div>
+                  <div
+                    *ngIf="
+                      editarUsuarioForm.get('password')?.touched &&
+                      editarUsuarioForm.get('password')?.hasError('minlength')
+                    "
+                    class="text text-danger mt-3"
+                  >
+                    Senha deve ter no mínimo 3 caracteres!
+                  </div>
+                  <div
+                    *ngIf="
+                      editarUsuarioForm.get('password')?.touched &&
+                      editarUsuarioForm.get('password')?.hasError('maxlength')
+                    "
+                    class="text text-danger mt-3"
+                  >
+                    Tamanho máximo: 15
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label class="form-label mt-3 mb-1">Repetir Senha</label>
+                  <input class="form-control" type="password" formControlName="repetirSenha" maxlength="25" />
+                  <div
+                    *ngIf="
+                      editarUsuarioForm.get('repetirSenha')?.touched &&
+                      editarUsuarioForm.get('repetirSenha')?.hasError('required')
+                    "
+                    class="text text-danger mt-3"
+                  >
+                    Campo obrigatório!
+                  </div>
+                  <div
+                    *ngIf="
+                      editarUsuarioForm.get('repetirSenha')?.touched &&
+                      editarUsuarioForm.get('repetirSenha')?.hasError('minlength')
+                    "
+                    class="text text-danger mt-3"
+                  >
+                    Senha deve ter no mínimo 3 caracteres!
+                  </div>
+                  <div
+                    *ngIf="
+                      editarUsuarioForm.get('repetirSenha')?.touched &&
+                      editarUsuarioForm.get('repetirSenha')?.hasError('maxlength')
+                    "
+                    class="text text-danger mt-3"
+                  >
+                    Tamanho máximo: 15
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <hr />
+          <div class="row">
+            <div class="col-md-3">
+              <button (click)="selecionarTodasSecretarias()" class="btn btn-sm btn-primary">
+                Selecionar Todas Secretarias
+              </button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-5">
+              <div class="form-group">
+                <label class="form-group">Secretarias*</label>
+                <ng-select
+                  class="ngSelectDropdown"
+                  [items]="secretariasFundos"
+                  bindLabel="descricao"
+                  bindValue="id"
+                  [(ngModel)]="selectedSecretarias"
+                  [multiple]="true"
+                  formControlName="secretarias"
+                >
+                </ng-select>
+                <div
+                  *ngIf="
+                    editarUsuarioForm.get('secretarias')?.touched &&
+                    editarUsuarioForm.get('secretarias')?.hasError('required')
+                  "
+                  class="text text-danger mt-3"
+                >
+                  Campo obrigatório!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer text-right">
+          <button
+            class="btn btn-success"
+            [disabled]="!editarUsuarioForm.valid"
+            (click)="salvar(editarUsuarioForm.value)"
+          >
+            Salvar
+          </button>
+        </div>
+        <!-- <div class="card shadow-sm border-0 mt-5">
+          <div class="card-header bg-primary text-white d-flex align-items-center justify-content-center py-3">
+            <i class="bi bi-link-45deg fs-3 me-2"></i>
+            <h3 class="card-title mb-0 fw-semibold text-center">Vincular Usuário</h3>
+          </div>
+
+          <div class="card-body bg-light">
+            <div class="row g-4 justify-content-center">
+              <div class="col-md-4">
+                <label class="form-label fw-semibold text-dark">Usuário *</label>
+                <ng-select
+                  class="ngSelectDropdown"
+                  [items]="usuarios"
+                  bindLabel="nome"
+                  bindValue="id"
+                  formControlName="usuarios"
+                  [multiple]="false"
+                  placeholder="Selecione o usuário"
+                  [clearable]="true"
+                  [searchable]="true"
+                >
+                </ng-select>
+                <small
+                  class="text-danger"
+                  *ngIf="
+                    editarUsuarioForm.get('usuarios')?.touched &&
+                    editarUsuarioForm.get('usuarios')?.hasError('required')
+                  "
+                >
+                  Campo obrigatório
+                </small>
+              </div>
+
+              <div class="col-md-4" [hidden]="!editarUsuarioForm.get('usuarios')?.value">
+                <label class="form-label fw-semibold text-dark">Município *</label>
+                <ng-select
+                  class="ngSelectDropdown"
+                  [items]="cliente"
+                  bindLabel="nome"
+                  bindValue="id"
+                  formControlName="municipios"
+                  [multiple]="false"
+                  placeholder="Selecione o município"
+                  (change)="filtrarGruposPorCliente(editarUsuarioForm.get('municipios')?.value)"
+                  [clearable]="true"
+                  [searchable]="true"
+                >
+                </ng-select>
+                <small
+                  class="text-danger"
+                  *ngIf="
+                    editarUsuarioForm.get('municipios')?.touched &&
+                    editarUsuarioForm.get('municipios')?.hasError('required')
+                  "
+                >
+                  Campo obrigatório
+                </small>
+              </div>
+
+              <div class="col-md-4" [hidden]="!editarUsuarioForm.get('municipios')?.value">
+                <label class="form-label fw-semibold text-dark">Grupo de Usuário *</label>
+                <ng-select
+                  class="ngSelectDropdown"
+                  [items]="gruposFiltrados"
+                  bindLabel="nome"
+                  bindValue="id"
+                  formControlName="grupoUsuarios"
+                  [multiple]="false"
+                  placeholder="Selecione o grupo"
+                  [clearable]="true"
+                  [searchable]="true"
+                >
+                </ng-select>
+                <small
+                  class="text-danger"
+                  *ngIf="
+                    editarUsuarioForm.get('grupoUsuarios')?.touched &&
+                    editarUsuarioForm.get('grupoUsuarios')?.hasError('required')
+                  "
+                >
+                  Campo obrigatório
+                </small>
+              </div>
+            </div>
+
+             <div class="row justify-content-center mt-5" *ngIf="editarUsuarioForm.get('grupoUsuarios')?.value">
+              <div class="col-md-4 text-center">
+                <button
+                  class="btn btn-success btn-lg px-5 py-2 shadow-sm d-flex align-items-center justify-content-center w-100"
+                  (click)="vincular()"
+                >
+                  <i class="bi bi-check2-circle me-2 fs-5"></i>
+                  Vincular Usuário
+                </button>
+              </div>
+            </div>
+          </div> 
+        </div> -->
+      </form>
+    </div>
+  </div>
+</div>
