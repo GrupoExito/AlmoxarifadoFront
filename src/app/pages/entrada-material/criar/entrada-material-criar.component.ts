@@ -41,19 +41,14 @@ export class EntradaMaterialCriarComponent implements OnInit {
   entradaMaterial: EntradaMaterial;
   criarEntradaMaterialForm: FormGroup;
   editarForm: any;
-  //tipoEntrada: number;
   token: AuthToken | null;
   secretarias: SecretariaFundo[];
   fornecedores: Fornecedor[];
   almoxarifados: Almoxarifado[];
   pedidoCompra: PedidoCompra[];
   usuario_id: number = 1;
-  //selectedSecretaria: number;
-  //selectedFornecedor: number;
-  //selectedAlmoxarifado: number;
   selectedAlmoxarifadoOrigem: number;
   selectedSecretariaOrigem: number;
-  //selectedPedidoCompra: number;
   id: number | null;
   visualizarEntrada: EMData | null;
   entradaAlmoxarifadoUsuario: boolean | undefined = false;
@@ -189,7 +184,7 @@ export class EntradaMaterialCriarComponent implements OnInit {
   }
 
   carregarDropdownPedidoCompra(): void {
-    this.pedidoCompraService.listarTodos().subscribe({
+    this.pedidoCompraService.listarTodosComSaldo().subscribe({
       next: (pedidoCompra) => {
         this.pedidoCompra = pedidoCompra.map((pedido) => ({
           ...pedido,

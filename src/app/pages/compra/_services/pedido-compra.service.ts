@@ -29,6 +29,10 @@ export class PedidoCompraService {
     return this.http.get<PedidoCompra[]>(this.baseURL);
   }
 
+  listarTodosComSaldo(): Observable<PedidoCompra[]> {
+    return this.http.get<PedidoCompra[]>(this.baseURL);
+  }
+
   criar(pedidoCompra: Partial<PedidoCompra>): Observable<PedidoCompra> {
     return this.http.post<PedidoCompra>(`${this.baseURL}`, pedidoCompra);
   }

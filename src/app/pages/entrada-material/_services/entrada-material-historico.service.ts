@@ -15,6 +15,6 @@ export class EntradaMaterialHistoricoService {
   }
 
   salvarObservacao(obeservacao: EntradaMaterialHistorico): Observable<EntradaMaterialHistorico> {
-    return this.http.post<EntradaMaterialHistorico>(`${this.baseURL}/observacao`, obeservacao);
+    return this.http.post<EntradaMaterialHistorico>(`${this.baseURL}/historico`, obeservacao);
   }
 }

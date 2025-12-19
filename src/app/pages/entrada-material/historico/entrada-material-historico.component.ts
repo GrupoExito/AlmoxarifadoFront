@@ -76,7 +76,6 @@ export class EntradaMaterialHistoricoComponent implements OnInit {
             this.entradaMaterialHistoricoService.listarTodos(this.id!).subscribe({
               next: (historico) => {
                 this.historicoForm.controls.historico.setValue('');
-                console.log(historico);
                 this.entradaMaterialHistorico = historico;
               },
               error: (error) => {
