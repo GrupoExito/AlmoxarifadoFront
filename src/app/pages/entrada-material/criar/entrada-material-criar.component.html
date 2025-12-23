@@ -89,7 +89,7 @@
           <div class="row mt-2">
             <div class="col-md-4">
               <div class="form-group">
-                <label class="form-group">Almoxarifado</label>
+                <label class="form-group">Almoxarifado*</label>
                 <ng-select
                   class="ngSelectDropdown"
                   [items]="almoxarifados"
@@ -112,7 +112,7 @@
             </div>
             <div class="col-md-4">
               <div class="form-group">
-                <label class="form-group">Secretaria</label>
+                <label class="form-group">Secretaria*</label>
                 <ng-select
                   class="ngSelectDropdown"
                   [items]="secretarias"
@@ -134,13 +134,14 @@
             </div>
             <div class="col-md-4">
               <div class="form-group">
-                <label class="form-group">Fornecedor</label>
+                <label class="form-group">Fornecedor*</label>
                 <ng-select
                   class="ngSelectDropdown"
                   [items]="fornecedores"
                   bindLabel="razao_social"
                   bindValue="id"
                   formControlName="fornecedor_id"
+                  (change)="onFornecedorChange($event)"
                 >
                 </ng-select>
 
@@ -255,7 +256,7 @@
                 </div>
               </div>
             </div>
-            <div *ngIf="criarEntradaMaterialForm.get('tipo_entrada')?.value === 1" class="col-md-4">
+            <div [hidden]="criarEntradaMaterialForm.get('tipo_entrada')?.value !== 1" class="col-md-4">
               <div class="form-group">
                 <label class="form-group">Pedido de Compra</label>
                 <ng-select
@@ -264,6 +265,7 @@
                   bindLabel="idAndObjeto"
                   bindValue="id"
                   formControlName="pedido_despesa_id"
+                  [clearable]="true"
                 >
                 </ng-select>
               </div>

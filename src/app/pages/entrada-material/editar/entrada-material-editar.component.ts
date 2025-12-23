@@ -36,7 +36,7 @@ export class EntradaMaterialEditarComponent implements OnInit {
     private almoxarifadoService: AlmoxarifadoService
   ) {}
 
-  entradaMaterial: EntradaMaterial;
+  entradaMaterial: EntradaMaterial | null = null;
   editarMaterialEntradaForm: FormGroup;
   id: number | null;
   token: AuthToken | null;
@@ -84,7 +84,14 @@ export class EntradaMaterialEditarComponent implements OnInit {
     //await this.consultarConfiguracaoUsuario();
 
 this.entradaMaterialService.setRouteId(this.id);
-    this.secretariaService.listarTodos().subscribe({
+
+this.entradaMaterialService.consultarPorId(this.id!).subscribe({
+ next: (entradaMaterial) => {
+
+this.entradaMaterial=entradaMaterial;
+this.tipoEntrada = entradaMaterial.tipo_entrada!;
+
+this.secretariaService.listarTodos().subscribe({
       next: (secretarias) => {
         this.secretarias = secretarias;
         this.fornecedorService.listarTodos().subscribe({
@@ -93,18 +100,18 @@ this.entradaMaterialService.setRouteId(this.id);
             this.almoxarifadoService.listarTodos().subscribe({
               next: (almoxarifados) => {
                 this.almoxarifados = almoxarifados;
-                this.pedidoService.listarTodos().subscribe({
+                
+                this.pedidoService.listarTodosComSaldo(this.entradaMaterial?.fornecedor_id!).subscribe({
                   next: (pedidosCompra) => {
                     this.pedidosCompra = pedidosCompra;
+
                     const entradaQuantidade = this.entradaMaterialService.consultarEntradaQuantidade(this.id!);
 
-                    this.entradaMaterialService.consultarPorId(this.id!).subscribe({
-                      next: (entradaMaterial) => {
+
                         console.log(entradaMaterial);
                         console.log('data_entrada', this.baseService.formatDate(entradaMaterial.data_entrada));
                         console.log('data_nota', this.baseService.formatDate(entradaMaterial.data_nota));
-                        this.entradaMaterial=entradaMaterial;
-                        this.tipoEntrada = entradaMaterial.tipo_entrada!;
+
                         this.editarMaterialEntradaForm.patchValue(entradaMaterial);
                         this.editarMaterialEntradaForm.get('data_entrada')?.setValue(this.baseService.formatDate(entradaMaterial.data_entrada));
                         this.editarMaterialEntradaForm.get('data_nota')?.setValue(this.baseService.formatDate(entradaMaterial.data_nota));
@@ -113,12 +120,7 @@ this.entradaMaterialService.setRouteId(this.id);
                         this.editarMaterialEntradaForm.get('saida_material_id')?.disable();
                         //this.selectedPedidoCompra = entradaMaterial.pedido_despesa_id!;
                         this.editarMaterialEntradaForm.get('pedido_despesa_id')?.setValue(entradaMaterial.pedido_despesa_id);
-
-                      },
-                      error: (error) => {
-                        console.error(error);
-                      },
-                    });
+                      
                   },
                 });
               },
@@ -128,13 +130,19 @@ this.entradaMaterialService.setRouteId(this.id);
       },
     });
 
+    },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+
       
   }
 
   editar() {
     Swal.showLoading();
     const entradaMaterial: EntradaMaterial = {
-      id: this.entradaMaterial.id!,
+      id: this.entradaMaterial?.id!,
       nota: this.editarMaterialEntradaForm.get('nota')!.value,
       status_id: this.editarMaterialEntradaForm.get('status_id')!.value,
       fornecedor_id: this.editarMaterialEntradaForm.get('fornecedor_id')!.value,

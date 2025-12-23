@@ -22,15 +22,23 @@ export class PedidoCompraService {
 
   public pedidoCompraDataHeader = new BehaviorSubject<PedidoCompraHeaderData | null>(null);
 
-  baseURL = `${environment.apiLegacyUrl}/pedidocompra`;
+  baseURL = `${environment.apiUrl}/pedidocompra`;
   constructor(private http: HttpClient) {}
 
   listarTodos(): Observable<PedidoCompra[]> {
     return this.http.get<PedidoCompra[]>(this.baseURL);
   }
 
-  listarTodosComSaldo(): Observable<PedidoCompra[]> {
-    return this.http.get<PedidoCompra[]>(this.baseURL);
+  listarTodosPorFornecedor(fornecedor_id: number): Observable<PedidoCompra[]> {
+    return this.http.get<PedidoCompra[]>(`${this.baseURL}/todos/${fornecedor_id}`);
+  }
+
+  listarTodosComSaldo(fornecedor_id: number): Observable<PedidoCompra[]> {
+    return this.http.get<PedidoCompra[]>(`${this.baseURL}/${fornecedor_id}`);
+  }
+
+  listarItens(pedido_compra_id: number): Observable<PedidoCompra[]> {
+    return this.http.get<PedidoCompra[]>(`${this.baseURL}/itens/${pedido_compra_id}`);
   }
 
   criar(pedidoCompra: Partial<PedidoCompra>): Observable<PedidoCompra> {

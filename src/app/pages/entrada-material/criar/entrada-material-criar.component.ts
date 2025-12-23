@@ -38,7 +38,7 @@ export class EntradaMaterialCriarComponent implements OnInit {
   ) {}
 
   entradasMaterial: EntradaMaterial[];
-  entradaMaterial: EntradaMaterial;
+  entradaMaterial: EntradaMaterial | null = null;
   criarEntradaMaterialForm: FormGroup;
   editarForm: any;
   token: AuthToken | null;
@@ -54,14 +54,14 @@ export class EntradaMaterialCriarComponent implements OnInit {
   entradaAlmoxarifadoUsuario: boolean | undefined = false;
 
   async ngOnInit(): Promise<void> {
-    this.token = this.authService.getDecodedAccessToken();
-    if (this.token) {
-      this.usuario_id = this.token.id;
-    }
+  this.token = this.authService.getDecodedAccessToken();
+  if (this.token) {
+    this.usuario_id = this.token.id;
+  }
 
-    this.id = this.entradaMaterialService.getRouteId();
+  this.id = this.entradaMaterialService.getRouteId();
 
-    this.criarEntradaMaterialForm = this.fb.group({
+  this.criarEntradaMaterialForm = this.fb.group({
     nota: ['', [Validators.maxLength(10)]],
     fornecedor_id: ['', [Validators.required]],
     secretaria_fundo_id: ['', [Validators.required]],
@@ -75,35 +75,61 @@ export class EntradaMaterialCriarComponent implements OnInit {
     observacao: ['', [Validators.maxLength(200)]],
   });
 
-    await this.consultarConfiguracaoUsuario();
+  await this.consultarConfiguracaoUsuario();
 
-    if (this.id) {
-      this.entradaMaterialService.data$.subscribe({
-        next: (res) => {
-          this.visualizarEntrada = res;
-          if (this.visualizarEntrada) {
-            this.secretarias = this.visualizarEntrada.secretarias;
-            this.fornecedores = this.visualizarEntrada.fornecedores;
-            this.almoxarifados = this.visualizarEntrada.almoxarifados;
-            this.pedidoCompra = this.visualizarEntrada.pedidoCompra.map((pedido) => ({
-              ...pedido,
-              idAndObjeto: `${pedido.id} - ${pedido.objeto}`,
-            }));
-            this.entradaMaterial = res?.entradaMaterial!;
-            this.criarEntradaMaterialForm.patchValue(res?.entradaMaterial!);
-            this.entradaMaterial.data_nota = this.baseService.formatDate(this.entradaMaterial.data_nota);
-            this.entradaMaterial.data_entrada = this.baseService.formatDate(this.entradaMaterial.data_entrada);
-            this.criarEntradaMaterialForm.disable();
-          }
-        },
-      });
-    } else {
-      this.carregarDropdownSecretaria();
-      this.carregarDropdownFornecedor();
-      this.carregarDropdownAlmoxarifado();
-      this.carregarDropdownPedidoCompra();
-    }
+  if (this.id) {
+    this.entradaMaterialService.data$.subscribe({
+      next: (res) => {
+        this.visualizarEntrada = res;
+
+        if (!this.visualizarEntrada || !res?.entradaMaterial) return;
+
+        // listas
+        this.secretarias = this.visualizarEntrada.secretarias;
+        this.fornecedores = this.visualizarEntrada.fornecedores;
+        this.almoxarifados = this.visualizarEntrada.almoxarifados;
+
+        // pedidos (normaliza id para number)
+        this.pedidoCompra = this.visualizarEntrada.pedidoCompra.map((pedido: any) => ({
+          ...pedido,
+          id: Number(pedido.id),
+          idAndObjeto: `${pedido.id} - ${pedido.objeto}`,
+        }));
+
+        // entrada
+        this.entradaMaterial = res.entradaMaterial;
+
+        // pega o pedidoId da entrada e normaliza para number (ou undefined)
+        const pedidoId =
+          this.entradaMaterial.pedido_despesa_id != null
+            ? Number(this.entradaMaterial.pedido_despesa_id)
+            : undefined;
+
+        // patch geral SEM pedido (evita setar antes do ng-select casar)
+        this.criarEntradaMaterialForm.patchValue({
+          ...this.entradaMaterial,
+          pedido_despesa_id: undefined,
+        });
+
+        // seta o pedido por último (força o ng-select a selecionar)
+        this.criarEntradaMaterialForm.get('pedido_despesa_id')?.setValue(pedidoId);
+        this.criarEntradaMaterialForm.get('pedido_despesa_id')?.updateValueAndValidity();
+
+        // formatar datas (apenas para exibição/objeto local)
+        this.entradaMaterial.data_nota = this.baseService.formatDate(this.entradaMaterial.data_nota);
+        this.entradaMaterial.data_entrada = this.baseService.formatDate(this.entradaMaterial.data_entrada);
+
+        // desabilita depois de setar tudo
+        this.criarEntradaMaterialForm.disable();
+      },
+      error: (error) => console.log(error),
+    });
+  } else {
+    this.carregarDropdownSecretaria();
+    this.carregarDropdownFornecedor();
+    this.carregarDropdownAlmoxarifado();
   }
+}
 
   criar() {
     Swal.showLoading();
@@ -183,8 +209,21 @@ export class EntradaMaterialCriarComponent implements OnInit {
     }
   }
 
-  carregarDropdownPedidoCompra(): void {
-    this.pedidoCompraService.listarTodosComSaldo().subscribe({
+  onFornecedorChange(event: any) {
+  const fornecedorId = event?.id ?? event;
+
+  this.criarEntradaMaterialForm.get('pedido_despesa_id')?.setValue(null);
+
+  // opcional: limpa a lista pra não ficar mostrando coisa velha
+  this.pedidoCompra = [];
+
+  if (!fornecedorId) return;
+
+  this.carregarDropdownPedidoCompra(fornecedorId);
+  }
+
+  carregarDropdownPedidoCompra(fornecedor_id: number):void{
+    this.pedidoCompraService.listarTodosComSaldo(fornecedor_id).subscribe({
       next: (pedidoCompra) => {
         this.pedidoCompra = pedidoCompra.map((pedido) => ({
           ...pedido,
@@ -261,7 +300,7 @@ cancelar() {
     if (!result.isConfirmed) return;
 
     Swal.showLoading();
-    this.entradaMaterialService.deletar(this.entradaMaterial.id!).subscribe({
+    this.entradaMaterialService.deletar(this.entradaMaterial?.id!).subscribe({
       next: () => {
         Swal.close();
         //this.atualizarEntradaMaterial();
@@ -282,7 +321,7 @@ cancelar() {
 }
 
   atualizarEntradaMaterial() {
-    this.entradaMaterialService.consultarPorId(this.entradaMaterial.id!).subscribe({
+    this.entradaMaterialService.consultarPorId(this.entradaMaterial?.id!).subscribe({
       next: (dto) => {
         this.entradaMaterialService.eMData.next({
           entradaMaterial: dto,

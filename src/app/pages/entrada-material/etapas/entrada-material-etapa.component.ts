@@ -41,7 +41,7 @@ export class EntradaMaterialEtapaComponent implements OnInit {
 
   token: AuthToken | null;
   eMQuantidade: EMDataEtapasHeader | null = null;
-  entradaMaterial: EntradaMaterial;
+  entradaMaterial: EntradaMaterial | null = null;
   entradaMaterialItem: EntradaMaterialItem[];
   id: number | null = null;
   status: string | null = '-';
@@ -93,6 +93,10 @@ export class EntradaMaterialEtapaComponent implements OnInit {
         error: (error) => {
           console.log(error);
         },
+      });
+
+      this.entradaMaterialService.consultarEntradaQuantidade(this.id!).subscribe((quantidade) => {
+        this.eMQuantidade = quantidade;
       });
 
       this.entradaMaterialService.consultarEntradaQuantidade(this.id!).subscribe((quantidade) => {
