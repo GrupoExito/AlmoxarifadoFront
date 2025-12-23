@@ -1,0 +1,35 @@
+<div class="form w-70 w-md-50 mx-auto my-0">
+  <!-- begin::Alert error -->
+  <ng-container *ngIf="hasError">
+    <div class="mb-lg-15 alert alert-danger">
+      <div class="alert-text font-weight-bold">
+        Não foi possível autenticar com o token. Você será redirecionado para o login.
+      </div>
+
+      <div class="mt-4">
+        <a routerLink="/auth/login" class="btn btn-lg btn-danger btn-magenta w-100">
+          Ir para o login
+        </a>
+      </div>
+    </div>
+  </ng-container>
+  <!-- end::Alert error -->
+
+  <!-- begin::Loading -->
+  <ng-container *ngIf="!hasError">
+    <div class="text-center">
+      <div class="text-white fw-bolder fs-2 mb-3">Autenticando…</div>
+      <div class="text-white-50 mb-8">
+        Estamos validando seu acesso. Aguarde o redirecionamento.
+      </div>
+
+      <div class="btn btn-lg btn-danger btn-magenta w-100 mb-5 disabled" aria-disabled="true">
+        <span class="indicator-progress" style="display: block">
+          Redirecionando...
+          <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+        </span>
+      </div>
+    </div>
+  </ng-container>
+  <!-- end::Loading -->
+</div>
