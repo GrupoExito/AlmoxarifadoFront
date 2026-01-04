@@ -1,13 +1,29 @@
-export interface ImpressaoDocumentoEntrada {
-  impressao_id: number;
-  impressao_nome: string;
-  entrada_id: number;
+export interface FiltroRelatorioDTO {
+  id?: number;
+  almoxarifado?: number;
+  almoxarifado_selecionado?: number[];
+  secretaria?: number;
+  secretaria_selecionadas?: number[];
+  fornecedor?: number;
+  fornecedor_selecionado?: number[];
+  produtoServico?: number;
+  produtoServico_selecionado?: number[];
+  //status_entrada?: string;
+  //tipo_entrada_material?: string;
+  data_inicial?: string;
+  data_final?: string;
+  produto_id?: number;
+  produto_selecionado?: number[];
+  tipo_produto?: number;
+  tipo_produto_selecionado?: number[];
+  setor?: number;
+  setor_selecionado?: number[];
 }
 
 export enum DocumentoEntrada {
   'Relatório de Movimentação de Material',
 }
-
+/*
 export interface RelatorioMovimentacaoEntrada {
   almoxarifado: string;
   almoxarifado_selecionado: number[];
@@ -21,9 +37,9 @@ export interface RelatorioMovimentacaoEntrada {
   tipo_entrada_material?: string;
   data_inicial: string;
   data_final: string;
-}
+}*/
 
-
+/*
 export interface RelatorioMovimentacaoEntradaPorItem {
   data_inicial: string;
   data_final: string;
@@ -34,3 +50,4 @@ export interface RelatorioMovimentacaoEntradaPorItem {
   tipo_produto: string;
   tipo_produto_selecionado: number[];
 }
+*/

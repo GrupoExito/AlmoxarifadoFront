@@ -5,7 +5,7 @@ import { Fornecedor } from '@pages/fornecedor/_models/fornecedor.model';
 import { FornecedorService } from '@pages/fornecedor/_services/fornecedor.service';
 import { ProdutoServico } from '@pages/produto-servico/_models/produto-servico.model';
 import { ProdutoServicoService } from '@pages/produto-servico/_services/produto-servico.service';
-import { RelatorioMovimentacaoEntrada } from '@pages/relatorio/_models/relatorio-entrada-material.model';
+import { FiltroRelatorioDTO } from '@pages/relatorio/_models/relatorio-entrada-material.model';
 import { RelatorioAlmoxarifadoService } from '@pages/relatorio/_services/relatorio-movimentacao-almoxarifado.service';
 import { SecretariaFundo } from '@pages/secretaria-fundo/_models/secretaria-fundo.model';
 import { SecretariaFundoService } from '@pages/secretaria-fundo/_services/secretaria-fundo.service';
@@ -34,13 +34,13 @@ export class RelatorioMovimentacaoPorEntradaDataComponent implements OnInit {
   almoxarifados: Almoxarifado[];
   fornecedores: Fornecedor[];
   produtos: ProdutoServico[];
-  optionSecretariaFundo = '0';
+  optionSecretariaFundo = 0;
   selectedSecretariaFundo: number[];
-  optionAlmoxarifado = '0';
+  optionAlmoxarifado = 0;
   selectedAlmoxarifado: number[];
-  optionFornecedor = '0';
+  optionFornecedor = 0;
   selectedFornecedor: number[];
-  optionProdutos = '0';
+  optionProdutos = 0;
   selectedProdutos: number[];
   dataInicialSelecionada: string;
   dataFinalSelecionada: string;
@@ -87,7 +87,7 @@ export class RelatorioMovimentacaoPorEntradaDataComponent implements OnInit {
 
   filtrar() {
     Swal.showLoading();
-    const relatorioMovimentacaoEntrada: RelatorioMovimentacaoEntrada = {
+    const relatorioMovimentacaoEntrada: FiltroRelatorioDTO = {
       secretaria: this.optionSecretariaFundo,
       secretaria_selecionadas: this.selectedSecretariaFundo,
       almoxarifado: this.optionAlmoxarifado,

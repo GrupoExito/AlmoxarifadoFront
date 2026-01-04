@@ -5,7 +5,7 @@ import { Fornecedor } from '@pages/fornecedor/_models/fornecedor.model';
 import { FornecedorService } from '@pages/fornecedor/_services/fornecedor.service';
 import { ProdutoServico } from '@pages/produto-servico/_models/produto-servico.model';
 import { ProdutoServicoService } from '@pages/produto-servico/_services/produto-servico.service';
-import { RelatorioMovimentacaoEntrada } from '@pages/relatorio/_models/relatorio-entrada-material.model';
+import { FiltroRelatorioDTO } from '@pages/relatorio/_models/relatorio-entrada-material.model';
 import { RelatorioMovimentacaoSaida } from '@pages/relatorio/_models/relatorio-saida-material.model';
 import { RelatorioAlmoxarifadoService } from '@pages/relatorio/_services/relatorio-movimentacao-almoxarifado.service';
 import { SecretariaFundo } from '@pages/secretaria-fundo/_models/secretaria-fundo.model';

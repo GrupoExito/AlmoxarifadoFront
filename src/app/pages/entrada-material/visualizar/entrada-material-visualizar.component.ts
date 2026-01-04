@@ -2,14 +2,14 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BaseService } from '@pages/shared/services/base.service';
-import { combineLatestWith, Subscription } from 'rxjs';
+import { combineLatestWith, Subscription, iif, of } from 'rxjs';
 import { EntradaMaterialService } from '../_services/entrada-material.service';
 import { EMDataEtapasHeader } from '../_models/entrada-material-data.model';
 import { SecretariaFundoService } from '@pages/secretaria-fundo/_services/secretaria-fundo.service';
 import { AlmoxarifadoService } from '@pages/almoxarifado/_services/almoxarifado.service';
 import { FornecedorService } from '@pages/fornecedor/_services/fornecedor.service';
 import { PedidoCompraService } from '@pages/compra/_services/pedido-compra.service';
-import { switchMap, tap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';0
 
 @Component({
   selector: 'app-entrada-material-visualizar',
@@ -49,7 +49,13 @@ export class EntradaMaterialVisualizarComponent implements OnInit, OnDestroy {
 
     //pedido depende do fornecedor_id da entrada
     const pedido$ = entrada$.pipe(
-      switchMap((entrada) => this.pedidoService.listarTodosPorFornecedor(entrada.fornecedor_id))
+      switchMap((entrada) =>
+        iif(
+          () => !!entrada?.fornecedor_id,
+          this.pedidoService.listarTodosPorFornecedor(entrada.fornecedor_id),
+          of([])
+        )
+      )
     );
 
     const entradaQuantidade$ = this.entradaMaterialService.consultarEntradaQuantidade(this.id);

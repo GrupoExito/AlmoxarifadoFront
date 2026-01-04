@@ -5,7 +5,7 @@ import { Fornecedor } from '@pages/fornecedor/_models/fornecedor.model';
 import { FornecedorService } from '@pages/fornecedor/_services/fornecedor.service';
 import { ProdutoServico } from '@pages/produto-servico/_models/produto-servico.model';
 import { ProdutoServicoService } from '@pages/produto-servico/_services/produto-servico.service';
-import { RelatorioMovimentacaoEntrada, RelatorioMovimentacaoEntradaPorItem } from '@pages/relatorio/_models/relatorio-entrada-material.model';
+import { FiltroRelatorioDTO } from '@pages/relatorio/_models/relatorio-entrada-material.model';
 import { RelatorioAlmoxarifadoService } from '@pages/relatorio/_services/relatorio-movimentacao-almoxarifado.service';
 import { SecretariaFundo } from '@pages/secretaria-fundo/_models/secretaria-fundo.model';
 import { SecretariaFundoService } from '@pages/secretaria-fundo/_services/secretaria-fundo.service';
@@ -33,12 +33,12 @@ export class RelatorioMovimentacaoPorEntradaItemComponent implements OnInit {
   dataFinalSelecionada: string;
   almoxarifados: Almoxarifado[];
   produtos: ProdutoServico[];
-  optionAlmoxarifado = '0';
+  optionAlmoxarifado = 0;
   selectedAlmoxarifado: number[];
-  optionProdutos = '0';
+  optionProdutos = 0;
   selectedProdutos: number[];
   selectedTipoProdutos: number[];
-  optionTipoProduto = '0';
+  optionTipoProduto = 0;
   tiposProduto: TipoProduto[];
 
 
@@ -75,13 +75,13 @@ export class RelatorioMovimentacaoPorEntradaItemComponent implements OnInit {
 
   filtrar() {
     Swal.showLoading();
-    const relatorioMovimentacaoEntrada: RelatorioMovimentacaoEntradaPorItem = {
+    const relatorioMovimentacaoEntrada: FiltroRelatorioDTO = {
         data_inicial: this.dataInicialSelecionada,
       data_final: this.dataFinalSelecionada,
       almoxarifado: this.optionAlmoxarifado,
       almoxarifado_selecionado: this.selectedAlmoxarifado,
-      produto: this.optionProdutos,
-      produto_selecionado: this.selectedProdutos,
+      produtoServico: this.optionProdutos,
+      produtoServico_selecionado: this.selectedProdutos,
       tipo_produto: this.optionTipoProduto,
       tipo_produto_selecionado: this.selectedTipoProdutos,
     };

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ImpressaoDocumentoEntrada, RelatorioMovimentacaoEntrada, RelatorioMovimentacaoEntradaPorItem } from '../_models/relatorio-entrada-material.model';
+import { FiltroRelatorioDTO } from '../_models/relatorio-entrada-material.model';
 import {
   ImpressaoDocumentoSaida,
   RelatorioMovimentacaoSaida,
@@ -24,13 +24,14 @@ export class RelatorioAlmoxarifadoService {
   baseURL = `${environment.apiUrl}/relatorio`;
   constructor(private http: HttpClient) {}
 
-  downloadEntrada(documento: ImpressaoDocumentoEntrada): Observable<ArrayBuffer> {
-    return this.http.post(`${this.baseURL}/impressao/entrada`, documento, {
+  downloadEntrada(documento: FiltroRelatorioDTO): Observable<ArrayBuffer> {
+    console.log('parametros enviados', documento);
+    return this.http.post(`${this.baseURL}/entrada/impressao`, documento, {
       responseType: 'arraybuffer',
     });
   }
 
-  exportarEntrada(documento: ImpressaoDocumentoEntrada): Observable<ArrayBuffer> {
+  exportarEntrada(documento: FiltroRelatorioDTO): Observable<ArrayBuffer> {
     return this.http.post(`${this.baseURL}/exportacao/entrada`, documento, {
       responseType: 'arraybuffer',
     });
@@ -48,19 +49,19 @@ export class RelatorioAlmoxarifadoService {
     });
   }
 
-  movimentacaoEntradaMaterial(documento: RelatorioMovimentacaoEntrada): Observable<ArrayBuffer> {
+  movimentacaoEntradaMaterial(documento: FiltroRelatorioDTO): Observable<ArrayBuffer> {
     return this.http.post(`${this.baseURL}/movimentacaoporentrada`, documento, {
       responseType: 'arraybuffer',
     });
   }
 
-  movimentacaoEntradaMaterialFornecedor(documento: RelatorioMovimentacaoEntrada): Observable<ArrayBuffer> {
+  movimentacaoEntradaMaterialFornecedor(documento: FiltroRelatorioDTO): Observable<ArrayBuffer> {
     return this.http.post(`${this.baseURL}/movimentacaoentradaporfornecedor`, documento, {
       responseType: 'arraybuffer',
     });
   }
 
-  movimentacaoEntradaMaterialData(documento: RelatorioMovimentacaoEntrada): Observable<ArrayBuffer> {
+  movimentacaoEntradaMaterialData(documento: FiltroRelatorioDTO): Observable<ArrayBuffer> {
     return this.http.post(`${this.baseURL}/movimentacaoentradapordata`, documento, {
       responseType: 'arraybuffer',
     });
@@ -180,7 +181,7 @@ export class RelatorioAlmoxarifadoService {
     });
   }
 
-   movimentacaoEntradaMaterialPorTipoItem(documento: RelatorioMovimentacaoEntradaPorItem): Observable<ArrayBuffer> {
+   movimentacaoEntradaMaterialPorTipoItem(documento: FiltroRelatorioDTO): Observable<ArrayBuffer> {
     return this.http.post(`${this.baseURL}/movimentacaoentradaportipoitem`, documento, {
       responseType: 'arraybuffer',
     });

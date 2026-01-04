@@ -14,7 +14,7 @@ import { EMDataEtapasHeader } from '../_models/entrada-material-data.model';
 import { EntradaMaterial } from '../_models/entrada-material.model';
 import { EntradaMaterialHistoricoService } from '../_services/entrada-material-historico.service';
 import { EntradaMaterialHistorico } from '../_models/entrada-material-historico.model';
-import { DocumentoEntrada, ImpressaoDocumentoEntrada } from '@pages/relatorio/_models/relatorio-entrada-material.model';
+import { FiltroRelatorioDTO } from '@pages/relatorio/_models/relatorio-entrada-material.model';
 import { RelatorioAlmoxarifadoService } from '@pages/relatorio/_services/relatorio-movimentacao-almoxarifado.service';
 import { BaseService } from '@pages/shared/services/base.service';
 import { EntradaMaterialItemService } from '../_services/entrada-material-itens.service';
@@ -143,10 +143,10 @@ export class EntradaMaterialEtapaComponent implements OnInit {
   imprimir() {
     Swal.showLoading();
     const enumPos = Number(this.selectedImpressao) - 1;
-    let documento: ImpressaoDocumentoEntrada = {
-      impressao_id: this.selectedImpressao,
-      impressao_nome: DocumentoEntrada[enumPos],
-      entrada_id: this.id!,
+    let documento: FiltroRelatorioDTO = {
+      //impressao_id: this.selectedImpressao,
+      //impressao_nome: DocumentoEntrada[enumPos],
+      id: this.id!,
     };
     if (this.selectedImpressao == 0) {
       Swal.fire('Erro!', 'Selecione um documento', 'info');
@@ -154,7 +154,7 @@ export class EntradaMaterialEtapaComponent implements OnInit {
     }
     this.relatorioService.downloadEntrada(documento).subscribe({
       next: (res) => {
-        this.baseService.relatorioMensagemModoImpressao(res, documento.impressao_nome);
+        this.baseService.relatorioMensagemModoImpressao(res);
         this.modalService.dismissAll(0);
       },
       error: (error) => {
