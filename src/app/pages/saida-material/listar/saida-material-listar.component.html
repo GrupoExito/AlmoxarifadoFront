@@ -105,12 +105,10 @@
           <label>Status</label>
           <select class="form-select" [(ngModel)]="statusSelecionado">
             <option value="">Selecione</option>
-            <option value="1">Aberto</option>
-            <option value="2">Autorizado</option>
-            <option value="5">Processando</option>
-            <option value="8">Em Análise</option>
-            <option value="12">Cancelado</option>
-            <option value="14">Extornado</option>
+            <option value="1">Em cadastro</option>
+            <option value="2">Solicitado</option>
+            <option value="3">Autorizado</option>
+            <option value="4">Entregue</option>
           </select>
         </div>
       </div>
@@ -119,12 +117,14 @@
           <label>Tipo Saída</label>
           <select class="form-select" [(ngModel)]="tipoSelecionado">
             <option value="">Selecione</option>
-            <option value="N">Normal</option>
-            <option value="D">Doação</option>
-            <option value="E">Emprestimo</option>
-            <option value="Q">Quebra/Dano</option>
-            <option value="V">Vencimento/Validade</option>
-            <option value="T">Transferencia</option>
+            <option value="1">Requisição de Consumo</option>
+            <option value="2">Transferência</option>
+            <option value="3">Devolução de Empréstimo</option>
+            <option value="4">Empréstimo/Cessão</option>
+            <option value="5">Perda/Avaria/Inutilização</option>
+            <option value="6">Devolução ao Fornecedor</option>
+            <option value="7">Doação</option>
+            <option value="8">Ajuste</option>
           </select>
         </div>
       </div>
@@ -268,7 +268,7 @@
                   ></span>
                 </button>
                 <button title="Visualizar itens"
-                *ngIf="saidaMaterial?.status_id === 2 || saidaMaterial?.status_id === 3"
+                *ngIf="saidaMaterial?.status_id === 2 || saidaMaterial?.status_id === 3 || saidaMaterial?.status_id === 4"
                   [routerLink]="['/saidamaterial/view', saidaMaterial.id, 'cadastro']"
                   class="btn btn-icon btn-active-color-primary btn-md me-1"
                 >

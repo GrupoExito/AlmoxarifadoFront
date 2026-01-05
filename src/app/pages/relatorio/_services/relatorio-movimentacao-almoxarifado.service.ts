@@ -25,7 +25,6 @@ export class RelatorioAlmoxarifadoService {
   constructor(private http: HttpClient) {}
 
   downloadEntrada(documento: FiltroRelatorioDTO): Observable<ArrayBuffer> {
-    console.log('parametros enviados', documento);
     return this.http.post(`${this.baseURL}/entrada/impressao`, documento, {
       responseType: 'arraybuffer',
     });
@@ -37,8 +36,8 @@ export class RelatorioAlmoxarifadoService {
     });
   }
 
-  downloadSaida(documento: ImpressaoDocumentoSaida): Observable<ArrayBuffer> {
-    return this.http.post(`${this.baseURL}/impressao/saida`, documento, {
+  downloadSaida(documento: FiltroRelatorioDTO): Observable<ArrayBuffer> {
+    return this.http.post(`${this.baseURL}/saida/impressao`, documento, {
       responseType: 'arraybuffer',
     });
   }

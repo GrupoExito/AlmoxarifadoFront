@@ -18,6 +18,7 @@ import { SMDataEtapasHeader } from '../_models/saida-material-data.model';
 import { SaidaMaterialItemService } from '../_services/saida-material-itens.service';
 import { SaidaMaterialItem } from '../_models/saida-material-itens.model';
 import { Router } from '@angular/router';
+import { FiltroRelatorioDTO } from '@pages/relatorio/_models/relatorio-entrada-material.model';
 
 @Component({
   selector: 'app-saida-material-etapa',
@@ -136,10 +137,10 @@ export class SaidaMaterialEtapaComponent implements OnInit {
   imprimir() {
     Swal.showLoading();
     const enumPos = Number(this.selectedImpressao) - 1;
-    let documento: ImpressaoDocumentoSaida = {
-      impressao_id: this.selectedImpressao,
-      impressao_nome: DocumentoSaida[enumPos],
-      saida_id: this.id!,
+    let documento: FiltroRelatorioDTO = {
+      //impressao_id: this.selectedImpressao,
+      //impressao_nome: DocumentoSaida[enumPos],
+      id: this.id!,
     };
     if (this.selectedImpressao == 0) {
       Swal.fire('Erro!', 'Selecione um documento', 'info');
@@ -147,7 +148,7 @@ export class SaidaMaterialEtapaComponent implements OnInit {
     }
     this.relatorioService.downloadSaida(documento).subscribe({
       next: (res) => {
-        this.baseService.relatorioMensagemModoImpressao(res, documento.impressao_nome);
+        this.baseService.relatorioMensagemModoImpressao(res);
         this.modalService.dismissAll(0);
       },
       error: (error) => {
