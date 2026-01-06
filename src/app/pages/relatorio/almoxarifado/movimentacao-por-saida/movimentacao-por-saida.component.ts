@@ -39,18 +39,18 @@ export class RelatorioMovimentacaoPorSaidaComponent implements OnInit {
   almoxarifados: Almoxarifado[];
   setores: Setor[];
   produtos: ProdutoServico[];
-  optionSecretariaFundo = '0';
+  optionSecretariaFundo = 0;
   selectedSecretariaFundo: number[];
-  optionAlmoxarifado = '0';
+  optionAlmoxarifado = 0;
   selectedAlmoxarifado: number[];
-  optionSetor = '0';
+  optionSetor = 0;
   selectedSetor: number[];
-  optionProdutos = '0';
+  optionProdutos = 0;
   selectedProdutos: number[];
   dataInicialSelecionada: string;
   dataFinalSelecionada: string;
   selectedTipoProdutos: number[];
-  optionTipoProduto = '0';
+  optionTipoProduto = 0;
   tiposProduto: TipoProduto[];
 
   ngOnInit(): void {
@@ -104,15 +104,15 @@ export class RelatorioMovimentacaoPorSaidaComponent implements OnInit {
 
   filtrar() {
     Swal.showLoading();
-    const relatorioMovimentacaoSaida: RelatorioMovimentacaoSaida = {
+    const relatorioMovimentacaoSaida: FiltroRelatorioDTO = {
       secretaria: this.optionSecretariaFundo,
       secretaria_selecionadas: this.selectedSecretariaFundo,
       almoxarifado: this.optionAlmoxarifado,
       almoxarifado_selecionado: this.selectedAlmoxarifado,
       setor: this.optionSetor,
       setor_selecionado: this.selectedSetor,
-      produto: this.optionProdutos,
-      produto_selecionado: this.selectedProdutos,
+      produtoServico: this.optionProdutos,
+      produtoServico_selecionado: this.selectedProdutos,
       data_inicial: this.dataInicialSelecionada,
       data_final: this.dataFinalSelecionada,
       tipo_produto: this.optionTipoProduto,

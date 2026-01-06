@@ -12,8 +12,8 @@ export interface FiltroRelatorioDTO {
   //tipo_entrada_material?: string;
   data_inicial?: string;
   data_final?: string;
-  produto_id?: number;
-  produto_selecionado?: number[];
+  //produto_id?: number;
+  //produto_selecionado?: number[];
   tipo_produto?: number;
   tipo_produto_selecionado?: number[];
   setor?: number;
