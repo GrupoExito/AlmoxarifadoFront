@@ -80,13 +80,13 @@ export class RelatorioAlmoxarifadoService {
   }
 
   movimentacaoSaidaMaterialSetor(documento: FiltroRelatorioDTO): Observable<ArrayBuffer> {
-    return this.http.post(`${this.baseURL}/movimentacaosaidaporsetor`, documento, {
+    return this.http.post(`${this.baseURL}/saida/porsetor`, documento, {
       responseType: 'arraybuffer',
     });
   }
 
   movimentacaoSaidaMaterialSetorResumido(documento: FiltroRelatorioDTO): Observable<ArrayBuffer> {
-    return this.http.post(`${this.baseURL}/movimentacaosaidaporsetorResumido`, documento, {
+    return this.http.post(`${this.baseURL}/saida/porsetorresumido`, documento, {
       responseType: 'arraybuffer',
     });
   }
