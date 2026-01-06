@@ -49,7 +49,8 @@ export class RelatorioAlmoxarifadoService {
   }
 
   movimentacaoEntradaMaterial(documento: FiltroRelatorioDTO): Observable<ArrayBuffer> {
-    return this.http.post(`${this.baseURL}/movimentacaoporentrada`, documento, {
+    console.log('relatorio entrada', documento);
+    return this.http.post(`${this.baseURL}/entrada`, documento, {
       responseType: 'arraybuffer',
     });
   }
