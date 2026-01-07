@@ -175,8 +175,8 @@ export class RelatorioAlmoxarifadoService {
     });
   }
 
-  movimentacaoSaidaMaterialPorTipoItem(documento: RelatorioMovimentacaoSaidaPorItem): Observable<ArrayBuffer> {
-    return this.http.post(`${this.baseURL}/movimentacaosaidaportipoitem`, documento, {
+  movimentacaoSaidaMaterialPorTipoItem(documento: FiltroRelatorioDTO): Observable<ArrayBuffer> {
+    return this.http.post(`${this.baseURL}/saida/poritem`, documento, {
       responseType: 'arraybuffer',
     });
   }
