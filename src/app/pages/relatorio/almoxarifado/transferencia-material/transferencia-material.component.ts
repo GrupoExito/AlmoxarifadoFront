@@ -4,6 +4,7 @@ import { AlmoxarifadoService } from '@pages/almoxarifado/_services/almoxarifado.
 import { ProdutoServico } from '@pages/produto-servico/_models/produto-servico.model';
 import { ProdutoServicoService } from '@pages/produto-servico/_services/produto-servico.service';
 import { RelatorioTransferenciaMaterial } from '@pages/relatorio/_models/relatorio-almoxarifado.model';
+import { FiltroRelatorioDTO } from '@pages/relatorio/_models/relatorio-entrada-material.model';
 import { RelatorioAlmoxarifadoService } from '@pages/relatorio/_services/relatorio-movimentacao-almoxarifado.service';
 import { SecretariaFundo } from '@pages/secretaria-fundo/_models/secretaria-fundo.model';
 import { SecretariaFundoService } from '@pages/secretaria-fundo/_services/secretaria-fundo.service';
@@ -34,13 +35,13 @@ export class RelatorioTransferenciamaterialComponent implements OnInit {
   almoxarifados: Almoxarifado[];
   setores: Setor[];
   produtos: ProdutoServico[];
-  optionSecretariaFundo = '0';
+  optionSecretariaFundo = 0;
   selectedSecretariaFundo: number[];
-  optionAlmoxarifado = '0';
+  optionAlmoxarifado = 0;
   selectedAlmoxarifado: number[];
-  optionSetor = '0';
+  optionSetor = 0;
   selectedSetor: number[];
-  optionProdutos = '0';
+  optionProdutos = 0;
   selectedProdutos: number[];
   dataInicialSelecionada: string;
   dataFinalSelecionada: string;
@@ -87,7 +88,7 @@ export class RelatorioTransferenciamaterialComponent implements OnInit {
 
   filtrar() {
     Swal.showLoading();
-    const relatorioTransferenciaMaterial: RelatorioTransferenciaMaterial = {
+    const relatorioTransferenciaMaterial: FiltroRelatorioDTO = {
       secretaria: this.optionSecretariaFundo,
       secretaria_selecionadas: this.selectedSecretariaFundo,
       almoxarifado: this.optionAlmoxarifado,

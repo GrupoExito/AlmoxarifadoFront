@@ -97,8 +97,8 @@ export class RelatorioAlmoxarifadoService {
     });
   }
 
-  transferenciaMaterial(documento: RelatorioTransferenciaMaterial): Observable<ArrayBuffer> {
-    return this.http.post(`${this.baseURL}/transferenciamaterial`, documento, {
+  transferenciaMaterial(documento: FiltroRelatorioDTO): Observable<ArrayBuffer> {
+    return this.http.post(`${this.baseURL}/transferencia`, documento, {
       responseType: 'arraybuffer',
     });
   }
