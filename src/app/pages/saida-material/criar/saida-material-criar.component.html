@@ -111,7 +111,7 @@
         <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'" class="svg-icon svg-icon-3"></span>
         Extornar
       </a>
-    </div>
+    </div-->
 
     <div
       *ngIf="saidaMaterial?.status_id === 1"
@@ -129,7 +129,7 @@
         <span [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'" class="svg-icon svg-icon-3"></span>
         Editar
       </a>
-    </div-->
+    </div>
   </div>
 
   <div class="container-fluid">
@@ -139,7 +139,7 @@
           <div class="row mt-2">
             <div class="col-md-3">
               <div class="form-group">
-                <label class="form-group">Almoxarifado</label>
+                <label class="form-group">Almoxarifado*</label>
                 <ng-select
                   class="ngSelectDropdown"
                   [items]="almoxarifados"
@@ -162,7 +162,7 @@
             </div>
             <div class="col-md-3">
               <div class="form-group">
-                <label class="form-group">Secretaria</label>
+                <label class="form-group">Secretaria*</label>
                 <ng-select
                   #sec
                   class="ngSelectDropdown"
@@ -233,13 +233,11 @@
           <div class="row mt-3">
             <div class="col-md-2">
               <div class="form-group">
-                <label class="form-label mb-2">Tipo de saída* </label>
+                <label for="tipo_saida_id" class="form-label mb-2">Tipo de saída*</label>
                 <select
                   class="form-select"
                   formControlName="tipo_saida_id"
-                  aria-label="Tipo"
                   (change)="onTipoSaidaChange()"
-                  [(ngModel)]="tipoSaida"
                 >
                   <!--option value="N">Normal</option>
                   <option value="D">Doação</option>

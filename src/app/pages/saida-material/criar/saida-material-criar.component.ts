@@ -271,28 +271,31 @@ export class SaidaMaterialCriarComponent implements OnInit {
   }
 
   onTipoSaidaChange() {
-    if (this.tipoSaida == 2) {
+    const raw = this.criarSaidaMaterialForm.get('tipo_saida_id')?.value;
+    this.tipoSaida = Number(raw); // garante number
+
+    console.log('tipoSaida (number):', this.tipoSaida, 'raw:', raw, 'typeof raw:', typeof raw);
+
+    if (this.tipoSaida === 2) {
       this.criarSaidaMaterialForm.get('almoxarifado_destino_id')!.setValidators([Validators.required]);
-      this.criarSaidaMaterialForm.get('almoxarifado_destino_id')!.updateValueAndValidity();
       this.criarSaidaMaterialForm.get('secretaria_destino_id')!.setValidators([Validators.required]);
-      this.criarSaidaMaterialForm.get('secretaria_destino_id')!.updateValueAndValidity();
     } else {
-      this.criarSaidaMaterialForm.controls.almoxarifado_destino_id.setValue(null);
+      this.criarSaidaMaterialForm.get('almoxarifado_destino_id')!.setValue(null);
+      this.criarSaidaMaterialForm.get('secretaria_destino_id')!.setValue(null);
       this.criarSaidaMaterialForm.get('almoxarifado_destino_id')!.clearValidators();
-      this.criarSaidaMaterialForm.get('almoxarifado_destino_id')!.updateValueAndValidity();
-      this.criarSaidaMaterialForm.controls.secretaria_destino_id.setValue(null);
       this.criarSaidaMaterialForm.get('secretaria_destino_id')!.clearValidators();
-      this.criarSaidaMaterialForm.get('secretaria_destino_id')!.updateValueAndValidity();
-      console.log(this.criarSaidaMaterialForm, 'else');
     }
-    if (this.tipoSaida == 4) {
+
+    this.criarSaidaMaterialForm.get('almoxarifado_destino_id')!.updateValueAndValidity();
+    this.criarSaidaMaterialForm.get('secretaria_destino_id')!.updateValueAndValidity();
+
+    if (this.tipoSaida === 4) {
       this.criarSaidaMaterialForm.get('unidade_externa_id')!.setValidators([Validators.required]);
-      this.criarSaidaMaterialForm.get('unidade_externa_id')!.updateValueAndValidity();
     } else {
-      this.criarSaidaMaterialForm.controls.unidade_externa_id.setValue(null);
+      this.criarSaidaMaterialForm.get('unidade_externa_id')!.setValue(null);
       this.criarSaidaMaterialForm.get('unidade_externa_id')!.clearValidators();
-      this.criarSaidaMaterialForm.get('unidade_externa_id')!.updateValueAndValidity();
     }
+    this.criarSaidaMaterialForm.get('unidade_externa_id')!.updateValueAndValidity();
   }
 
   emAnalise() {
