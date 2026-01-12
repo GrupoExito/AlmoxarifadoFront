@@ -4,6 +4,7 @@ import { AlmoxarifadoService } from '@pages/almoxarifado/_services/almoxarifado.
 import { ProdutoServico } from '@pages/produto-servico/_models/produto-servico.model';
 import { ProdutoServicoService } from '@pages/produto-servico/_services/produto-servico.service';
 import { RelatorioBalanceteEstoque } from '@pages/relatorio/_models/relatorio-almoxarifado.model';
+import { FiltroRelatorioDTO } from '@pages/relatorio/_models/relatorio-entrada-material.model';
 import { RelatorioAlmoxarifadoService } from '@pages/relatorio/_services/relatorio-movimentacao-almoxarifado.service';
 import { BaseService } from '@pages/shared/services/base.service';
 import Swal from 'sweetalert2';
@@ -22,9 +23,9 @@ export class RelatorioBalanceteEstoqueComponent implements OnInit {
 
   almoxarifados: Almoxarifado[];
   produtos: ProdutoServico[];
-  optionAlmoxarifado = '0';
+  optionAlmoxarifado = 0;
   selectedAlmoxarifado: number[];
-  optionProdutos = '0';
+  optionProdutos = 0;
   selectedProdutos: number[];
   dataInicialSelecionada: string;
   dataFinalSelecionada: string;
@@ -57,11 +58,11 @@ export class RelatorioBalanceteEstoqueComponent implements OnInit {
     if (this.dataInicialSelecionada && this.dataFinalSelecionada) {
         this.filtroHabilitado = true;
 
-        const relatorioBalanceteEstoque: RelatorioBalanceteEstoque = {
+        const relatorioBalanceteEstoque: FiltroRelatorioDTO = {
             almoxarifado: this.optionAlmoxarifado,
             almoxarifado_selecionado: this.selectedAlmoxarifado,
-            produto: this.optionProdutos,
-            produto_selecionado: this.selectedProdutos,
+            produtoServico: this.optionProdutos,
+            produtoServico_selecionado: this.selectedProdutos,
             data_inicial: this.dataInicialSelecionada,
             data_final: this.dataFinalSelecionada,
         };

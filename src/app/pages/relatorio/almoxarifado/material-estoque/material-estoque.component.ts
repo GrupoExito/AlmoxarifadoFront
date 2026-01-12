@@ -7,6 +7,7 @@ import {
   RelatorioMaterialEstoque,
   RelatorioTransferenciaMaterial,
 } from '@pages/relatorio/_models/relatorio-almoxarifado.model';
+import { FiltroRelatorioDTO } from '@pages/relatorio/_models/relatorio-entrada-material.model';
 import { RelatorioAlmoxarifadoService } from '@pages/relatorio/_services/relatorio-movimentacao-almoxarifado.service';
 import { BaseService } from '@pages/shared/services/base.service';
 import { TipoProduto } from '@pages/tipo-produto/_models/tipoproduto.model';
@@ -29,15 +30,15 @@ export class RelatorioMaterialEstoqueComponent implements OnInit {
 
   almoxarifados: Almoxarifado[];
   produtos: ProdutoServico[];
-  optionAlmoxarifado = '0';
+  optionAlmoxarifado = 0;
   selectedAlmoxarifado: number[];
-  optionProdutos = '0';
+  optionProdutos = 0;
   selectedProdutos: number[];
   dataInicialSelecionada: string;
   dataFinalSelecionada: string;
   filtroHabilitado: boolean = false;
   selectedTipoProdutos: number[];
-  optionTipoProduto = '0';
+  optionTipoProduto = 0;
   tiposProduto: TipoProduto[];
   
 
@@ -74,11 +75,11 @@ export class RelatorioMaterialEstoqueComponent implements OnInit {
 
   filtrar() {
     Swal.showLoading();
-    const relatorioMaterialEstoque: RelatorioMaterialEstoque = {
+    const relatorioMaterialEstoque: FiltroRelatorioDTO = {
       almoxarifado: this.optionAlmoxarifado,
       almoxarifado_selecionado: this.selectedAlmoxarifado,
-      produto: this.optionProdutos,
-      produto_selecionado: this.selectedProdutos,
+      produtoServico: this.optionProdutos,
+      produtoServico_selecionado: this.selectedProdutos,
       data_inicial: this.dataInicialSelecionada,
       data_final: this.dataFinalSelecionada,
       tipo_produto: this.optionTipoProduto,

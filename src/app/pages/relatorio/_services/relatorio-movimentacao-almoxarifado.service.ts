@@ -103,19 +103,19 @@ export class RelatorioAlmoxarifadoService {
     });
   }
 
-  MaterialEstoque(documento: RelatorioMaterialEstoque): Observable<ArrayBuffer> {
-    return this.http.post(`${this.baseURL}/materialestoque`, documento, {
+  MaterialEstoque(documento: FiltroRelatorioDTO): Observable<ArrayBuffer> {
+    return this.http.post(`${this.baseURL}/estoque/material`, documento, {
       responseType: 'arraybuffer',
     });
   }
 
-  MaterialEstoqueLoteDataValidade(documento: RelatorioMaterialEstoque): Observable<ArrayBuffer> {
+  MaterialEstoqueLoteDataValidade(documento: FiltroRelatorioDTO): Observable<ArrayBuffer> {
     return this.http.post(`${this.baseURL}/materialestoqueLoteDataValidade`, documento, {
       responseType: 'arraybuffer',
     });
   }
 
-  BalanceteEstoque(documento: RelatorioBalanceteEstoque): Observable<ArrayBuffer> {
+  BalanceteEstoque(documento: FiltroRelatorioDTO): Observable<ArrayBuffer> {
     return this.http.post(`${this.baseURL}/balanceteestoque`, documento, {
       responseType: 'arraybuffer',
     });
