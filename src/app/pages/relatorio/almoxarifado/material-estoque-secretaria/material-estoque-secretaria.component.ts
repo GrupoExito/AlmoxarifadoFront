@@ -8,6 +8,7 @@ import {
   RelatorioMaterialEstoqueSecretaria,
   RelatorioTransferenciaMaterial,
 } from '@pages/relatorio/_models/relatorio-almoxarifado.model';
+import { FiltroRelatorioDTO } from '@pages/relatorio/_models/relatorio-entrada-material.model';
 import { RelatorioAlmoxarifadoService } from '@pages/relatorio/_services/relatorio-movimentacao-almoxarifado.service';
 import { SecretariaFundo } from '@pages/secretaria-fundo/_models/secretaria-fundo.model';
 import { SecretariaFundoService } from '@pages/secretaria-fundo/_services/secretaria-fundo.service';
@@ -32,13 +33,13 @@ export class RelatorioMaterialEstoqueSecretariaComponent implements OnInit {
   produtos: ProdutoServico[];
   almoxarifados: Almoxarifado[];
   selectedAlmoxarifado: number[];
-  optionAlmoxarifado = '0';
-  optionSecretariaFundo = '0';
+  optionAlmoxarifado = 0;
+  optionSecretariaFundo = 0;
   selectedSecretariaFundo: number[];
-  optionProdutos = '0';
+  optionProdutos = 0;
   selectedProdutos: number[];
-  dataInicialSelecionada: string | null;
-  dataFinalSelecionada: string | null;
+  dataInicialSelecionada: string;
+  dataFinalSelecionada: string;
   filtroHabilitado: boolean = false;
 
   ngOnInit(): void {
@@ -77,25 +78,25 @@ export class RelatorioMaterialEstoqueSecretariaComponent implements OnInit {
     this.dataInicialSelecionada = '';
     this.dataFinalSelecionada = '';
     
-    this.optionAlmoxarifado = '0';
+    this.optionAlmoxarifado = 0;
     this.selectedAlmoxarifado = [];
   
-    this.optionSecretariaFundo = '0';
+    this.optionSecretariaFundo = 0;
     this.selectedSecretariaFundo = [];
   
-    this.optionProdutos = '0';
+    this.optionProdutos = 0;
     this.selectedProdutos = [];
   }
   
   filtrar() {
     Swal.showLoading();
-    const relatorioMaterialEstoqueSecretaria: RelatorioMaterialEstoqueSecretaria = {
+    const relatorioMaterialEstoqueSecretaria: FiltroRelatorioDTO = {
       secretaria: this.optionSecretariaFundo,
       secretaria_selecionadas: this.selectedSecretariaFundo,
-      produto: this.optionProdutos,
-      produto_selecionado: this.selectedProdutos,
-      data_inicial: this.dataInicialSelecionada || null,
-      data_final: this.dataFinalSelecionada || null,
+      produtoServico: this.optionProdutos,
+      produtoServico_selecionado: this.selectedProdutos,
+      data_inicial: this.dataInicialSelecionada,
+      data_final: this.dataFinalSelecionada,
       almoxarifado: this.optionAlmoxarifado,
       almoxarifado_selecionado: this.selectedAlmoxarifado,
     };

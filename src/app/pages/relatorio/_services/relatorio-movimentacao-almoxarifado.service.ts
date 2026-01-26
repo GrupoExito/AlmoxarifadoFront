@@ -163,8 +163,8 @@ export class RelatorioAlmoxarifadoService {
     });
   }
 
-  MaterialEstoquePorSecretaria(documento: RelatorioMaterialEstoqueSecretaria): Observable<ArrayBuffer> {
-    return this.http.post(`${this.baseURL}/materialestoquesecretaria`, documento, {
+  MaterialEstoquePorSecretaria(documento: FiltroRelatorioDTO): Observable<ArrayBuffer> {
+    return this.http.post(`${this.baseURL}/estoque/porsecretaria`, documento, {
       responseType: 'arraybuffer',
     });
   }
