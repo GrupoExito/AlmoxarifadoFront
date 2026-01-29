@@ -31,6 +31,12 @@ export class EntradaMaterialItemComponent implements OnInit {
   ) {}
 
   @ViewChild('quantidadeMaterial') quantidadeMaterial!: ElementRef;
+  @ViewChild('xmlInput') xmlInput!: ElementRef<HTMLInputElement>;
+
+  modalXmlNotaFiscal: any;
+
+  xmlFile: File | null = null;
+  xmlFileName: string = '';
 
   @ViewChild(DataTableDirective, { static: false })
   dtElement: DataTableDirective;
@@ -70,6 +76,7 @@ export class EntradaMaterialItemComponent implements OnInit {
     console.log('Itens');
 
     this.modalAdicionarItem = new Modal(document.getElementById('modalAdicionarItem')!);
+    this.modalXmlNotaFiscal = new Modal(document.getElementById('modalXmlNotaFiscal')!);
 
     this.dtOptions = dtOptions;
     this.entrada_id = this.entradaMaterialService.getRouteId()!;
@@ -192,25 +199,9 @@ export class EntradaMaterialItemComponent implements OnInit {
             console.log(error);
           },
         });
-        this.entradaMaterialItemService.listarItemPorEntrada(this.entradaMaterialService.getRouteId()!).subscribe({
-          next: (entradaItens) => {
-            this.entradaItens = entradaItens;
-            this.rerender();
-            let header = this.entradaMaterialService.emDataEtapasHeader.getValue();
-            header!.quantidade_itens = this.entradaItens.length;
-            if (entradaItens) {
-              header!.valorTotal = entradaItens.reduce((accumulator, object) => {
-                return accumulator + object.valor_unitario! * object.quantidade!;
-              }, 0);
-            } else {
-              header!.valorTotal = 0;
-            }
-            this.entradaMaterialService.emDataEtapasHeader.next(header);
-          },
-          error: (error) => {
-            console.log(error);
-          },
-        });
+        
+        this.listarProdutosAdicionados();
+
         Swal.fire('Adicionado!', 'Produto adicionado com sucesso!', 'success');
         this.addProdutoSDForm.reset();
         this.addProdutoSDForm.get('data_validade')?.setValue('');
@@ -226,6 +217,12 @@ export class EntradaMaterialItemComponent implements OnInit {
   }
 
   rerender(): void {
+    // se o DataTable ainda não foi inicializado, apenas dispara o trigger
+    if (!this.dtElement || !this.dtElement.dtInstance) {
+      this.dtTrigger.next(null);
+      return;
+    }
+
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.destroy();
       this.dtTrigger.next(null);
@@ -301,19 +298,36 @@ private removeFracionamentoControl() {
   }
 }
 
-  listarProdutosAdicionados() {
-    this.entradaMaterialItemService.listarItemPorEntrada(this.entradaMaterialService.getRouteId()!).subscribe({
+listarProdutosAdicionados() {
+  this.entradaMaterialItemService
+    .listarItemPorEntrada(this.entradaMaterialService.getRouteId()!)
+    .subscribe({
       next: (entradaItens) => {
-        this.entradaItens = entradaItens;
-        this.dtTrigger.next(null);
+        this.entradaItens = entradaItens ?? [];
+
+        const headerAtual = this.entradaMaterialService.emDataEtapasHeader.getValue();
+        if (headerAtual) {
+          const valorTotal = this.entradaItens.reduce((acc, item) => {
+            return acc + (item.quantidade ?? 0) * (item.valor_unitario ?? 0);
+          }, 0);
+
+          this.entradaMaterialService.emDataEtapasHeader.next({
+            ...headerAtual,
+            quantidade_itens: this.entradaItens.length,
+            valorTotal,
+          });
+
+          //this.cd.detectChanges();
+        }
+
+        this.rerender();
       },
-      error: (error) => {
-        console.log(error);
-      },
+      error: (error) => console.log(error),
     });
-  }
+}
 
   deletar(id: number = 0): void {
+    console.log('deletar item', id);
     Swal.fire({
       title: 'Tem certeza?',
       text: 'Você não será capaz de recuperar esta informação!',
@@ -330,19 +344,22 @@ private removeFracionamentoControl() {
             this.entradaMaterialService.consultarPorId(this.entrada_id!).subscribe({
               next: (entradaMaterial) => {
                 this.entradaMaterial = entradaMaterial;
-                if (entradaMaterial.tipo_entrada === 4) {
+                this.listarProdutosAdicionados();
+                  this.addProdutoSDForm.reset();
+                  Swal.fire('Excluído!', 'Item excluído!', 'success');
+                /*if (entradaMaterial.tipo_entrada === 4) {
                   this.listarProdutoSaidas(entradaMaterial.saida_material_id!);
                 } else if (entradaMaterial.tipo_entrada === 1) {
                   this.ListarPedidoCompraItens(entradaMaterial.pedido_despesa_id!);
                 } else {
                   this.listarProdutos();
-                }
+                }*/
               },
               error: (error) => {
                 console.log(error);
               },
             });
-
+/*
             this.entradaItens = this.entradaItens.filter((entrada) => entrada.id != id);
             let header = this.entradaMaterialService.emDataEtapasHeader.getValue();
             header!.quantidade_itens = this.entradaItens.length;
@@ -358,6 +375,7 @@ private removeFracionamentoControl() {
             this.addProdutoSDForm.reset();
 
             Swal.fire('Excluído!', 'Item excluído!', 'success');
+            */
           },
           error: () => {
             Swal.fire('Algo deu errado!', 'Não foi possivel excluir esse Item!', 'error');
@@ -369,7 +387,37 @@ private removeFracionamentoControl() {
     });
   }
 
-  adicionarTodosItensPorPedidoCompra() {
+adicionarTodosItensPorPedidoCompra() {
+  Swal.fire({
+    title: 'Confirmação',
+    text: 'Deseja adicionar todos os itens do pedido de compra?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Sim, adicionar',
+    cancelButtonText: 'Cancelar',
+    confirmButtonColor: '#23b349',
+    cancelButtonColor: '#eb2067',
+  }).then((result) => {
+    if (!result.isConfirmed) return;
+
+    Swal.showLoading();
+    this.entradaMaterialItemService
+      .adicionarTodosItensPorPedidoCompra(this.pedido_compra_id, this.entrada_id)
+      .subscribe({
+        next: () => {
+          Swal.fire('Ok!', 'Itens adicionados com sucesso!', 'success');
+          // melhor que reload total:
+          this.listarProdutosAdicionados();
+        },
+        error: (error) => {
+          console.log(error);
+          Swal.fire('Erro!', 'Não foi possível adicionar os itens.', 'error');
+        },
+      });
+  });
+}
+
+  adicionarTodosItensPorNF() {
     this.entradaMaterialItemService.adicionarTodosItensPorPedidoCompra(this.pedido_compra_id, this.entrada_id).subscribe({
       next: () => {
         document.location.reload();
@@ -460,4 +508,114 @@ private removeFracionamentoControl() {
       valor_unitario: p.valor_unitario ?? p.valor_referencia,
   }));
 }
+
+abrirModalNotaFiscal() {
+  this.xmlFile = null;
+  this.xmlFileName = '';
+
+  // limpa o input pra permitir re-selecionar o mesmo arquivo
+  if (this.xmlInput?.nativeElement) {
+    this.xmlInput.nativeElement.value = '';
+  }
+
+  this.modalXmlNotaFiscal.show();
+}
+
+onXmlSelected(event: Event) {
+  const input = event.target as HTMLInputElement;
+  const file = input.files?.[0] ?? null;
+
+  if (!file) {
+    this.xmlFile = null;
+    this.xmlFileName = '';
+    return;
+  }
+
+  // validação simples
+  const isXml =
+    file.name.toLowerCase().endsWith('.xml') ||
+    file.type.includes('xml');
+
+  if (!isXml) {
+    Swal.fire('Arquivo inválido', 'Selecione um arquivo .xml', 'warning');
+    input.value = '';
+    this.xmlFile = null;
+    this.xmlFileName = '';
+    return;
+  }
+
+  this.xmlFile = file;
+  this.xmlFileName = file.name;
+}
+
+enviarXmlNotaFiscal() {
+  if (!this.xmlFile) return;
+
+  Swal.fire({
+    title: 'Confirmação',
+    text: 'Deseja enviar este XML e adicionar os itens da nota fiscal?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Sim, enviar',
+    cancelButtonText: 'Cancelar',
+    confirmButtonColor: '#23b349',
+    cancelButtonColor: '#eb2067',
+  }).then((result) => {
+    if (!result.isConfirmed) return;
+
+    Swal.showLoading();
+    this.entradaMaterialItemService
+      .adicionarItensPorNotaFiscal(this.pedido_compra_id, this.entrada_id, this.xmlFile!)
+      .subscribe({
+        next: () => {
+          this.modalXmlNotaFiscal.hide();
+          Swal.fire('Ok!', 'Itens adicionados pela nota fiscal!', 'success');
+          this.listarProdutosAdicionados();
+        },
+        error: (error) => {
+          console.log(error);
+          this.tratarErroApi(error);
+        },
+      });
+    });
+  }
+
+  private tratarErroApi(error: any) {
+    let mensagem = 'Ocorreu um erro inesperado.';
+
+    // string simples
+    if (typeof error?.error === 'string') {
+      mensagem = error.error;
+    }
+
+    // objeto estruturado
+    else if (typeof error?.error === 'object') {
+      if (error.error.mensagem) {
+        mensagem = error.error.mensagem;
+
+        // se vier lista de códigos de barra
+        if (
+          Array.isArray(error.error.codigos_barra_nao_localizados) &&
+          error.error.codigos_barra_nao_localizados.length > 0
+        ) {
+          mensagem +=
+            '\n\nCódigos de barra não localizados:\n' +
+            error.error.codigos_barra_nao_localizados.join(', ');
+        }
+      }
+    }
+
+    // fallback por status
+    else if (error.status === 404) {
+      mensagem = 'Registro não encontrado.';
+    }
+
+    Swal.fire({
+      title: 'Erro',
+      text: mensagem,
+      icon: 'error',
+      confirmButtonText: 'Ok',
+    });
+  }
+
 }

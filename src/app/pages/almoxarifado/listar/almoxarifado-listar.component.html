@@ -107,7 +107,7 @@
             <td>
               <div class="d-flex justify-content-end flex-shrink-0">
                 <button *appPermission="['Almoxarifado', 'associar_usuario']"
-                  [routerLink]="['/almoxarifado', almoxarifado.id, 'usuario']"
+                  [routerLink]="['/almoxarifado', almoxarifado.id, 'usuario']" title="Vincular Usuários"
                   class="btn btn-icon btn-active-color-primary btn-md me-1">
                   <i class="fa-solid fa-user"></i>
                 </button>
@@ -115,7 +115,7 @@
                   >
                   <span [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'" class="svg-icon svg-icon-3"></span>
                 </button>
-                <button (click)="deletar(almoxarifado.id)" href="#" class="btn btn-icon btn-active-color-danger btn-md">
+                <button (click)="deletar(almoxarifado.id)" href="#" title="Excluir" class="btn btn-icon btn-active-color-danger btn-md">
                   <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
                     class="svg-icon svg-icon-3"></span>
                 </button>

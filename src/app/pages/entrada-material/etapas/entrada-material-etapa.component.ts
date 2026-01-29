@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ModeloDocumento } from '@pages/modelo-documento/_models/modelo-documento.model';
@@ -20,12 +20,13 @@ import { BaseService } from '@pages/shared/services/base.service';
 import { EntradaMaterialItemService } from '../_services/entrada-material-itens.service';
 import { EntradaMaterialItem } from '../_models/entrada-material-itens.model';
 
+
 @Component({
   selector: 'app-entrada-material-etapa',
   templateUrl: './entrada-material-etapa.component.html',
   styleUrls: ['./entrada-material-etapa.component.scss'],
 })
-export class EntradaMaterialEtapaComponent implements OnInit {
+export class EntradaMaterialEtapaComponent implements OnInit, OnDestroy {
   constructor(
     private entradaMaterialService: EntradaMaterialService,
     private entradaMaterialItemService: EntradaMaterialItemService,
@@ -39,6 +40,7 @@ export class EntradaMaterialEtapaComponent implements OnInit {
     private baseService: BaseService
   ) {}
 
+  subHeader?: Subscription;
   token: AuthToken | null;
   eMQuantidade: EMDataEtapasHeader | null = null;
   entradaMaterial: EntradaMaterial | null = null;
@@ -70,6 +72,17 @@ export class EntradaMaterialEtapaComponent implements OnInit {
 
     console.log('ID da entrada de material:', this.id);
 
+this.subHeader = this.entradaMaterialService.emDataEtapasHeader.subscribe((h) => {
+  if (!h) return;
+
+  // atualiza o objeto que o HTML usa
+  this.eMQuantidade = {
+    ...(this.eMQuantidade ?? ({} as any)),
+    ...h,
+  };
+});
+
+
     this.entradaMaterialService.consultarPorId(this.id!).subscribe({
       next: (entrada) => {
         this.entradaMaterial = entrada;
@@ -99,9 +112,6 @@ export class EntradaMaterialEtapaComponent implements OnInit {
         this.eMQuantidade = quantidade;
       });
 
-      this.entradaMaterialService.consultarEntradaQuantidade(this.id!).subscribe((quantidade) => {
-        this.eMQuantidade = quantidade;
-      });
     }
 
     this.entradaMaterialItemService.listarItemPorEntrada(this.id!).subscribe({
@@ -172,5 +182,9 @@ export class EntradaMaterialEtapaComponent implements OnInit {
     } else {
       this.valorTotalEntrada = 0;
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subHeader?.unsubscribe();
   }
 }

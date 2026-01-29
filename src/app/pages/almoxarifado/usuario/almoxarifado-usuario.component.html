@@ -55,13 +55,13 @@
             <td>{{ item.autorizador ? 'Sim' : 'Não' }}</td>
             <td>
               <div class="d-flex justify-content-end flex-shrink-0">
-                <button (click)="autorizador(item.usuario_id!, item.almoxarifado_id!, !item.autorizador)" href="#"
+                <button (click)="autorizador(item.usuario_id!, item.almoxarifado_id!, !item.autorizador)" href="#" title="Alterar Autorizador"
                 *appPermission="['Almoxarifado', 'excluir_usuario']"
                   class="btn btn-icon btn-active-color-danger btn-md">
                   <span *ngIf="!item.autorizador" [inlineSVG]="'./assets/media/icons/duotune/general/gen043.svg'" class="svg-icon svg-icon-3"></span>
                   <span *ngIf="item.autorizador" [inlineSVG]="'./assets/media/icons/duotune/general/gen044.svg'" class="svg-icon svg-icon-3"></span>
                 </button>
-                <button (click)="deletar(item.usuario_id!, item.almoxarifado_id!)" href="#"
+                <button (click)="deletar(item.usuario_id!, item.almoxarifado_id!)" href="#" title="Excluir/Desvincular"
                 *appPermission="['Almoxarifado', 'excluir_usuario']"
                   class="btn btn-icon btn-active-color-danger btn-md">
                   <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"

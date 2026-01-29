@@ -51,6 +51,7 @@ export class ProdutoServicoEditarComponent implements OnInit {
       valor_referencia: [{ value: '', disabled: true }, Validators.required],
       unidade_medida_almoxarifado_id:  ['', [Validators.required]],
       qtde_do_principal:  ['', [Validators.required]],
+      codigo_barra: ['', [Validators.pattern(/^\d{8}$|^\d{12}$|^\d{13}$|^\d{14}$/)]],
     });
 
     this.produtoServicoService.consultarPorId(this.id).subscribe({
@@ -75,6 +76,7 @@ export class ProdutoServicoEditarComponent implements OnInit {
     this.produtoServicoEdicao.unidade_medida_almoxarifado_id = this.editarProdutoServicoForm.get('unidade_medida_almoxarifado_id')!.value;
     this.produtoServicoEdicao.qtde_do_principal = this.editarProdutoServicoForm.get('qtde_do_principal')!.value;
     this.produtoServicoEdicao.descricao_almoxarifado = this.editarProdutoServicoForm.get('descricao_almoxarifado')!.value;
+    this.produtoServicoEdicao.codigo_barra = this.editarProdutoServicoForm.get('codigo_barra')?.value || null;
 
     this.produtoServicoService.editar(this.id, this.produtoServicoEdicao).subscribe({
       next: () => {
@@ -101,4 +103,18 @@ export class ProdutoServicoEditarComponent implements OnInit {
       .replace(/\s{2,}/g, ' ')             // colapsa espaços múltiplos
       .trim();
   }
+
+  onCodigoBarraInput(event: Event) {
+  const input = event.target as HTMLInputElement;
+
+  // remove tudo que não for número e limita a 14
+  const somenteNumeros = input.value.replace(/\D/g, '').slice(0, 14);
+
+  // atualiza input e formControl
+  input.value = somenteNumeros;
+  this.editarProdutoServicoForm
+    .get('codigo_barra')
+    ?.setValue(somenteNumeros, { emitEvent: false });
+}
+
 }

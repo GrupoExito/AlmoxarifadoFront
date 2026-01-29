@@ -62,7 +62,7 @@ export class EntradaMateriaListarComponent implements OnInit, OnDestroy {
     this.dtOptions = dtOptions;
     this.dtOptions.order = [2, 'asc'];
     await this.consultarConfiguracaoUsuario();
-
+console.log(this.entradaAlmoxarifadoUsuario,'configuracao');
     if (this.entradaAlmoxarifadoUsuario) {
       this.entradaMateriaLService.listarPorUsuario(this.usuario_id).subscribe({
         next: (entradasMaterial) => {
@@ -122,7 +122,14 @@ export class EntradaMateriaListarComponent implements OnInit, OnDestroy {
   //   });
   // }
 
- confirmar(id: number = 0): void {
+ confirmar(id: number = 0, totalItens: number = 0): void {
+
+        if (totalItens <= 0) {
+          Swal.close();
+          Swal.fire('Atenção', 'Adicione ao menos 1 item antes de confirmar.', 'info');
+          return;
+        }
+
      Swal.fire({
        title: 'Tem certeza?',
        text: 'Você não será capaz de adicionar itens!',
@@ -204,25 +211,27 @@ export class EntradaMateriaListarComponent implements OnInit, OnDestroy {
     Swal.showLoading();
     const data_inicial = this.dataInicialSelecionado.split('-');
     const data_final = this.dataFinalSelecionado.split('-');
-    const parameters = {
-      secretaria: this.secretariaSelecionada,
-      almoxarifado: this.almoxarifadoSelecionado,
-      produto: this.ItemSelecionado,
-      nota: this.Nota,
-      fornecedor: this.fornecedorSelecionado,
-      id: this.idSelecionado,
-      tipo: this.tipoSelecionado,
-      status: this.statusSelecionado,
-      data_inicial:
-        data_inicial[0] != ''
-          ? data_inicial[2] + '-' + data_inicial[1] + '-' + data_inicial[0]
-          : this.dataInicialSelecionado,
-      data_final:
-        data_final[0] != '' ? data_final[2] + '-' + data_final[1] + '-' + data_final[0] : this.dataFinalSelecionado,
+
+    const parameters: Record<string, any> = {
+      secretaria_fundo_id: this.secretariaSelecionada ?? null,
+      almoxarifado_id: this.almoxarifadoSelecionado ?? null,
+      fornecedor_id: this.fornecedorSelecionado ?? null,
+      entrada_id: this.idSelecionado ?? null,
+      status_id: this.statusSelecionado ?? null,
+      data_ini: this.toIsoDate(this.dataInicialSelecionado),
+      data_fim: this.toIsoDate(this.dataFinalSelecionado),
     };
+
+    Object.keys(parameters).forEach((k) => {
+      const v = parameters[k];
+      if (v === null || v === '' || v === undefined) {
+        delete parameters[k];
+      }
+    });
+
     console.log(parameters);
 
-    this.entradaMateriaLService.filtrar(parameters).subscribe({
+    this.entradaMateriaLService.filtrar(parameters,this.usuario_id).subscribe({
       next: (entradaMaterial) => {
         this.entradasMaterial = entradaMaterial;
         this.rerender();
@@ -232,6 +241,29 @@ export class EntradaMateriaListarComponent implements OnInit, OnDestroy {
         Swal.fire('Algo deu errado!', 'Não foi possivel filtrar as Entradas!', 'error');
       },
     });
+  }
+
+  private toIsoDate(value: any): string | null {
+    if (!value) return null;
+
+    // Se já vier yyyy-MM-dd
+    if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
+
+    // dd-MM-yyyy ou dd/MM/yyyy
+    if (typeof value === 'string') {
+      const m = value.match(/^(\d{2})[-/](\d{2})[-/](\d{4})$/);
+      if (m) return `${m[3]}-${m[2]}-${m[1]}`;
+    }
+
+    // Date
+    if (value instanceof Date && !isNaN(value.getTime())) {
+      const y = value.getFullYear();
+      const mm = String(value.getMonth() + 1).padStart(2, '0');
+      const dd = String(value.getDate()).padStart(2, '0');
+      return `${y}-${mm}-${dd}`;
+    }
+
+    return null;
   }
 
   limparFiltros() {

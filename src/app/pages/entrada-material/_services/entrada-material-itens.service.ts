@@ -41,4 +41,15 @@ export class EntradaMaterialItemService {
   adicionarTodosItensPorPedidoCompra(pedido_compra_id: number, entrada_id: number): Observable<void> {
     return this.http.post<void>(`${this.baseURL}/adicionartodositenspedidocompra/${pedido_compra_id}/${entrada_id}`, null);
   }
+
+  adicionarItensPorNotaFiscal(pedido_compra_id: number, entrada_id: number, xml: File): Observable<void> {
+  const formData = new FormData();
+  formData.append('xml', xml, xml.name);
+
+  // NÃO setar Content-Type manualmente (o browser põe o multipart boundary certo)
+  return this.http.post<void>(
+    `${this.baseURL}/adicionaritensnotafiscal/${pedido_compra_id}/${entrada_id}`,
+    formData
+  );
+}
 }

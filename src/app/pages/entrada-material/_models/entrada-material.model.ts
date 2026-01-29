@@ -26,6 +26,7 @@ export interface EntradaMaterial {
   tipo_entrada_descricao?: string;
   status_descricao?: string;
   observacao: string;
+  quantidade_item?: number;
 }
 
 export interface ItemMovimentacao {

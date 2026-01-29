@@ -5,7 +5,7 @@
       <span class="card-label fw-bolder fs-3 mb-1">Entradas de Material</span>
     </h3>
     <div class="btn-toolbar" role="toolbar">
-      <!--div
+      <div
         class="card-toolbar me-4"
         data-bs-toggle="tooltip"
         data-bs-placement="top"
@@ -21,7 +21,7 @@
           <i class="fa fa-light fa-filter-circle-xmark" *ngIf="filtroButton"></i>
           Filtrar
         </button>
-      </div-->
+      </div>
       <div
         class="card-toolbar"
         data-bs-toggle="tooltip"
@@ -97,41 +97,6 @@
             <option value="2">Confirmado</option>
             <option value="3">Cancelado</option>
           </select>
-        </div>
-      </div>
-      <div class="col-md-2">
-        <div class="form-group mb-0">
-          <label>Tipo Entrada</label>
-          <select class="form-select" [(ngModel)]="tipoSelecionado">
-            <option value="">Selecione</option>
-                  <option [ngValue]="1">Compra</option>
-                  <option [ngValue]="2">Transferência</option>
-                  <option [ngValue]="3">Doação/Convênio</option>
-                  <option [ngValue]="4">Devolução</option>
-                  <option [ngValue]="5">Produção própria/Reaproveitamento</option>
-                  <option [ngValue]="6">Ajuste de inventário</option>
-                  <option [ngValue]="7">Empréstimo/Cessão/Comodato</option>
-          </select>
-        </div>
-      </div>
-      <div class="col-md-1">
-        <div class="form-group mb-0">
-          <label>N° Nota</label>
-          <input class="form-control" type="text" maxlength="20" [(ngModel)]="Nota" />
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="form-group mb-0">
-          <label>Produto</label>
-          <ng-select
-            class="ngSelectDropdown"
-            [items]="itensMovimentacao"
-            bindLabel="descricao"
-            bindValue="codigo_item"
-            [(ngModel)]="ItemSelecionado"
-            [multiple]="true"
-          >
-          </ng-select>
         </div>
       </div>
       <div class="col-md-2">
@@ -229,7 +194,7 @@
                 <button
                   title="Confirmar"
                   *ngIf="entradaMaterial.status_id === 1"
-                  (click)="confirmar(entradaMaterial.id)"
+                  (click)="confirmar(entradaMaterial.id, entradaMaterial.quantidade_item)"
                   href="#"
                   class="btn btn-icon btn-active-color-danger btn-md"
                 >

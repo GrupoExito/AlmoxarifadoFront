@@ -248,23 +248,44 @@ export class EntradaMaterialCriarComponent implements OnInit {
     }
   }
 
-  confimarEntrada() {
-    Swal.showLoading();
-    this.entradaMaterialService.alterarStatusEntradaMaterial(this.id!, 13).subscribe({
-      next: () => {
-        this.atualizarEntradaMaterial();
-        Swal.fire('Atualizado!', 'Entrada confirmada com sucesso!', 'success').then((result) => {
-          if (result.value) {
-            this.route.navigate(['/entradamaterial/view', this.id, 'cadastro']);
-          }
-        });
-      },
-      error: (error) => {
-        console.log(error);
-        Swal.fire('Erro!', error.error, 'error');
-      },
-    });
-  }
+confimarEntrada() {
+  if (!this.id) return;
+
+  Swal.showLoading();
+
+  this.entradaMaterialService.consultarEntradaQuantidade(this.id).subscribe({
+    next: (qtd) => {
+      const totalItens = qtd?.quantidade_itens ?? 0;
+
+      if (totalItens <= 0) {
+        Swal.close();
+        Swal.fire('Atenção', 'Adicione ao menos 1 item antes de confirmar.', 'info');
+        return;
+      }
+
+      // pode confirmar
+      this.entradaMaterialService.alterarStatusEntradaMaterial(this.id!, 2).subscribe({
+        next: () => {
+          this.atualizarEntradaMaterial();
+          Swal.fire('Atualizado!', 'Entrada confirmada com sucesso!', 'success').then((result) => {
+            if (result.value) {
+              this.route.navigate(['/entradamaterial/view', this.id, 'cadastro']);
+            }
+          });
+        },
+        error: (error) => {
+          console.log(error);
+          Swal.fire('Erro!', error.error, 'error');
+        },
+      });
+    },
+    error: (error) => {
+      console.log(error);
+      Swal.fire('Erro!', 'Não foi possível validar a quantidade de itens.', 'error');
+    },
+  });
+}
+
 
   reabrirEntrada() {
     Swal.showLoading();

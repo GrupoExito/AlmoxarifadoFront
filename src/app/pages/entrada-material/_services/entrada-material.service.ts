@@ -72,8 +72,8 @@ export class EntradaMaterialService {
     return this.routeId;
   }
 
-  filtrar(parameters: any): Observable<EntradaMaterial[]> {
-    return this.http.get<EntradaMaterial[]>(`${this.baseURL}/filtrar`, {
+  filtrar(parameters: any, usuario_id: number): Observable<EntradaMaterial[]> {
+    return this.http.get<EntradaMaterial[]>(`${this.baseURL}/porusuario/${usuario_id}`, {
       params: parameters,
     });
   }

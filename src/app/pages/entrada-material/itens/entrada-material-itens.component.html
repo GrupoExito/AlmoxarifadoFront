@@ -1,21 +1,36 @@
 <div class="card mt-3">
-  <div class="card-header border-1 pt-2">
-    <h3 class="card-title align-items-start flex-column">
-      <span class="card-label fw-bolder fs-3">Adicionar itens</span>
-    </h3>
-    <div
-      *ngIf="entradaMaterial?.status_id === 1 && entradaMaterial?.tipo_entrada === 1"
-      class="card-toolbar me-4"
+  <div class="card-header border-1 pt-2 d-flex align-items-center">
+  <h3 class="card-title align-items-start flex-column mb-0">
+    <span class="card-label fw-bolder fs-3">Adicionar itens</span>
+  </h3>
+
+  <div class="card-toolbar ms-auto d-flex gap-2">
+    <button
+      *ngIf="entradaMaterial?.status_id === 1"
+      (click)="abrirModalNotaFiscal()"
+      class="btn btn-sm btn-primary"
       data-bs-toggle="tooltip"
       data-bs-placement="top"
-      data-bs-trigger="hover"
+      title="Clique para Adicionar itens através da nota fiscal"
+    >
+      <i class="fa-solid fa-plus me-1"></i>
+      Adicionar itens da nota fiscal
+    </button>
+
+    <button
+      *ngIf="entradaMaterial?.status_id === 1 && entradaMaterial?.tipo_entrada === 1"
+      (click)="adicionarTodosItensPorPedidoCompra()"
+      class="btn btn-sm btn-primary"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
       title="Clique para Adicionar todos os itens"
     >
-      <button (click)="adicionarTodosItensPorPedidoCompra()" class="btn btn-sm btn-primary align-items-end">
-        <span><i class="fa-solid fa-plus"></i>Adicionar todos os itens do pedido</span>
-      </button>
-    </div>
+      <i class="fa-solid fa-plus me-1"></i>
+      Adicionar todos os itens do pedido
+    </button>
   </div>
+</div>
+
   <div *ngIf="entradaMaterial?.status_id === 1" class="card-body">
     <div class="row" *ngIf="selectedProdutoServico && entradaMaterial.tipo_entrada === 1">
       <h5 class="fw-bolder"><span>Dados do Pedido de Compra</span></h5>
@@ -239,7 +254,7 @@
                           class="svg-icon svg-icon-4"
                         ></span>
                       </button>
-                      <button (click)="deletar(entradaItem.id)" class="btn btn-icon btn-active-color-danger btn-md">
+                      <button (click)="deletar(entradaItem.item_codigo)" class="btn btn-icon btn-active-color-danger btn-md">
                         <span
                           [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
                           class="svg-icon svg-icon-4"
@@ -263,6 +278,44 @@
           <h4 class="modal-title" id="modal-basic-title">Adicionar Item</h4>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalXmlNotaFiscal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Adicionar itens pela Nota Fiscal (XML)</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <label class="form-label fw-bolder">Selecione o arquivo XML</label>
+        <input
+          #xmlInput
+          type="file"
+          class="form-control"
+          accept=".xml,text/xml,application/xml"
+          (change)="onXmlSelected($event)"
+        />
+
+        <div class="mt-2 text-muted" *ngIf="xmlFileName">
+          Arquivo selecionado: <b>{{ xmlFileName }}</b>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="!xmlFile"
+          (click)="enviarXmlNotaFiscal()"
+        >
+          Enviar XML e adicionar itens
+        </button>
       </div>
     </div>
   </div>
