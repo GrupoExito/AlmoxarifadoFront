@@ -28,7 +28,7 @@ export class RelatorioEstoqueExcelComponent implements OnInit {
   ngOnInit(): void {
     console.log('Relatorio de Estoque Excel');
 
-    this.almoxarifadoService.listarTodos().subscribe({
+    this.almoxarifadoService.listarAtivos().subscribe({
       next: (almoxarifado) => {
         this.almoxarifados = almoxarifado;
       },

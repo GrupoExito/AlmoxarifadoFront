@@ -45,7 +45,7 @@ export class EntradaMaterialVisualizarComponent implements OnInit, OnDestroy {
 
     const secretaria$ = this.secretariaService.listarTodos();
     const fornecedor$ = this.fornecedorService.listarTodos();
-    const almoxarifado$ = this.almoxarifadoService.listarTodos();
+    const almoxarifado$ = this.almoxarifadoService.listarAtivos();
 
     //pedido depende do fornecedor_id da entrada
     const pedido$ = entrada$.pipe(

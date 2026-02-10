@@ -1,0 +1,7 @@
+:host ::ng-deep tr.row-inativo {
+  background: rgba(220, 53, 69, 0.08); // vermelho bem clarinho
+}
+
+:host ::ng-deep tr.row-inativo td {
+  color: #6c757d; // texto mais “apagado”
+}

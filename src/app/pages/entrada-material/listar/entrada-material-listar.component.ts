@@ -143,7 +143,6 @@ console.log(this.entradaAlmoxarifadoUsuario,'configuracao');
        if (result.value) {
          this.entradaMateriaLService.alterarStatusEntradaMaterial(id,2).subscribe({
            next: () => {
-             //this.entradasMaterial = this.entradasMaterial.filter((entradasMaterial) => entradasMaterial.id != id);
             const entrada = this.entradasMaterial.find(e => e.id === id);
             if (entrada) {
               entrada.status_id = 2;
@@ -179,7 +178,7 @@ console.log(this.entradaAlmoxarifadoUsuario,'configuracao');
       },
     });
 
-    this.almoxarifado.listarTodos().subscribe({
+    this.almoxarifado.listarAtivos().subscribe({
       next: (almoxarifados) => {
         this.almoxarifados = almoxarifados;
       },
@@ -209,8 +208,6 @@ console.log(this.entradaAlmoxarifadoUsuario,'configuracao');
 
   filtrar() {
     Swal.showLoading();
-    const data_inicial = this.dataInicialSelecionado.split('-');
-    const data_final = this.dataFinalSelecionado.split('-');
 
     const parameters: Record<string, any> = {
       secretaria_fundo_id: this.secretariaSelecionada ?? null,

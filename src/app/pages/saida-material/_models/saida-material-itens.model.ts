@@ -10,17 +10,12 @@ export interface SaidaMaterialItem {
   id_und_medida_descricao?: string;
   item_codigo?: number;
   item_descricao?: string;
-  // quantidade_entrada?: number;
-  // quantidade_saida?: number;
   saldo_disponivel?: number;
-  // quantidade_entrada_total?: number;
-  // quantidade_saida_total?: number;
-  // saldo_lote_data_validade?: number;
-  // quantidade_disponivel?: number;
   almoxarifado_id?: number;
   und_descricao?: string;
   qtd_solicitada?: number; // para exibir na tela após autorizado
   qtd_autorizada?: number; // para exibir na tela após autorizado
+  valor_total?: number;
 }
 
 export interface ListarItemDisponivel {

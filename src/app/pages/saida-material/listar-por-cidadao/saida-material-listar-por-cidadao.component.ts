@@ -128,7 +128,7 @@ export class SaidaMateriaListarPorCidadaoComponent implements OnInit, OnDestroy 
       },
     });
 
-    this.almoxarifado.listarTodos().subscribe({
+    this.almoxarifado.listarAtivos().subscribe({
       next: (almoxarifados) => {
         this.almoxarifados = almoxarifados;
       },

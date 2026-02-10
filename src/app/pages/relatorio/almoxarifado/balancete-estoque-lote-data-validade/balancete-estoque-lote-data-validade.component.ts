@@ -33,7 +33,7 @@ export class RelatorioBalanceteEstoquelotedatavalidadeComponent implements OnIni
   ngOnInit(): void {
     console.log('Relatorio de Movimentação (lote / data validade)');
 
-    this.almoxarifadoService.listarTodos().subscribe({
+    this.almoxarifadoService.listarAtivos().subscribe({
       next: (almoxarifado) => {
         this.almoxarifados = almoxarifado;
       },

@@ -30,7 +30,7 @@ export class RelatorioEstoqueComponent implements OnInit {
   ngOnInit(): void {
     console.log('Relatorio de Estoque PDF');
 
-    this.almoxarifadoService.listarTodos().subscribe({
+    this.almoxarifadoService.listarAtivos().subscribe({
       next: (almoxarifado) => {
         this.almoxarifados = almoxarifado;
       },

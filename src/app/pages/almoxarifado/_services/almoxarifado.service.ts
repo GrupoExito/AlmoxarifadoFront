@@ -20,9 +20,12 @@ export class AlmoxarifadoService {
   baseURL = `${environment.apiUrl}/almoxarifado`;
   constructor(private http: HttpClient) {}
 
-  listarTodos(): Observable<Almoxarifado[]> {
-    console.log('listar todos almoxarifado service');
-    return this.http.get<Almoxarifado[]>(this.baseURL);
+  listarAll(): Observable<Almoxarifado[]> {
+    return this.http.get<Almoxarifado[]>(`${this.baseURL}/all/`);
+  }
+
+  listarAtivos(): Observable<Almoxarifado[]> {
+    return this.http.get<Almoxarifado[]>(`${this.baseURL}`);
   }
 
   consultarPorId(id: number): Observable<Almoxarifado> {
@@ -88,6 +91,10 @@ export class AlmoxarifadoService {
 
   alterarAutorizadorUsuario(usuario_id: number, almoxarifado_id: number, autorizador: boolean): Observable<void> {
     return this.http.put<void>(`${this.baseURL}/usuarios/${usuario_id}/${almoxarifado_id}`, autorizador);
+  }
+
+  reativar(almoxarifado_id: number): Observable<void> {
+    return this.http.put<void>(`${this.baseURL}/reativar/${almoxarifado_id}`, null);
   }
 
   GetDashboard(): Observable<Dashboard> {

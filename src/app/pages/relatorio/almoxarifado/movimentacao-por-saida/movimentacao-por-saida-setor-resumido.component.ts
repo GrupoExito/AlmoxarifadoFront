@@ -64,7 +64,7 @@ import Swal from 'sweetalert2';
       },
     });
 
-    this.almoxarifadoService.listarTodos().subscribe({
+    this.almoxarifadoService.listarAtivos().subscribe({
       next: (almoxarifado) => {
         this.almoxarifados = almoxarifado;
       },

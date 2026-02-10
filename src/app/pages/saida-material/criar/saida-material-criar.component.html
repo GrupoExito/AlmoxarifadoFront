@@ -5,7 +5,7 @@
       <span class="card-label fw-bolder fs-3 mb-1">Criar Saída Material</span>
     </h3>
 
-    <!--div
+    <div
       *ngIf="saidaMaterial?.status_id === 1"
       class="card-toolbar ms-auto"
       data-bs-toggle="tooltip"
@@ -15,103 +15,13 @@
     >
       <a
         *appPermission="['Almoxarifado', 'emAnalise_saida']"
-        (click)="emAnalise()"
+        (click)="enviarSolicitacao()"
         class="btn btn-sm btn-light-success align-items-end me-4"
       >
         <span [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'" class="svg-icon svg-icon-3"></span>
-        Em análise
+        Enviar solicitação
       </a>
-    </div-->
-
-    <div
-      *ngIf="saidaMaterial?.status_id === 8"
-      class="card-toolbar ms-auto"
-      data-bs-toggle="tooltip"
-      data-bs-placement="top"
-      data-bs-trigger="hover"
-      title="Confirmar a saída de material"
-    >
-      <a
-        *appPermission="['Almoxarifado', 'autorizar_saida']"
-        (click)="autorizarSaida()"
-        class="btn btn-sm btn-light-success align-items-end me-4"
-      >
-        <span [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'" class="svg-icon svg-icon-3"></span>
-        Autorizar
-      </a>
-    </div>
-
-    <!--div
-      *ngIf="saidaMaterial?.status_id === 2"
-      class="card-toolbar ms-auto"
-      data-bs-toggle="tooltip"
-      data-bs-placement="top"
-      data-bs-trigger="hover"
-      title="Processar a saída de material"
-    >
-      <a
-        *appPermission="['Almoxarifado', 'processar_saida']"
-        (click)="processarSaida()"
-        class="btn btn-sm btn-light-success align-items-end me-4"
-      >
-        <span [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'" class="svg-icon svg-icon-3"></span>
-        Processar
-      </a>
-    </div>
-
-    <div
-      *ngIf="saidaMaterial?.status_id === 2"
-      class="card-toolbar"
-      data-bs-toggle="tooltip"
-      data-bs-placement="top"
-      data-bs-trigger="hover"
-      title="Cancelar a saída de material"
-    >
-      <a
-        *appPermission="['Almoxarifado', 'cancelar_saida']"
-        (click)="cancelar()"
-        class="btn btn-sm btn-light-danger align-items-end me-4"
-      >
-        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'" class="svg-icon svg-icon-3"></span>
-        Cancelar
-      </a>
-    </div>
-
-    <div
-      *ngIf="saidaMaterial?.status_id === 2"
-      class="card-toolbar"
-      data-bs-toggle="tooltip"
-      data-bs-placement="top"
-      data-bs-trigger="hover"
-      title="reabrir a saída de material"
-    >
-      <a
-        *appPermission="['Almoxarifado', 'reabrir_saida']"
-        (click)="reabrirSaida()"
-        class="btn btn-sm btn-light-warning align-items-end me-4"
-      >
-        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'" class="svg-icon svg-icon-3"></span>
-        reabrir
-      </a>
-    </div>
-
-    <div
-      *ngIf="saidaMaterial?.status_id === 5 && saidaMaterial?.tipo_saida_id !== 2"
-      class="card-toolbar"
-      data-bs-toggle="tooltip"
-      data-bs-placement="top"
-      data-bs-trigger="hover"
-      title="Cancelar a saída de material"
-    >
-      <a
-        *appPermission="['Almoxarifado', 'extornar_saida']"
-        (click)="abrirModalExtorno()"
-        class="btn btn-sm btn-light-warning align-items-end me-4"
-      >
-        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'" class="svg-icon svg-icon-3"></span>
-        Extornar
-      </a>
-    </div-->
+    </div>  
 
     <div
       *ngIf="saidaMaterial?.status_id === 1"

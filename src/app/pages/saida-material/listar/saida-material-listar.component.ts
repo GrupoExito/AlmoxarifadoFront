@@ -141,7 +141,14 @@ this.saidaMateriaLService.consultarSaidaQuantidade(id).subscribe({
     if (data.quantidade_itens > 0) {
         this.saidaMateriaLService.enviarSolicitacao(id).subscribe({
           next: () => {
-            this.saidasMaterial = this.saidasMaterial.filter((saidasMaterial) => saidasMaterial.id != id);
+            
+            const item = this.saidasMaterial.find(sm => sm.id === id);
+
+            if (item) {
+              item.status_id = 2;
+              item.status = 'Solicitado';
+            }
+
             Swal.fire('Enviado!', 'Solicitação da Saida Material foi enviada!', 'success');
           },
           error: () => {
@@ -178,7 +185,7 @@ this.saidaMateriaLService.consultarSaidaQuantidade(id).subscribe({
       },
     });
 
-    this.almoxarifado.listarTodos().subscribe({
+    this.almoxarifado.listarAtivos().subscribe({
       next: (almoxarifados) => {
         this.almoxarifados = almoxarifados;
       },
@@ -219,27 +226,28 @@ this.saidaMateriaLService.consultarSaidaQuantidade(id).subscribe({
 
   filtrar() {
     Swal.showLoading();
-    const data_inicial = this.dataInicialSelecionado.split('-');
-    const data_final = this.dataFinalSelecionado.split('-');
-    const parameters = {
-      secretaria: this.secretariaSelecionada,
-      almoxarifado: this.almoxarifadoSelecionado,
-      produto: this.ItemSelecionado,
-      setor: this.setorSelecionado,
-      solicitante: this.solicitanteSelecionado,
-      id: this.idSelecionado,
-      tipo: this.tipoSelecionado,
-      status: this.statusSelecionado,
-      data_inicial:
-        data_inicial[0] != ''
-          ? data_inicial[2] + '-' + data_inicial[1] + '-' + data_inicial[0]
-          : this.dataInicialSelecionado,
-      data_final:
-        data_final[0] != '' ? data_final[2] + '-' + data_final[1] + '-' + data_final[0] : this.dataFinalSelecionado,
+
+const parameters: Record<string, any> = {
+      secretaria_id: this.secretariaSelecionada ?? null,
+      almoxarifado_id: this.almoxarifadoSelecionado ?? null,
+      status_id: this.statusSelecionado ?? null,
+      setor_id: this.setorSelecionado ?? null,
+      solicitante_id: this.solicitanteSelecionado ?? null,
+      saida_id: this.idSelecionado ?? null,
+      tipo_saida_id: this.tipoSelecionado ?? null,
+      data_ini: this.toIsoDate(this.dataInicialSelecionado),
+      data_fim: this.toIsoDate(this.dataFinalSelecionado),
     };
+
+    Object.keys(parameters).forEach((k) => {
+      const v = parameters[k];
+      if (v === null || v === '' || v === undefined) {
+        delete parameters[k];
+      }
+    });
     console.log(parameters);
 
-    this.saidaMateriaLService.filtrar(parameters).subscribe({
+    this.saidaMateriaLService.filtrar(parameters, this.usuario_id).subscribe({
       next: (saidasMaterial) => {
         this.saidasMaterial = saidasMaterial;
         this.rerender();
@@ -249,6 +257,29 @@ this.saidaMateriaLService.consultarSaidaQuantidade(id).subscribe({
         Swal.fire('Algo deu errado!', 'Não foi possivel filtrar as saidas!', 'error');
       },
     });
+  }
+
+  private toIsoDate(value: any): string | null {
+    if (!value) return null;
+
+    // Se já vier yyyy-MM-dd
+    if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
+
+    // dd-MM-yyyy ou dd/MM/yyyy
+    if (typeof value === 'string') {
+      const m = value.match(/^(\d{2})[-/](\d{2})[-/](\d{4})$/);
+      if (m) return `${m[3]}-${m[2]}-${m[1]}`;
+    }
+
+    // Date
+    if (value instanceof Date && !isNaN(value.getTime())) {
+      const y = value.getFullYear();
+      const mm = String(value.getMonth() + 1).padStart(2, '0');
+      const dd = String(value.getDate()).padStart(2, '0');
+      return `${y}-${mm}-${dd}`;
+    }
+
+    return null;
   }
 
   limparFiltros() {

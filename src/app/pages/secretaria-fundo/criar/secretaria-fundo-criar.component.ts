@@ -134,43 +134,6 @@ export class SecretariaFundoCriarComponent implements OnInit {
   }
 
   criar() {
-    Swal.showLoading();
-    const secretariaFundo: SecretariaFundo = {
-      descricao: this.criarSecretariaFundoForm.get('descricao')!.value,
-      descricaoresumida: this.criarSecretariaFundoForm.get('descricaoresumida')!.value,
-      sigla: this.criarSecretariaFundoForm.get('sigla')!.value,
-      fundo: !!+this.criarSecretariaFundoForm.get('fundo')!.value,
-      cep: this.criarSecretariaFundoForm.get('cep')!.value,
-      logradouro: this.criarSecretariaFundoForm.get('logradouro')!.value,
-      complemento: this.criarSecretariaFundoForm.get('complemento')!.value,
-      municipio_id: this.criarSecretariaFundoForm.get('municipio_id')!.value,
-      bairro: this.criarSecretariaFundoForm.get('bairro')!.value,
-      cnpj: this.criarSecretariaFundoForm.get('cnpj')!.value,
-      grupo_secretaria_id: this.criarSecretariaFundoForm.get('grupo_secretaria_id')!.value,
-      orgao_id: this.criarSecretariaFundoForm.get('orgao_id')!.value,
-      codigo_tcm: this.criarSecretariaFundoForm.get('codigo_tcm')!.value,
-      gpessoa_responsavel_id: this.criarSecretariaFundoForm.get('gpessoa_responsavel_id')!.value,
-      usuario_id: this.criarSecretariaFundoForm.get('usuario_id')!.value,
-    };
-
-    if (this.fundo) {
-      secretariaFundo.secretaria_fundo_id = this.criarSecretariaFundoForm.get('secretaria_fundo_id')!.value;
-    }
-
-    this.baseService.verificarNulosInterface(secretariaFundo);
-
-    this.secretariaFundoService.criar(secretariaFundo).subscribe({
-      next: (dto) => {
-        Swal.close();
-        Swal.fire('Criado!', 'Secretaria ou fundo criado com sucesso!', 'success').then((result) => {
-          if (result.value) {
-            this.route.navigate(['/secretariafundo/editar', dto.id]);
-          }
-        });
-      },
-      error: (error) => {
-        Swal.fire('Erro!', error.error.message, 'error');
-      },
-    });
+    
   }
 }

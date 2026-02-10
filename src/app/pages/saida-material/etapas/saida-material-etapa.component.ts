@@ -36,7 +36,9 @@ export class SaidaMaterialEtapaComponent implements OnInit {
     private saidaHistoricoService: SaidaMaterialHistoricoService,
     private baseService: BaseService,
     private route: Router
-  ) {}
+  ) {
+    console.log('[SERVICE_INSTANCE]', saidaMaterialService);
+  }
 
   token: AuthToken | null;
   eMQuantidade: SMDataEtapasHeader | null = null;
@@ -89,10 +91,10 @@ export class SaidaMaterialEtapaComponent implements OnInit {
         },
       });
 
-      this.saidaMaterialService.dataEtapasHeader$.subscribe((quantidade) => {
+      this.saidaMaterialService.smDataEtapasHeader.subscribe((quantidade) => {
         this.eMQuantidade = quantidade;
-        console.log(quantidade, 'quantidade header');
       });
+
     }
 
     this.saidaMaterialItemService.listarItemPorSaida(this.id!).subscribe({

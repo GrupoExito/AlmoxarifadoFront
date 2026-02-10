@@ -143,7 +143,7 @@ export class SaidaMaterialCriarComponent implements OnInit {
       next: (dto) => {
         Swal.fire('Criado!', 'Saida Material criada com sucesso!', 'success').then((result) => {
           if (result.value) {
-            this.route.navigate(['/saidamaterial/listar']);
+            this.route.navigate(['/saidamaterial/view', dto.id, 'cadastro']);
           }
         });
       },
@@ -247,7 +247,7 @@ export class SaidaMaterialCriarComponent implements OnInit {
         },
       });
     } else {
-      this.almoxarifadoService.listarTodos().subscribe({
+      this.almoxarifadoService.listarAtivos().subscribe({
         next: (almoxarifados) => {
           this.almoxarifados = almoxarifados;
         },
@@ -298,182 +298,45 @@ export class SaidaMaterialCriarComponent implements OnInit {
     this.criarSaidaMaterialForm.get('unidade_externa_id')!.updateValueAndValidity();
   }
 
-  emAnalise() {
-    Swal.showLoading();
-    const saidaMaterialTransferencia: SaidaMaterialTransferencia = {
-      id: this.id!,
-      status_id: 8,
-      tipo_saida_id: this.saidaMaterial?.tipo_saida_id,
-      usuario_id: this.usuario_id,
-    };
-    this.saidaMaterialService.alterarStatusSaidaMaterial(saidaMaterialTransferencia).subscribe({
-      next: () => {
-        this.atualizarSaidaMaterial();
-        Swal.fire('Autorizado !', 'Saida autorizada com sucesso!', 'success').then((result) => {
-          if (result.value) {
-            this.route.navigate(['/saidamaterial/view', this.id, 'cadastro']);
-          }
-        });
-      },
-      error: (error) => {
-        console.log(error);
-        Swal.fire('Erro!', error.error.mensagem, 'error');
-      },
-    });
-  }
+  enviarSolicitacao(): void {
+      Swal.fire({
+        title: 'Tem certeza que deseja enviar?',
+        text: 'Após envio você não será capaz de modificar esta solicitação!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sim',
+        cancelButtonText: 'Não',
+        confirmButtonColor: '#23b349',
+        cancelButtonColor: '#eb2067',
+      }).then((result) => {
+        if (result.value) {
+  
+  this.saidaMaterialService.consultarSaidaQuantidade(this.id!).subscribe({
+    next: (data) => {
+      if (data.quantidade_itens > 0) {
+          this.saidaMaterialService.enviarSolicitacao(this.id!).subscribe({
+            next: () => {
+              this.saidaMaterial!.status_id = 2;
+              this.atualizarSaidaMaterial();
 
-  autorizarSaida() {
-    Swal.showLoading();
-    const saidaMaterialTransferencia: SaidaMaterialTransferencia = {
-      id: this.id!,
-      status_id: 2,
-      tipo_saida_id: this.saidaMaterial?.tipo_saida_id,
-      usuario_id: this.usuario_id,
-    };
-    this.saidaMaterialService.alterarStatusSaidaMaterial(saidaMaterialTransferencia).subscribe({
-      next: () => {
-        this.atualizarSaidaMaterial();
-        Swal.fire('Autorizado !', 'Saida autorizada com sucesso!', 'success').then((result) => {
-          if (result.value) {
-            this.route.navigate(['/saidamaterial/view', this.id, 'cadastro']);
-          }
-        });
-      },
-      error: (error) => {
-        console.log(error);
-        Swal.fire('Erro!', error.error.mensagem, 'error');
-      },
-    });
-  }
-
-  processarSaida() {
-    Swal.showLoading();
-    const saidaMaterialTransferencia: SaidaMaterialTransferencia = {
-      id: this.id!,
-      status_id: 5,
-      tipo_saida_id: this.saidaMaterial?.tipo_saida_id,
-      usuario_id: this.usuario_id,
-    };
-    this.saidaMaterialService.alterarStatusSaidaMaterial(saidaMaterialTransferencia).subscribe({
-      next: () => {
-        this.atualizarSaidaMaterial();
-        Swal.fire('Processado!', 'Saida processada com sucesso!', 'success').then((result) => {
-          if (result.value) {
-            this.route.navigate(['/saidamaterial/view', this.id, 'cadastro']);
-          }
-        });
-      },
-      error: (err) => {
-        let msg = '';
-        err.error.mensagem.forEach((element: string) => {
-          msg = msg + element + '\n';
-        });
-        Swal.fire({
-          title: 'Saldo insuficiente',
-          html: '<pre>' + msg + '</pre>',
-          icon: 'error',
-        });
-      },
-    });
-  }
-
-  extornarSaida(observacao: string) {
-    Swal.showLoading();
-    const saidaMaterialTransferencia: SaidaMaterialTransferencia = {
-      id: this.id!,
-      status_id: 14,
-      tipo_saida_id: this.saidaMaterial?.tipo_saida_id,
-      usuario_id: this.usuario_id,
-      observacao,
-    };
-    this.saidaMaterialService.alterarStatusSaidaMaterial(saidaMaterialTransferencia).subscribe({
-      next: () => {
-        this.atualizarSaidaMaterial();
-        Swal.fire('extornada!', 'Saida extornada com sucesso!', 'success').then((result) => {
-          if (result.value) {
-            this.route.navigate(['/saidamaterial/view', this.id, 'cadastro']);
-          }
-        });
-      },
-      error: (error) => {
-        console.log(error);
-        Swal.fire('Erro!', error.error.message, 'error');
-      },
-    });
-  }
-
-  abrirModalExtorno() {
-    Swal.fire({
-      title: 'Observação do Estorno',
-      input: 'textarea',
-      inputLabel: 'Digite o motivo do estorno',
-      inputPlaceholder: 'Escreva sua observação...',
-      inputAttributes: {
-        'aria-label': 'Escreva sua observação',
-      },
-      showCancelButton: true,
-      confirmButtonText: 'Confirmar',
-      cancelButtonText: 'Cancelar',
-      inputValidator: (value) => {
-        if (!value) {
-          return 'A observação é obrigatória!';
-        }
-        return null;
-      },
-    }).then((result) => {
-      if (result.isConfirmed && result.value) {
-        this.extornarSaida(result.value.trim());
+              Swal.fire('Enviado!', 'Solicitação da Saida Material foi enviada!', 'success');
+            },
+            error: () => {
+              Swal.fire('Algo deu errado!', 'Não foi possivel enviar esta Saida de Material!', 'error');
+            },
+          });
+        
+      }else{
+        Swal.fire('Atenção!', 'Não é possível enviar uma saída sem itens!', 'warning');
       }
-    });
-  }
-
-  reabrirSaida() {
-    Swal.showLoading();
-    const saidaMaterialTransferencia: SaidaMaterialTransferencia = {
-      id: this.id!,
-      status_id: 1,
-      tipo_saida_id: this.saidaMaterial?.tipo_saida_id,
-      usuario_id: this.usuario_id,
-    };
-    this.saidaMaterialService.alterarStatusSaidaMaterial(saidaMaterialTransferencia).subscribe({
-      next: () => {
-        this.atualizarSaidaMaterial();
-        Swal.fire('Reaberta!', 'Saida reaberta com sucesso!', 'success').then((result) => {
-          if (result.value) {
-            this.route.navigate(['/saidamaterial/view', this.id, 'cadastro']);
-          }
-        });
-      },
-      error: (error) => {
-        console.log(error);
-        Swal.fire('Erro!', error.error.message, 'error');
-      },
-    });
-  }
-
-  cancelar() {
-    Swal.showLoading();
-    const saidaMaterialTransferencia: SaidaMaterialTransferencia = {
-      id: this.id!,
-      status_id: 12,
-      tipo_saida_id: this.saidaMaterial?.tipo_saida_id,
-      usuario_id: this.usuario_id,
-    };
-    this.saidaMaterialService.alterarStatusSaidaMaterial(saidaMaterialTransferencia).subscribe({
-      next: () => {
-        this.atualizarSaidaMaterial();
-        Swal.fire('Cancelado!', 'Saida cancelada com sucesso!', 'success').then((result) => {
-          if (result.value) {
-            this.route.navigate(['/saidamaterial/view', this.id, 'cadastro']);
-          }
-        });
-      },
-      error: (error) => {
-        console.log(error);
-        Swal.fire('Erro!', error.error.message, 'error');
-      },
-    });
-  }
+    }
+      });
+  
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire('Cancelado!', 'A informação está segura!', 'error');
+        }
+      });
+    }
 
   atualizarSaidaMaterial() {
     this.saidaMaterialService.consultarPorId(this.saidaMaterial?.id!).subscribe({

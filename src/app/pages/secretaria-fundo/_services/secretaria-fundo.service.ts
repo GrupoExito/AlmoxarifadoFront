@@ -8,7 +8,8 @@ import { SecretariaFundo } from '../_models/secretaria-fundo.model';
   providedIn: 'root',
 })
 export class SecretariaFundoService {
-  baseURL = `${environment.apiLegacyUrl}/secretariafundo`;
+  //baseURL = `${environment.apiUrl}/secretariafundo`;
+  baseURL = `${environment.apiUrl}/secretariafundo`;
   constructor(private http: HttpClient) {}
 
   listarTodos(): Observable<SecretariaFundo[]> {
@@ -29,18 +30,6 @@ export class SecretariaFundoService {
 
   consultarUsuariosPermitidos(secretaria_id: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseURL}/usuariospermitidos/${secretaria_id}`);
-  }
-
-  editar(id: number, secretariafundo: SecretariaFundo): Observable<SecretariaFundo> {
-    return this.http.put<SecretariaFundo>(`${this.baseURL}/${id}`, secretariafundo);
-  }
-
-  criar(secretariafundo: SecretariaFundo): Observable<SecretariaFundo> {
-    return this.http.post<SecretariaFundo>(`${this.baseURL}`, secretariafundo);
-  }
-
-  deletar(id: number): Observable<SecretariaFundo> {
-    return this.http.delete<SecretariaFundo>(`${this.baseURL}/${id}`);
   }
 
   listarPorUsuario(usuario_id: number): Observable<SecretariaFundo[]> {

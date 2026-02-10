@@ -4,7 +4,7 @@ import { ProdutoServico } from '@pages/produto-servico/_models/produto-servico.m
 import { ProdutoServicoService } from '@pages/produto-servico/_services/produto-servico.service';
 import { dtOptions } from '@pages/shared/globals';
 import { DataTableDirective } from 'angular-datatables';
-import { Subject } from 'rxjs';
+import { Subject, firstValueFrom } from 'rxjs';
 import Swal from 'sweetalert2';
 import { EntradaMaterialItemService } from '../_services/entrada-material-itens.service';
 import { BaseService } from '@pages/shared/services/base.service';
@@ -428,52 +428,76 @@ adicionarTodosItensPorPedidoCompra() {
     });
   }
 
-  atualizarQuantidade(id: number = 0, gproduto_servico_id: number = 0) {
-    Swal.fire({
-      title: 'Digite a nova quantidade',
-      input: 'number',
-      inputAttributes: {
-        autocapitalize: 'off',
-      },
-      showCancelButton: true,
-      confirmButtonText: 'Atualizar',
-      showLoaderOnConfirm: true,
-      preConfirm: (quantidade) => {
-        if (!/^\d+$/.test(quantidade)) {
-          Swal.fire('Erro', 'Por favor, digite apenas números.', 'error');
-          return false;
-        }
-        if (parseInt(quantidade, 10) <= 0) {
-          Swal.fire('Erro', 'A quantidade deve ser maior que zero.', 'error');
-          return false;
-        }
+async atualizarQuantidade(
+  id: number = 0,
+  produto_servico_id: number = 0,
+  quantidadeAtual: number = 0
+) {
+  const max = (this.entradaMaterial?.tipo_entrada === 1 && this.saldo != null)
+    ? Number(this.saldo)
+    : null;
 
-        if (this.entradaMaterial.tipo_entrada === 1) {
-          if (quantidade > this.saldo) {
-            Swal.fire('Erro!', 'A quantidade não pode ser superior ao saldo disponível', 'error');
-            return;
-          }
-        }
-        Swal.isLoading();
-        const sdItem = {
-          id: id,
-          quantidade: quantidade,
-          entrada_id: this.entrada_id,
-          produto_servico_id: gproduto_servico_id,
-        };
-        this.entradaMaterialItemService.atualizarQuantidadeitem(sdItem).subscribe({
-          next: () => {
-            this.listarProdutosAdicionados();
-            Swal.fire('Atualizado!', 'Item atualizado com sucesso!', 'success');
-          },
-          error: (error) => {
-            console.log(error);
-          },
-        });
-      },
-      allowOutsideClick: false,
-    });
+  const result = await Swal.fire({
+    title: 'Digite a nova quantidade',
+    html: `<div style="text-align:left">
+    <div>Quantidade atual: <b>${quantidadeAtual}</b></div>
+    ${max !== null ? `<div>Saldo disponível: <b>${max}</b></div>` : ''}
+    </div>`,
+    input: 'number',
+    inputValue: quantidadeAtual ?? 1,      //já vem preenchido
+    inputAttributes: {
+      min: '1',                            //UX: já impede < 1 em muitos browsers
+      step: '1',
+    },
+    showCancelButton: true,
+    confirmButtonText: 'Atualizar',
+    cancelButtonText: 'Cancelar',
+    showLoaderOnConfirm: true,
+    preConfirm: async (value) => {
+      const quantidade = Number(value);
+
+      if (!Number.isFinite(quantidade)) {
+        Swal.showValidationMessage('Digite um número válido.');
+        return;
+      }
+
+      if (quantidade < 1) {                // ✅ regra: não aceitar < 1
+        Swal.showValidationMessage('A quantidade deve ser no mínimo 1.');
+        return;
+      }
+
+      if (max !== null && quantidade > max) {
+        Swal.showValidationMessage(`A quantidade não pode ser superior ao saldo disponível (${max}).`);
+        return;
+      }
+
+      const payload = {
+        id,
+        quantidade,
+        entrada_id: this.entrada_id,
+        produto_servico_id,
+      };
+
+      //O segredo: retornar a promise do request pro Swal esperar
+      try {
+        await firstValueFrom(this.entradaMaterialItemService.atualizarQuantidadeitem(payload));
+        return true;
+      } catch (e: any) {
+        Swal.showValidationMessage(
+          e?.error?.message ?? 'Não foi possível atualizar a quantidade.'
+        );
+        return;
+      }
+    },
+    allowOutsideClick: () => !Swal.isLoading(),
+  });
+
+  if (result.isConfirmed) {
+    await this.listarProdutosAdicionados(); // ✅ recarrega lista
+    Swal.fire('Atualizado!', 'Item atualizado com sucesso!', 'success');
   }
+}
+
 
   onEnterPressed() {
     Swal.showLoading();

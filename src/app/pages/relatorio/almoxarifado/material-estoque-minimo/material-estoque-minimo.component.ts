@@ -38,7 +38,7 @@ export class RelatorioMaterialEstoqueMinimoComponent implements OnInit {
   ngOnInit(): void {
     console.log('Relatorio de Material Estoque Abaixo do Minimo');
 
-    this.almoxarifadoService.listarTodos().subscribe({
+    this.almoxarifadoService.listarAtivos().subscribe({
       next: (almoxarifado) => {
         this.almoxarifados = almoxarifado;
       },

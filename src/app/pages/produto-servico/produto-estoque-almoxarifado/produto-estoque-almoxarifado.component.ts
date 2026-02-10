@@ -103,7 +103,7 @@ export class ProdutoEstoqueAlmoxarifadoComponent implements OnInit {
   }
 
   carregarDropdownAlmoxarifado(): void {
-    this.almoxarifadoService.listarTodos().subscribe({
+    this.almoxarifadoService.listarAtivos().subscribe({
       next: (almoxarifados) => {
         this.almoxarifados = almoxarifados;
       },

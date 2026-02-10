@@ -31,7 +31,7 @@ export class RelatorioExtratoMovimentacaoComponent implements OnInit {
   ngOnInit(): void {
     console.log('Relatorio Extrato movimentacao');
 
-    this.almoxarifadoService.listarTodos().subscribe({
+    this.almoxarifadoService.listarAtivos().subscribe({
       next: (almoxarifado) => {
         this.almoxarifados = almoxarifado;
       },

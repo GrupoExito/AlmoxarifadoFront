@@ -45,7 +45,7 @@ export class SaidaMaterialVisualizarComponent implements OnInit, OnDestroy {
     this.saidaMaterialService.setRouteId(this.id);
     const saida$ = this.saidaMaterialService.consultarPorId(this.id);
     const secretaria$ = this.secretariaService.listarTodos();
-    const almoxarifado$ = this.almoxarifadoService.listarTodos();
+    const almoxarifado$ = this.almoxarifadoService.listarAtivos();
     const solicitante$ = this.solicitanteService.listarTodos();
     const setor$ = this.setorService.listarTodos();
     const centroCusto$ = this.centroCustoService.listarTodos();

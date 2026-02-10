@@ -5,7 +5,7 @@
       <span class="card-label fw-bolder fs-3 mb-1">Saidas de Material</span>
     </h3>
     <div class="btn-toolbar" role="toolbar">
-      <!--div
+      <div
         *appPermission="['Almoxarifado', 'filtrar_saida']"
         class="card-toolbar me-4"
         data-bs-toggle="tooltip"
@@ -18,7 +18,7 @@
           <i class="fa fa-light fa-filter-circle-xmark" *ngIf="filtroButton"></i>
           Filtrar
         </button>
-      </div-->
+      </div>
       <div
         class="card-toolbar"
         data-bs-toggle="tooltip"
@@ -44,7 +44,7 @@
     <div class="row mb-3" *ngIf="filtroButton">
       <div class="col-md-1">
         <div class="form-group mb-0">
-          <label>N° Entrada</label>
+          <label>N° Saída</label>
           <input class="form-control" type="text" maxlength="20" [(ngModel)]="idSelecionado" />
         </div>
       </div>
@@ -74,6 +74,17 @@
           </select>
         </div>
       </div>
+      <div class="col-md-3">
+        <div class="form-group mb-0">
+          <label>Setor</label>
+          <select class="form-select" [(ngModel)]="setorSelecionado">
+            <option value="">Selecione</option>
+            <option *ngFor="let setor of setores" value="{{ setor.id }}" aria-placeholder="Setor">
+              {{ setor.nome }}
+            </option>
+          </select>
+        </div>
+      </div>
       <div class="col-md-2">
         <div class="form-group mb-0">
           <label>Solicitante</label>
@@ -85,17 +96,6 @@
               aria-placeholder="Solicitante"
             >
               {{ solicitante.nome }}
-            </option>
-          </select>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="form-group mb-0">
-          <label>Setor</label>
-          <select class="form-select" [(ngModel)]="setorSelecionado">
-            <option value="">Selecione</option>
-            <option *ngFor="let setor of setores" value="{{ setor.id }}" aria-placeholder="Setor">
-              {{ setor.nome }}
             </option>
           </select>
         </div>
@@ -126,35 +126,6 @@
             <option value="7">Doação</option>
             <option value="8">Ajuste</option>
           </select>
-        </div>
-      </div>
-      <!-- <div class="col-md-4">
-        <div class="form-group mb-0">
-          <label>Produto</label>
-          <select class="form-select" [(ngModel)]="ItemSelecionado">
-            <option value="">Selecione</option>
-            <option
-              *ngFor="let itemMovimentacao of itensMovimentacao"
-              value="{{ itemMovimentacao.codigo_item }}"
-              aria-placeholder="Item"
-            >
-              {{ itemMovimentacao.descricao }}
-            </option>
-          </select>
-        </div>
-      </div> -->
-      <div class="col-md-4">
-        <div class="form-group mb-0">
-          <label>Produto</label>
-          <ng-select
-            class="ngSelectDropdown"
-            [items]="itensMovimentacao"
-            bindLabel="descricao"
-            bindValue="codigo_item"
-            [(ngModel)]="ItemSelecionado"
-            [multiple]="true"
-          >
-          </ng-select>
         </div>
       </div>
       <div class="col-md-2">

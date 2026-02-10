@@ -97,7 +97,7 @@ this.secretariaService.listarTodos().subscribe({
         this.fornecedorService.listarTodos().subscribe({
           next: (fornecedores) => {
             this.fornecedores = fornecedores;
-            this.almoxarifadoService.listarTodos().subscribe({
+            this.almoxarifadoService.listarAtivos().subscribe({
               next: (almoxarifados) => {
                 this.almoxarifados = almoxarifados;
                 
@@ -189,7 +189,7 @@ this.secretariaService.listarTodos().subscribe({
         },
       });
     } else {
-      this.almoxarifadoService.listarTodos().subscribe({
+      this.almoxarifadoService.listarAtivos().subscribe({
         next: (almoxarifados) => {
           this.almoxarifados = almoxarifados;
         },

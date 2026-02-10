@@ -39,7 +39,7 @@ export class RelatorioAlmoxarifadoComponent implements OnInit {
   ngOnInit(): void {
     console.log('Almoxarifado');
 
-    this.almoxarifadoService.listarTodos().subscribe({
+    this.almoxarifadoService.listarAll().subscribe({
       next: (almoxarifado) => {
         this.almoxarifados = almoxarifado;
       },

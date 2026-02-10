@@ -50,7 +50,7 @@ export class AlmoxarifadoCriarComponent implements OnInit {
       logradouro_complemento: ['', Validators.maxLength(50)],
       bairro: ['', Validators.maxLength(80)],
       municipio: ['', Validators.maxLength(80)],
-      uf: [''],
+      uf: ['', [Validators.required]],
       cep: ['', Validators.maxLength(10)],
       telefone: ['', Validators.maxLength(15)],
     });

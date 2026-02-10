@@ -73,8 +73,8 @@ export class SaidaMaterialService {
     return this.routeId;
   }
 
-  filtrar(parameters: any): Observable<SaidaMaterial[]> {
-    return this.http.get<SaidaMaterial[]>(`${this.baseURL}/filtrar`, {
+  filtrar(parameters: any, usuario_id: number): Observable<SaidaMaterial[]> {
+    return this.http.get<SaidaMaterial[]>(`${this.baseURL}/porusuario/${usuario_id}`, {
       params: parameters,
     });
   }

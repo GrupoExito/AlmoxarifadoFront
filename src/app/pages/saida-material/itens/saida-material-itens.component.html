@@ -154,11 +154,13 @@
 
         <!-- Botão Adicionar vinculado à tabela -->
         <div class="card-footer d-flex justify-content-end">
-          <button class="btn btn-success"
-                  (click)="adicionar()"
-                  [disabled]="!temQuantidadeParaAdicionar">
-            Adicionar
-          </button>
+        <button
+          type="button"
+          class="btn btn-success"
+          (click)="adicionar()"
+          [disabled]="!temQuantidadeParaAdicionar">
+          Adicionar
+        </button>
         </div>
       </div>
     </div>
@@ -206,9 +208,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr
-                *ngFor="let item of saidaItens | sortBy : 'asc' : 'item_descricao'; trackBy: trackItem; let i = index"
-              >
+              <tr *ngFor="let item of saidaItens; trackBy: trackItem; let i = index">
                 <td>
                   <div class="d-flex align-items-center">
                     <div class="d-flex justify-content-start flex-column">

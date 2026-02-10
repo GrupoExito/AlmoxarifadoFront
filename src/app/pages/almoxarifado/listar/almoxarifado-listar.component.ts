@@ -3,7 +3,7 @@ import Swal from 'sweetalert2';
 import { Almoxarifado } from '../_models/almoxarifado.model';
 import { AlmoxarifadoService } from '../_services/almoxarifado.service';
 import { dtOptions } from '@shared/globals';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil, finalize } from 'rxjs';
 import { Router } from '@angular/router';
 import { Usuario } from '@pages/pessoa/_models/usuario.model';
 import { DataTableDirective } from 'angular-datatables';
@@ -19,46 +19,113 @@ export class AlmoxarifadoListarComponent implements OnInit, OnDestroy {
     private almoxarifadoService: AlmoxarifadoService,
     private route: Router,
     private usuarioService: UsuarioService
-  ) { }
+  ) {}
 
   @ViewChild(DataTableDirective, { static: false })
-  dtElement: DataTableDirective;
-  almoxarifados: Almoxarifado[];
+  dtElement!: DataTableDirective;
+
+  almoxarifados: Almoxarifado[] = [];
+  usuarios: Usuario[] = [];
+  usuarioSelecionado = '';
+
+  private isDestroyed = false;
   dtTrigger = new Subject<any>();
   dtOptions: any = {};
-  usuarioSelecionado: string = '';
-  filtroAccordion: boolean = false;
-  filtroButton: boolean = false;
-  usuariosAlmoxarifadoFiltrados: Usuario[];
-  usuarios: Usuario[];
 
+  filtroAccordion = false;
+  filtroButton = false;
+
+  private destroyed$ = new Subject<void>();
+  private dtInitialized = false;
 
   ngOnInit(): void {
-    this.dtOptions = dtOptions;
-    this.dtOptions.order = [2, 'asc'];
-    this.almoxarifadoService.listarTodos().subscribe({
-      next: (almoxarifado) => {
-        this.almoxarifados = almoxarifado;
-        this.dtTrigger.next(null);
-        console.log(almoxarifado, 'saidas');
-      },
-      error: (error) => {
-        console.log(error);
-      },
-    });
-    console.log(this.almoxarifados);
+    this.dtOptions = { ...dtOptions, order: [2, 'asc'] };
+    this.loadAlmoxarifados(false);
+  }
+
+ngOnDestroy(): void {
+  // impede rodar duas vezes
+  if (this.isDestroyed) return;
+  this.isDestroyed = true;
+
+  // encerra streams do takeUntil (isso é seguro)
+  if (!this.destroyed$.closed) {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
+
+  // tenta destruir o datatable sem deixar promise estourar
+  if (this.dtElement) {
+    this.dtElement.dtInstance
+      .then((dtInstance: DataTables.Api) => {
+        try { dtInstance.destroy(true); } catch {}
+      })
+      .catch(() => {});
+  }
+
+  // IMPORTANTE:
+  // não complete/unsubscribe o dtTrigger aqui, pois o angular-datatables pode ter feito isso antes.
+}
+
+
+  trackItem(index: number, item: Almoxarifado) {
+    return item.id;
   }
 
   doubleClickRedicionar(almoxarifado: Almoxarifado) {
     this.route.navigate(['/almoxarifado/view', almoxarifado.id, 'editar']);
   }
 
-  ngOnDestroy(): void {
-    this.dtTrigger.unsubscribe();
+  editar(id: number = 0): void {
+    this.route.navigate(['/almoxarifado', 'editar', id]);
   }
 
-  public trackItem(index: number, item: Almoxarifado) {
-    return item.id;
+  openAccordion(): void {
+    this.filtroButton = !this.filtroButton;
+
+    // Se já abriu uma vez e agora está fechando:
+    if (this.filtroAccordion) {
+      if (!this.filtroButton) {
+        this.limparFiltros();
+      }
+      return;
+    }
+
+    // Primeira vez abrindo: carrega usuários uma vez só
+    this.filtroAccordion = true;
+    this.usuarioService
+      .listarTodos()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (usuarios) => (this.usuarios = usuarios),
+        error: () => Swal.fire('Algo deu errado!', 'Não foi possível carregar usuários.', 'error'),
+      });
+  }
+
+  filtrar(): void {
+    Swal.showLoading();
+
+    const parameters = { usuario: this.usuarioSelecionado || '' };
+
+    this.almoxarifadoService
+      .filtrar(parameters)
+      .pipe(
+        takeUntil(this.destroyed$),
+        finalize(() => Swal.close())
+      )
+      .subscribe({
+        next: (almoxarifadosFiltrados) => {
+          this.almoxarifados = almoxarifadosFiltrados;
+          this.refreshTable();
+        },
+        error: () =>
+          Swal.fire('Algo deu errado!', 'Não foi possivel filtrar Usuários do Almoxarifado!', 'error'),
+      });
+  }
+
+  limparFiltros(): void {
+    this.usuarioSelecionado = '';
+    this.loadAlmoxarifados(true);
   }
 
   deletar(id: number = 0): void {
@@ -72,97 +139,102 @@ export class AlmoxarifadoListarComponent implements OnInit, OnDestroy {
       confirmButtonColor: '#23b349',
       cancelButtonColor: '#eb2067',
     }).then((result) => {
-      if (result.value) {
-        this.almoxarifadoService.deletar(id).subscribe({
+      if (!result.value) {
+        if (result.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire('Cancelado!', 'A informação está segura!', 'error');
+        }
+        return;
+      }
+
+      this.almoxarifadoService
+        .deletar(id)
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe({
           next: () => {
-            this.almoxarifados = this.almoxarifados.filter((almoxarifado) => almoxarifado.id != id);
+            this.almoxarifados = this.almoxarifados.filter((a) => a.id !== id);
+            this.refreshTable(); // garante consistência na tabela
             Swal.fire('Excluído!', 'Almoxarifado excluído!', 'success');
           },
-          error: (err) => {
-            Swal.fire('Algo deu errado!', err.error.message, 'error');
-          },
+          error: (err) => Swal.fire('Algo deu errado!', err?.error?.message ?? 'Erro ao excluir.', 'error'),
         });
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        Swal.fire('Cancelado!', 'A informação está segura!', 'error');
-      }
     });
   }
 
-editar(id: number = 0): void {
-  console.log('editar almoxarifado id:', id);
-  //this.almoxarifadoService.setRouteId(id); // se ainda precisar disso
-  this.route.navigate(['/almoxarifado', 'editar', id])
-    .then(ok => console.log('navigate result:', ok))
-    .catch(err => console.error('navigate error:', err));
+  reativar(id: number = 0): void {
+    Swal.fire({
+      title: 'Reativar almoxarifado?',
+      text: 'Ele voltará a ficar disponível no sistema.',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sim',
+      cancelButtonText: 'Não',
+      confirmButtonColor: '#23b349',
+      cancelButtonColor: '#eb2067',
+    }).then((result) => {
+      if (!result.value) return;
+
+      Swal.showLoading();
+
+      this.almoxarifadoService
+        .reativar(id)
+        .pipe(
+          takeUntil(this.destroyed$),
+          finalize(() => Swal.close())
+        )
+        .subscribe({
+          next: () => {
+            const item = this.almoxarifados.find((a) => a.id === id);
+            if (item) item.ativo = true;
+
+            this.refreshTable();
+            Swal.fire('Reativado!', 'Almoxarifado reativado com sucesso.', 'success');
+          },
+          error: (err) =>
+            Swal.fire('Algo deu errado!', err?.error?.message ?? 'Não foi possível reativar.', 'error'),
+        });
+    });
+  }
+
+  private loadAlmoxarifados(refresh: boolean): void {
+    this.almoxarifadoService
+      .listarAll()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (almoxarifados) => {
+          this.almoxarifados = almoxarifados;
+
+          if (refresh) this.refreshTable();
+          else this.initOrRefresh();
+        },
+        error: () => Swal.fire('Algo deu errado!', 'Não foi possível carregar almoxarifados.', 'error'),
+      });
+  }
+
+private initOrRefresh(): void {
+  if (!this.dtInitialized) {
+    this.dtInitialized = true;
+    if (!this.dtTrigger.closed) this.dtTrigger.next(null);
+    return;
+  }
+  this.refreshTable();
 }
 
-  carregarAlmoxarifados(): void {
-    this.almoxarifadoService.listarTodos().subscribe({
-      next: async (almoxarifado) => {
-        this.almoxarifados = almoxarifado;
+private refreshTable(): void {
+  if (this.isDestroyed) return;
 
-        if (this.dtElement && await this.dtElement.dtInstance) {
-          this.rerender();
-        } else {
-
-          this.dtTrigger.next(null);
-        }
-      },
-      error: (error) => {
-        console.log(error);
-      },
-    });
+  if (!this.dtElement) {
+    if (!this.dtTrigger.closed) this.dtTrigger.next(null);
+    return;
   }
 
-  openAccordion() {
-    this.filtroButton = !this.filtroButton;
-    if (this.filtroAccordion) {
-      if (!this.filtroButton) {
-        this.limparFiltros();
-        this.carregarAlmoxarifados();
-      }
-      return;
-    }
-    this.filtroAccordion = true;
-    this.usuarioService.listarTodos().subscribe({
-      next: (usuarios) => {
-        this.usuarios = usuarios;
-      },
-      error: (error) => {
-        console.log(error);
-      },
-    });
-  }
+  this.dtElement.dtInstance
+    .then((dtInstance: DataTables.Api) => {
+      if (this.isDestroyed) return;
 
-  filtrar() {
-    Swal.showLoading();
-    const parameters = {
-      usuario: this.usuarioSelecionado,
-    };
-
-    this.almoxarifadoService.filtrar(parameters).subscribe({
-      next: (almoxarifadosFiltrados) => {
-        this.almoxarifados = almoxarifadosFiltrados;
-        this.rerender();
-        Swal.close();
-      },
-      error: () => {
-        Swal.fire('Algo deu errado!', 'Não foi possivel filtrar Usuários do Almoxarifado!', 'error');
-      },
-    });
-  }
-
-  limparFiltros() {
-    this.usuarioSelecionado = '';
-    this.carregarAlmoxarifados();
-  }
-
-  rerender(): void {
-    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      // Destroy the table first
       dtInstance.destroy();
-      // Call the dtTrigger to rerender again
-      this.dtTrigger.next(null);
-    });
-  }
+      if (!this.dtTrigger.closed) this.dtTrigger.next(null);
+    })
+    .catch(() => {});
+}
+
 }

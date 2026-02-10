@@ -39,7 +39,7 @@ export class RelatorioBalanceteEstoqueExcelComponent implements OnInit {
   ngOnInit(): void {
     console.log('Relatorio de Balancete Material Estoque');
 
-    this.almoxarifadoService.listarTodos().subscribe({
+    this.almoxarifadoService.listarAtivos().subscribe({
       next: (almoxarifado) => {
         this.almoxarifados = almoxarifado;
       },

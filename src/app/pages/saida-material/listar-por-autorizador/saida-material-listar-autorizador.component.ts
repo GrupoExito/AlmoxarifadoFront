@@ -167,7 +167,7 @@ enviar(id: number = 0): void {
       },
     });
 
-    this.almoxarifado.listarTodos().subscribe({
+    this.almoxarifado.listarAtivos().subscribe({
       next: (almoxarifados) => {
         this.almoxarifados = almoxarifados;
       },
@@ -228,7 +228,7 @@ enviar(id: number = 0): void {
     };
     console.log(parameters);
 
-    this.saidaMateriaLService.filtrar(parameters).subscribe({
+    this.saidaMateriaLService.filtrar(parameters, this.usuario_id).subscribe({
       next: (saidasMaterial) => {
         this.saidasMaterial = saidasMaterial;
         this.rerender();

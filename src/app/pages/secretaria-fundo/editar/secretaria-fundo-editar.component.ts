@@ -151,41 +151,7 @@ export class SecretariaFundoEditarComponent implements OnInit {
   }
 
   editar() {
-    Swal.showLoading();
-    const secretariaFundo: SecretariaFundo = {
-      id: this.id,
-      descricao: this.editarSecretariaFundoForm.get('descricao')!.value,
-      descricaoresumida: this.editarSecretariaFundoForm.get('descricaoresumida')!.value,
-      sigla: this.editarSecretariaFundoForm.get('sigla')!.value,
-      fundo: !!+this.editarSecretariaFundoForm.get('fundo')!.value,
-      cep: this.editarSecretariaFundoForm.get('cep')!.value,
-      logradouro: this.editarSecretariaFundoForm.get('logradouro')!.value,
-      complemento: this.editarSecretariaFundoForm.get('complemento')!.value,
-      municipio_id: this.editarSecretariaFundoForm.get('municipio_id')!.value,
-      bairro: this.editarSecretariaFundoForm.get('bairro')!.value,
-      cnpj: this.editarSecretariaFundoForm.get('cnpj')!.value,
-      grupo_secretaria_id: this.editarSecretariaFundoForm.get('grupo_secretaria_id')!.value,
-      orgao_id: this.editarSecretariaFundoForm.get('orgao_id')!.value,
-      codigo_tcm: this.editarSecretariaFundoForm.get('codigo_tcm')!.value,
-      gpessoa_responsavel_id: this.editarSecretariaFundoForm.get('gpessoa_responsavel_id')!.value,
-      usuario_id: this.editarSecretariaFundoForm.get('usuario_id')!.value,
-    };
-    if (this.fundo) {
-      secretariaFundo.secretaria_fundo_id = this.editarSecretariaFundoForm.get('secretaria_fundo_id')!.value;
-    }
-    this.secretariaFundoService.editar(this.id, secretariaFundo).subscribe({
-      next: () => {
-        Swal.close();
-        Swal.fire('Atualizado!', 'Secretaria/Fundo atualizado com sucesso!', 'success').then((result) => {
-          if (result.value) {
-            this.route.navigate(['/secretariafundo/editar', this.id]);
-          }
-        });
-      },
-      error: (error) => {
-        console.log(error);
-      },
-    });
+    
   }
 
   validarFundo(ev: boolean) {

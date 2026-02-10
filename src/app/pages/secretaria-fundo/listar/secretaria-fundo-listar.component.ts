@@ -35,30 +35,7 @@ export class SecretariaFundoListarComponent implements OnInit, OnDestroy {
   }
 
   deletar(id: number = 0): void {
-    Swal.fire({
-      title: 'Tem certeza?',
-      text: 'Você não será capaz de recuperar esta informação!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sim',
-      cancelButtonText: 'Não',
-      confirmButtonColor: '#23b349',
-      cancelButtonColor: '#eb2067',
-    }).then((result) => {
-      if (result.value) {
-        this.secretariaFundoService.deletar(id).subscribe({
-          next: () => {
-            this.secretariaFundos = this.secretariaFundos.filter((secretariaFundo) => secretariaFundo.id != id);
-            Swal.fire('Excluído!', 'Secretaria/Fundo excluída!', 'success');
-          },
-          error: () => {
-            Swal.fire('Algo deu errado!', 'Não foi possivel excluir esta secretaria/fundo!', 'error');
-          },
-        });
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        Swal.fire('Cancelado!', 'A informação está segura!', 'error');
-      }
-    });
+
   }
 
   public trackItem(index: number, item: SecretariaFundo) {

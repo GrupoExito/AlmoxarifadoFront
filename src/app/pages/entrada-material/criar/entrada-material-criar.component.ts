@@ -198,7 +198,7 @@ export class EntradaMaterialCriarComponent implements OnInit {
         },
       });
     } else {
-      this.almoxarifadoService.listarTodos().subscribe({
+      this.almoxarifadoService.listarAtivos().subscribe({
         next: (almoxarifados) => {
           this.almoxarifados = almoxarifados;
         },
@@ -266,11 +266,13 @@ confimarEntrada() {
       // pode confirmar
       this.entradaMaterialService.alterarStatusEntradaMaterial(this.id!, 2).subscribe({
         next: () => {
+          this.entradaMaterial!.status_id = 2;
           this.atualizarEntradaMaterial();
           Swal.fire('Atualizado!', 'Entrada confirmada com sucesso!', 'success').then((result) => {
-            if (result.value) {
-              this.route.navigate(['/entradamaterial/view', this.id, 'cadastro']);
-            }
+            //if (result.value) {
+              //this.entradaMaterial.status_id=2;
+              //this.route.navigate(['/entradamaterial/view', this.id, 'cadastro']);
+            //}
           });
         },
         error: (error) => {

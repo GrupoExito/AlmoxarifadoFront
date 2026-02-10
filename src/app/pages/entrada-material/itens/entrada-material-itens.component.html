@@ -98,7 +98,7 @@
         </div>
         <div class="col-md-2">
           <div class="form-group">
-            <label class="form-label">Quantidade</label>
+            <label class="form-label">Quantidade*</label>
             <input
               #quantidadeMaterial
               class="form-control"
@@ -113,7 +113,7 @@
         </div>
         <div class="col-md-2">
           <div class="form-group">
-            <label class="form-label">Valor unitário</label>
+            <label class="form-label">Valor unitário*</label>
             <input
               class="form-control"
               type="text"
@@ -245,15 +245,6 @@
                   </td>
                   <td>
                     <div class="d-flex flex-shrink-0 justify-content-center" *ngIf="entradaMaterial?.status_id === 1">
-                      <button
-                        (click)="atualizarQuantidade(entradaItem.id, entradaItem.gproduto_servico_id)"
-                        class="btn btn-icon btn-active-color-warning btn-md me-1"
-                      >
-                        <span
-                          [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'"
-                          class="svg-icon svg-icon-4"
-                        ></span>
-                      </button>
                       <button (click)="deletar(entradaItem.item_codigo)" class="btn btn-icon btn-active-color-danger btn-md">
                         <span
                           [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
