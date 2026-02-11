@@ -197,7 +197,7 @@ export class SaidaMaterialAnexoComponent implements OnInit {
       if (result.value) {
         this.saidaMaterialAnexoService.deletar(id).subscribe({
           next: () => {
-            this.saidaMaterial = this.saidaMaterial.filter((saidaMaterial) => saidaMaterial.id != id);
+            this.saidaMaterialAnexo = (this.saidaMaterialAnexo || []).filter((a) => a.id !== id);
             this.carregarDropdownTipoDocumento();
             Swal.fire('Excluído!', 'Anexo removido!', 'success');
           },

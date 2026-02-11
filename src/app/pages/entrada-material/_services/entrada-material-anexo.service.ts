@@ -9,24 +9,23 @@ import { EntradaMaterialAnexo } from '../_models/entrada-material-anexo.model';
   providedIn: 'root',
 })
 export class EntradaMaterialAnexoService {
-  baseURL = `${environment.apiUrl}/entradamaterialanexo`;
+  baseURL = `${environment.apiUrl}/entradamaterial`;
   constructor(private http: HttpClient) {}
 
   listarTodos(entrada_id: number): Observable<EntradaMaterialAnexo[]> {
-    return this.http.get<EntradaMaterialAnexo[]>(`${this.baseURL}/${entrada_id}`);
+    return this.http.get<EntradaMaterialAnexo[]>(`${this.baseURL}/anexo/${entrada_id}`);
   }
 
   salvarAnexo(anexo: FormData): Observable<EntradaMaterialAnexo> {
-    return this.http.post<EntradaMaterialAnexo>(`${this.baseURL}`, anexo);
+    return this.http.post<EntradaMaterialAnexo>(`${this.baseURL}/anexo`, anexo);
   }
 
-  download(entrada_id: number): Observable<ArrayBuffer> {
-    return this.http.get(`${this.baseURL}/download/${entrada_id}`, {
-      responseType: 'arraybuffer',
-    });
-  }
+download(anexoId: number): Observable<ArrayBuffer> {
+  return this.http.get(`${this.baseURL}/anexo/download/${anexoId}`, {
+    responseType: 'arraybuffer',
+  });}
 
   deletar(id: number): Observable<EntradaMaterialAnexo> {
-    return this.http.delete<EntradaMaterialAnexo>(`${this.baseURL}/${id}`);
+    return this.http.delete<EntradaMaterialAnexo>(`${this.baseURL}/anexo/${id}`);
   }
 }

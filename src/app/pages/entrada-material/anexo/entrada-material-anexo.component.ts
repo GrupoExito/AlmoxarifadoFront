@@ -197,7 +197,7 @@ export class EntradaMaterialAnexoComponent implements OnInit {
       if (result.value) {
         this.entradaMaterialAnexoService.deletar(id).subscribe({
           next: () => {
-            this.entradaMaterial = this.entradaMaterial.filter((entradaMaterial) => entradaMaterial.id != id);
+            this.entradaMaterialAnexo = (this.entradaMaterialAnexo || []).filter((a) => a.id !== id);
             this.carregarDropdownTipoDocumento();
             Swal.fire('Excluído!', 'Anexo removido!', 'success');
           },

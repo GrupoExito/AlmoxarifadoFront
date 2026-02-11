@@ -8,24 +8,24 @@ import { SaidaMaterialAnexo } from '../_models/saida-material-anexo.model';
   providedIn: 'root',
 })
 export class SaidaMaterialAnexoService {
-  baseURL = `${environment.apiUrl}/saidamaterialanexo`;
+  baseURL = `${environment.apiUrl}/saidamaterial`;
   constructor(private http: HttpClient) {}
 
   listarTodos(saida_id: number): Observable<SaidaMaterialAnexo[]> {
-    return this.http.get<SaidaMaterialAnexo[]>(`${this.baseURL}/${saida_id}`);
+    return this.http.get<SaidaMaterialAnexo[]>(`${this.baseURL}/anexo/${saida_id}`);
   }
 
   salvarAnexo(anexo: FormData): Observable<SaidaMaterialAnexo> {
-    return this.http.post<SaidaMaterialAnexo>(`${this.baseURL}`, anexo);
+    return this.http.post<SaidaMaterialAnexo>(`${this.baseURL}/anexo`, anexo);
   }
 
   download(saida_id: number): Observable<ArrayBuffer> {
-    return this.http.get(`${this.baseURL}/download/${saida_id}`, {
+    return this.http.get(`${this.baseURL}/anexo/download/${saida_id}`, {
       responseType: 'arraybuffer',
     });
   }
 
   deletar(id: number): Observable<SaidaMaterialAnexo> {
-    return this.http.delete<SaidaMaterialAnexo>(`${this.baseURL}/${id}`);
+    return this.http.delete<SaidaMaterialAnexo>(`${this.baseURL}/anexo/${id}`);
   }
 }
