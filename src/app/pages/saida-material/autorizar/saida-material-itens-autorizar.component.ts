@@ -482,8 +482,28 @@ autorizar(): void {
     this.saidaMaterialItemService.autorizar(itensPayload).subscribe({
       next: () => {
         Swal.close();
+
+        this.saidaMaterial.status_id = 3;
+        this.saidaMaterial.status_descricao = 'Autorizado'; // ou o texto correto do seu sistema
+
+        const atual = this.saidaMaterialService.sMData.getValue();
+        this.saidaMaterialService.setSaida({
+          ...(atual ?? ({} as any)),
+          saidaMaterial: { ...(atual?.saidaMaterial ?? {} as any), ...this.saidaMaterial }
+        });
+
+        const valorTotalAutorizado = this.calcularValorTotalAutorizado();
+
+          // 3) Publica no header (eMQuantidade)
+          const headerAtual = this.saidaMaterialService.smDataEtapasHeader.getValue() ?? ({} as any);
+          this.saidaMaterialService.smDataEtapasHeader.next({
+            ...headerAtual,
+            valorTotal: valorTotalAutorizado,
+            quantidade_itens: this.itensControls.length,
+          });
+
         Swal.fire('Autorizado!', 'Quantidades autorizadas com sucesso.', 'success');
-        this.listarProdutosAdicionados(); // recarrega a lista com os valores finais
+        this.listarProdutosAdicionados();
       },
       error: (error) => {
         console.error(error);
@@ -498,6 +518,66 @@ autorizar(): void {
   });
 }
 
+
+entregar(): void {
+
+  Swal.fire({
+    title: 'Confirmar a entrega do material',
+    text: 'Confirma a entrega dos materiais autorizados?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sim, confirmo',
+    cancelButtonText: 'Cancelar',
+    confirmButtonColor: '#23b349',
+    cancelButtonColor: '#eb2067',
+  }).then((result) => {
+    if (!result.isConfirmed) {
+      return;
+    }
+
+    Swal.showLoading();
+
+    this.saidaMaterialItemService.entregar(this.saidaMaterial.id!).subscribe({
+      next: () => {
+        Swal.close();
+
+        this.saidaMaterial.status_id = 4;
+        this.saidaMaterial.status_descricao = 'Entregue'; // ou o texto correto do seu sistema
+
+        const atual = this.saidaMaterialService.sMData.getValue();
+        this.saidaMaterialService.setSaida({
+          ...(atual ?? ({} as any)),
+          saidaMaterial: { ...(atual?.saidaMaterial ?? {} as any), ...this.saidaMaterial }
+        });
+
+        Swal.fire('Entregue!', 'Material entregue com sucesso.', 'success');
+        this.listarProdutosAdicionados();
+      },
+      error: (error) => {
+        console.error(error);
+        Swal.close();
+        Swal.fire(
+          'Erro!',
+          error?.error?.message || 'Falha ao entregar o material.',
+          'error'
+        );
+      }
+    });
+  });
+}
+
+private calcularValorTotalAutorizado(): number {
+  return this.itensControls.reduce((acc, g) => {
+    const valorUnit = Number(g.get('valor')?.value) || 0;
+
+    const rawQtd = (g.get('quantidade_autorizada')?.value ?? '').toString().trim();
+    const qtd = rawQtd === '' ? 0 : this.parseNumeroPtBr(rawQtd);
+
+    if (!isFinite(valorUnit) || !isFinite(qtd) || qtd <= 0) return acc;
+
+    return acc + (valorUnit * qtd);
+  }, 0);
+}
 
   /**
    * Clique no botão "Adicionar"
@@ -575,7 +655,7 @@ autorizar(): void {
         quantidade_solicitada: new FormControl(quantidadeSolicitada),
         qtd_solicitada: new FormControl(item.qtd_solicitada), // para exibir na tela após autorizado
         qtd_autorizada: new FormControl(item.qtd_autorizada), // para exibir na tela após autorizado
-
+        valor: new FormControl(item.valor ?? 0),
         // quantidade_autorizada editável: começa igual solicitada
         quantidade_autorizada: new FormControl(
           quantidadeSolicitada.toFixed(4).replace('.', ','), // já no formato amigável

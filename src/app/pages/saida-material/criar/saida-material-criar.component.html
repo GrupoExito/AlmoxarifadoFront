@@ -232,7 +232,7 @@
             <div class="col-md-2">
               <div class="form-group mt-2">
                 <label>Data saída*</label>
-                <input class="form-control" type="date" formControlName="data_solicitacao" />
+                <input class="form-control" type="date" formControlName="data_solicitacao" [max]="hoje" />
                 <div
                   *ngIf="
                     criarSaidaMaterialForm.get('data_solicitacao')?.touched &&

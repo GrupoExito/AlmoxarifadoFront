@@ -52,8 +52,11 @@ export class EntradaMaterialCriarComponent implements OnInit {
   id: number | null;
   visualizarEntrada: EMData | null;
   entradaAlmoxarifadoUsuario: boolean | undefined = false;
+  hoje: string = '';
 
   async ngOnInit(): Promise<void> {
+  this.hoje = this.toDateInputValue(new Date());
+
   this.token = this.authService.getDecodedAccessToken();
   if (this.token) {
     this.usuario_id = this.token.id;
@@ -66,11 +69,11 @@ export class EntradaMaterialCriarComponent implements OnInit {
     fornecedor_id: ['', [Validators.required]],
     secretaria_fundo_id: ['', [Validators.required]],
     almoxarifado_id: ['', [Validators.required]],
-    data_entrada: ['', [Validators.required]],
+    data_entrada: ['', [Validators.required, this.maxHojeValidator()]],
     pedido_despesa_id: [''],
     tipo_entrada: ['', [Validators.required]],
     conta_contabil: [''],
-    data_nota: [''],
+    data_nota: ['', [this.maxHojeValidator()]],
     saida_material_id: [''],
     observacao: ['', [Validators.maxLength(200)]],
   });
@@ -269,10 +272,10 @@ confimarEntrada() {
           this.entradaMaterial!.status_id = 2;
           this.atualizarEntradaMaterial();
           Swal.fire('Atualizado!', 'Entrada confirmada com sucesso!', 'success').then((result) => {
-            //if (result.value) {
+            if (result.value) {
               //this.entradaMaterial.status_id=2;
               //this.route.navigate(['/entradamaterial/view', this.id, 'cadastro']);
-            //}
+            }
           });
         },
         error: (error) => {
@@ -343,20 +346,20 @@ cancelar() {
   });
 }
 
-  atualizarEntradaMaterial() {
-    this.entradaMaterialService.consultarPorId(this.entradaMaterial?.id!).subscribe({
-      next: (dto) => {
-        this.entradaMaterialService.eMData.next({
-          entradaMaterial: dto,
-          secretarias: this.secretarias,
-          fornecedores: this.fornecedores,
-          almoxarifados: this.almoxarifados,
-          pedidoCompra: this.pedidoCompra,
-        });
-      },
-      error: () => {},
-    });
-  }
+atualizarEntradaMaterial() {
+  this.entradaMaterialService.consultarPorId(this.entradaMaterial?.id!).subscribe({
+    next: (dto) => {
+      this.entradaMaterialService.setEntrada({
+        entradaMaterial: dto,
+        secretarias: this.secretarias,
+        fornecedores: this.fornecedores,
+        almoxarifados: this.almoxarifados,
+        pedidoCompra: this.pedidoCompra,
+      });
+    },
+    error: () => {},
+  });
+}
 
   async consultarConfiguracaoUsuario(): Promise<void> {
     const parameters = {
@@ -378,4 +381,26 @@ cancelar() {
       });
     });
   }
+
+  private toDateInputValue(date: Date): string {
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+/** Valida se a data do input não é maior que hoje */
+private maxHojeValidator() {
+  return (control: any) => {
+    const value: string | null = control.value;
+    if (!value) return null; // deixa o required cuidar se precisar
+
+    // value vem como "YYYY-MM-DD"
+    const selected = new Date(value + 'T00:00:00');
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // zera hora
+
+    return selected > today ? { maxHoje: true } : null;
+  };
+ }
 }

@@ -22,7 +22,7 @@
       </a>
     </div>
     <div
-      *ngIf="entradaMaterial?.status_id === 1 && entradaMaterial?.tipo_entrada !== 2
+      *ngIf="entradaMaterial?.status_id === 1
       "
       class="card-toolbar"
       data-bs-toggle="tooltip"
@@ -37,24 +37,6 @@
       >
         <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'" class="svg-icon svg-icon-3"></span>
         Excluir
-      </a>
-    </div>
-
-    <div
-      *ngIf="entradaMaterial?.status_id === 12"
-      class="card-toolbar"
-      data-bs-toggle="tooltip"
-      data-bs-placement="top"
-      data-bs-trigger="hover"
-      title="Cancelar a entrada de material"
-    >
-      <a
-        *appPermission="['Almoxarifado', 'reabrir_entrada']"
-        (click)="reabrirEntrada()"
-        class="btn btn-sm btn-light-warning align-items-end me-4"
-      >
-        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'" class="svg-icon svg-icon-3"></span>
-        Reabrir
       </a>
     </div>
 
@@ -75,11 +57,6 @@
         Editar
       </a>
     </div>
-    <!-- fluxo status:
-        Confirmado = aberto
-        Cancelar = aberto, confirmado
-        Reabrir = cancelado
-        Editar = aberto-->
   </div>
 
   <div class="container-fluid">
@@ -189,7 +166,7 @@
             <div class="col-md-2">
               <div class="form-group mb-0">
                 <label>Data da Entrada*</label>
-                <input class="form-control" type="date" formControlName="data_entrada" />
+                <input class="form-control" type="date" formControlName="data_entrada" [max]="hoje"/>
                 <div
                   *ngIf="
                     criarEntradaMaterialForm.get('data_entrada')?.touched &&
@@ -228,7 +205,7 @@
             <div class="col-md-2">
               <div class="form-group mb-0">
                 <label>Data Nota</label>
-                <input class="form-control" type="date" formControlName="data_nota" />
+                <input class="form-control" type="date" formControlName="data_nota" [max]="hoje" />
                 <div
                   *ngIf="
                     criarEntradaMaterialForm.get('data_nota')?.touched &&

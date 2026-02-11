@@ -536,6 +536,7 @@ private refreshLotesSelecionado(): void {
   private criarLinhaLote(l: LoteLinha): FormGroup {
     return this.fb.group({
       id: new FormControl(l.id),
+      data_entrada: new FormControl(l.data_entrada),
       numero_lote: new FormControl(l.numero_lote),
       data_validade: new FormControl(l.data_validade),
       saldo_total: new FormControl(l.saldo_total),
@@ -577,4 +578,26 @@ private refreshLotesSelecionado(): void {
     const g = this.lotesControls?.length ? this.lotesControls[0] : null;
     return g?.get('descricao')?.value ?? null;
   }
+
+  get totalItensProduto(): number {
+    return this.lotesControls.reduce((acc, ctrl) => {
+      const v = Number(ctrl.get('saldo_total')?.value) || 0;
+      return acc + v;
+    }, 0);
+  }
+
+  get totalDisponivelProduto(): number {
+    return this.lotesControls.reduce((acc, ctrl) => {
+      const v = Number(ctrl.get('saldo_disponivel')?.value) || 0;
+      return acc + v;
+    }, 0);
+  }
+
+get totalDigitado(): number {
+  return this.lotesControls.reduce((acc, ctrl) => {
+    const raw = ctrl.get('quantidade')?.value;
+    const qtd = this.parseNumeroPtBr(raw);
+    return acc + (qtd > 0 ? qtd : 0);
+  }, 0);
+}
 }

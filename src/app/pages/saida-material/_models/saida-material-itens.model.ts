@@ -67,4 +67,5 @@ export interface LoteLinha {
   descricao: string;
   item_codigo?: string | number;
   produto_servico_id?: number;
+  data_entrada?: string | Date | null;
 }

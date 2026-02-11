@@ -49,12 +49,16 @@ export class SaidaMaterialItemService {
     return this.http.put<void>(`${this.baseURL}/autorizar`, itens);
   }
 
+  entregar(saida_id: number): Observable<void> {
+    return this.http.put<void>(`${this.baseURL}/entregar/${saida_id}`, null);
+  }
+
   consultarUltimoValorEntrada(saidaMaterialItem: SaidaMaterialItem): Observable<SaidaMaterialItem> {
     return this.http.post<SaidaMaterialItem>(`${this.baseURL}/ConsultarValorEntrada`, saidaMaterialItem);
   }
 
-  listarItemDisponivel(almoxarifado_id: number): Observable<ListarItemDisponivel[]> {
-    return this.http.get<ListarItemDisponivel[]>(`${this.baseURL}/itensdisponivel/${almoxarifado_id}`);
+  listarItemDisponivel(saida_id: number): Observable<ListarItemDisponivel[]> {
+    return this.http.get<ListarItemDisponivel[]>(`${this.baseURL}/itensdisponivel/${saida_id}`);
   }
 
   ConsultarSaldoGeral(almoxarifado_id: number, produto_id: number): Observable<SaldoItemGeral> {

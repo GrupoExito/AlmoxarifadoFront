@@ -118,6 +118,7 @@ this.secretariaService.listarTodos().subscribe({
                         this.editarMaterialEntradaForm.get('tipo_entrada')?.disable();
                         this.editarMaterialEntradaForm.get('pedido_despesa_id')?.disable();
                         this.editarMaterialEntradaForm.get('saida_material_id')?.disable();
+                        this.editarMaterialEntradaForm.get('almoxarifado_id')?.disable();
                         //this.selectedPedidoCompra = entradaMaterial.pedido_despesa_id!;
                         this.editarMaterialEntradaForm.get('pedido_despesa_id')?.setValue(entradaMaterial.pedido_despesa_id);
                       

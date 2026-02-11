@@ -41,6 +41,7 @@ export class EntradaMaterialEtapaComponent implements OnInit, OnDestroy {
   ) {}
 
   subHeader?: Subscription;
+  subEtapasHeader?: Subscription;
   token: AuthToken | null;
   eMQuantidade: EMDataEtapasHeader | null = null;
   entradaMaterial: EntradaMaterial | null = null;
@@ -62,72 +63,68 @@ export class EntradaMaterialEtapaComponent implements OnInit, OnDestroy {
   valorTotalEntrada: number;
 
   ngOnInit(): void {
-    console.log('Etapas');
-    this.token = this.authService.getDecodedAccessToken();
-    if (this.token) {
-      this.usuario_id = this.token.id;
-    }
+  this.token = this.authService.getDecodedAccessToken();
+  if (this.token) this.usuario_id = this.token.id;
 
-    this.id = this.entradaMaterialService.getRouteId();
+  this.id = this.entradaMaterialService.getRouteId();
+  if (!this.id) return;
 
-    console.log('ID da entrada de material:', this.id);
+  // 1) ouve atualizações da entrada (status, datas, etc)
+  this.subHeader = this.entradaMaterialService.data$.subscribe((res) => {
+    if (!res?.entradaMaterial) return;
+    this.entradaMaterial = res.entradaMaterial;
+  });
 
-this.subHeader = this.entradaMaterialService.emDataEtapasHeader.subscribe((h) => {
-  if (!h) return;
+  // 2) ouve atualizações do header de quantidades/valores
+  this.subEtapasHeader = this.entradaMaterialService.dataEtapasHeader$.subscribe((h) => {
+    if (!h) return;
+    this.eMQuantidade = h;
+  });
 
-  // atualiza o objeto que o HTML usa
-  this.eMQuantidade = {
-    ...(this.eMQuantidade ?? ({} as any)),
-    ...h,
-  };
-});
+  // 3) primeira carga: busca a entrada e já publica no service (pra todo mundo ouvir)
+  this.entradaMaterialService.consultarPorId(this.id).subscribe({
+    next: (entrada) => {
+      this.entradaMaterial = entrada;
 
+      // mantém listas anteriores se já existirem no eMData (pra não "zerar" o estado)
+      const current = this.entradaMaterialService.eMData.value;
 
-    this.entradaMaterialService.consultarPorId(this.id!).subscribe({
-      next: (entrada) => {
-        this.entradaMaterial = entrada;
-      },
-    });
-
-    /*this.modeloDocumentoService.listarTodos().subscribe({
-      next: (impressoes) => {
-        this.impressoes = impressoes.filter((impressao) => impressao.tipo == '4');
-      },
-      error: (error) => {
-        console.log(error);
-      },
-    });*/
-
-    if (this.id) {
-      this.entradaHistoricoService.listarTodos(this.id!).subscribe({
-        next: (historico) => {
-          this.entradaRecente = historico[historico.length - 1]!;
-        },
-        error: (error) => {
-          console.log(error);
-        },
+      this.entradaMaterialService.setEntrada({
+        entradaMaterial: entrada,
+        secretarias: current?.secretarias ?? [],
+        fornecedores: current?.fornecedores ?? [],
+        almoxarifados: current?.almoxarifados ?? [],
+        pedidoCompra: current?.pedidoCompra ?? [],
       });
+    },
+  });
 
-      this.entradaMaterialService.consultarEntradaQuantidade(this.id!).subscribe((quantidade) => {
-        this.eMQuantidade = quantidade;
+  // 4) outras consultas que você já faz
+  this.entradaHistoricoService.listarTodos(this.id).subscribe({
+    next: (historico) => {
+      this.entradaRecente = historico[historico.length - 1]!;
+    },
+    error: (error) => console.log(error),
+  });
+
+  this.entradaMaterialService.consultarEntradaQuantidade(this.id).subscribe((quantidade) => {
+    this.entradaMaterialService.setEtapasHeader(quantidade);
+  });
+
+  this.entradaMaterialItemService.listarItemPorEntrada(this.id).subscribe({
+    next: (itens) => {
+      this.entradaMaterialItem = itens;
+      this.calcvalorTotalEntrada();
+
+      this.entradaMaterialService.setEtapasHeader({
+        quantidade_itens: itens.length,
+        valorTotal: this.valorTotalEntrada,
       });
+    },
+    error: (error) => console.log(error),
+  });
+}
 
-    }
-
-    this.entradaMaterialItemService.listarItemPorEntrada(this.id!).subscribe({
-      next: (entradaMaterialItem) => {
-        this.entradaMaterialItem = entradaMaterialItem;
-        this.calcvalorTotalEntrada();
-        this.entradaMaterialService.emDataEtapasHeader.next({
-          quantidade_itens: entradaMaterialItem.length,
-          valorTotal: this.valorTotalEntrada,
-        });
-      },
-      error: (error) => {
-        console.log(error);
-      },
-    });
-  }
 
   open(content: any) {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
@@ -184,7 +181,8 @@ this.subHeader = this.entradaMaterialService.emDataEtapasHeader.subscribe((h) =>
     }
   }
 
-  ngOnDestroy(): void {
-    this.subHeader?.unsubscribe();
-  }
+ngOnDestroy(): void {
+  this.subHeader?.unsubscribe();
+  this.subEtapasHeader?.unsubscribe();
+}
 }

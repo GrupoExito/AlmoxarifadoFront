@@ -224,8 +224,9 @@
                 >
                   <span><i class="fa-solid fa-eye"></i></span>
                 </button>
-                <!-- <button
-                  *ngIf="entradaMaterial.id_status === 1"
+                <div *appPermission="['Almoxarifado', 'cancelar_entrada']"> 
+                <button
+                  *ngIf="entradaMaterial.status_id === 1"
                   (click)="deletar(entradaMaterial.id)"
                   href="#"
                   class="btn btn-icon btn-active-color-danger btn-md"
@@ -234,7 +235,8 @@
                     [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
                     class="svg-icon svg-icon-3"
                   ></span>
-                </button> -->
+                </button>
+                </div>
               </div>
             </td>
           </tr>

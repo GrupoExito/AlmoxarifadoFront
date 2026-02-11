@@ -61,7 +61,11 @@ export class SaidaMateriaListarComponent implements OnInit, OnDestroy {
   usuario_id: number = 1;
 
   async ngOnInit(): Promise<void> {
-    this.dtOptions = dtOptions;
+  this.dtOptions = {
+    ...dtOptions,
+    pageLength: 50,                 // padrão = 50 por página
+    lengthMenu: [10, 25, 50, 100],   // opções do seletor
+  };
     this.dtOptions.order = [2, 'asc'];
     await this.consultarConfiguracaoUsuario();
 

@@ -106,6 +106,14 @@
             >
               Autorizar
             </button>
+            <button *ngIf="this.saidaMaterial.status_id === 3"
+              type="button"
+              class="btn btn-success"
+              (click)="entregar()"
+              [disabled]="!autorizacaoForm.valid"
+            >
+              Entregar
+            </button>
           </div>
         </form>
 

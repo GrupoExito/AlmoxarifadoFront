@@ -65,17 +65,6 @@ export class SaidaMateriaListarAutorizadorComponent implements OnInit, OnDestroy
     this.dtOptions.order = [2, 'asc'];
     await this.consultarConfiguracaoUsuario();
 
-    if (this.saidaAlmoxarifadoUsuario) {
-      /*this.saidaMateriaLService.listarPorUsuario(this.usuario_id).subscribe({
-        next: (saidasMaterial) => {
-          this.saidasMaterial = saidasMaterial;
-          this.dtTrigger.next(null);
-        },
-        error: (error) => {
-          console.log(error);
-        },
-      });*/
-    } else {
       this.saidaMateriaLService.listarPorUsuarioAutorizador(this.usuario_id).subscribe({
         next: (saidasMaterial) => {
           this.saidasMaterial = saidasMaterial;
@@ -85,7 +74,7 @@ export class SaidaMateriaListarAutorizadorComponent implements OnInit, OnDestroy
           console.log(error);
         },
       });
-    }
+
   }
 
   ngOnDestroy(): void {

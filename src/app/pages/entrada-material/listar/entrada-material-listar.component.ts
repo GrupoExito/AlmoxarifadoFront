@@ -59,10 +59,14 @@ export class EntradaMateriaListarComponent implements OnInit, OnDestroy {
   entradaAlmoxarifadoUsuario: boolean | undefined = false;
 
   async ngOnInit(): Promise<void> {
-    this.dtOptions = dtOptions;
+  this.dtOptions = {
+    ...dtOptions,
+    pageLength: 50,                 // padrão = 50 por página
+    lengthMenu: [10, 25, 50, 100],   // opções do seletor
+  };
     this.dtOptions.order = [2, 'asc'];
     await this.consultarConfiguracaoUsuario();
-console.log(this.entradaAlmoxarifadoUsuario,'configuracao');
+
     if (this.entradaAlmoxarifadoUsuario) {
       this.entradaMateriaLService.listarPorUsuario(this.usuario_id).subscribe({
         next: (entradasMaterial) => {
@@ -95,32 +99,32 @@ console.log(this.entradaAlmoxarifadoUsuario,'configuracao');
     return item.id;
   }
 
-  // deletar(id: number = 0): void {
-  //   Swal.fire({
-  //     title: 'Tem certeza?',
-  //     text: 'Você não será capaz de recuperar esta informação!',
-  //     icon: 'warning',
-  //     showCancelButton: true,
-  //     confirmButtonText: 'Sim',
-  //     cancelButtonText: 'Não',
-  //     confirmButtonColor: '#23b349',
-  //     cancelButtonColor: '#eb2067',
-  //   }).then((result) => {
-  //     if (result.value) {
-  //       this.entradaMateriaLService.deletar(id,this.entradaMaterial.usuario_cancelamento_id!).subscribe({
-  //         next: () => {
-  //           this.entradasMaterial = this.entradasMaterial.filter((entradasMaterial) => entradasMaterial.id != id);
-  //           Swal.fire('Excluído!', 'Entrada Material foi cancelada!', 'success');
-  //         },
-  //         error: () => {
-  //           Swal.fire('Algo deu errado!', 'Não foi possivel excluir este Entrada Material!', 'error');
-  //         },
-  //       });
-  //     } else if (result.dismiss === Swal.DismissReason.cancel) {
-  //       Swal.fire('Cancelado!', 'A informação está segura!', 'error');
-  //     }
-  //   });
-  // }
+   deletar(id: number = 0): void {
+     Swal.fire({
+       title: 'Tem certeza?',
+       text: 'Você não será capaz de recuperar esta informação!',
+       icon: 'warning',
+       showCancelButton: true,
+       confirmButtonText: 'Sim',
+       cancelButtonText: 'Não',
+       confirmButtonColor: '#23b349',
+       cancelButtonColor: '#eb2067',
+     }).then((result) => {
+       if (result.value) {
+         this.entradaMateriaLService.deletar(id).subscribe({
+           next: () => {
+             this.entradasMaterial = this.entradasMaterial.filter((entradasMaterial) => entradasMaterial.id != id);
+             Swal.fire('Excluído!', 'Entrada Material foi cancelada!', 'success');
+           },
+           error: () => {
+             Swal.fire('Algo deu errado!', 'Não foi possivel excluir este Entrada Material!', 'error');
+           },
+         });
+       } else if (result.dismiss === Swal.DismissReason.cancel) {
+         Swal.fire('Cancelado!', 'A informação está segura!', 'error');
+       }
+     });
+   }
 
  confirmar(id: number = 0, totalItens: number = 0): void {
 

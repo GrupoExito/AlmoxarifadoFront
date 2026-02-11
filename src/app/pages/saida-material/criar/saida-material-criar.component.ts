@@ -20,8 +20,6 @@ import { CentroCustoService } from '@pages/centro-custo/_services/centro-custo.s
 import { UnidadeExterna } from '@pages/unidade-externa/_models/unidade-externa.model';
 import { UnidadeExternaService } from '@pages/unidade-externa/_services/unidade-externa.service';
 import { BaseService } from '@pages/shared/services/base.service';
-import { CidadaoService } from '@pages/cidadao/_services/cidadao.service';
-import { Cidadao } from '@pages/cidadao/_models/cidadao.model';
 import { ConfiguracaoOrganizacaoService } from '@pages/configuracao-organizacao/_services/configuracao-organizacao.service';
 
 @Component({
@@ -43,7 +41,6 @@ export class SaidaMaterialCriarComponent implements OnInit {
     private unidadeExternaService: UnidadeExternaService,
     private baseService: BaseService,
     private configuracaoOrganizacaoService: ConfiguracaoOrganizacaoService,
-    //private cidadaoService: CidadaoService
   ) {}
 
   saidaMaterial: SaidaMaterial | null;
@@ -62,9 +59,11 @@ export class SaidaMaterialCriarComponent implements OnInit {
   //cidadaos: Cidadao[];
   saidaAlmoxarifadoUsuario: boolean | undefined = false;
   saida_almoxarifado_solicitante_setor: boolean | undefined = false;
+  hoje: string = '';
 
   async ngOnInit(): Promise<void> {
-    console.log('Cadastro');
+    this.hoje = this.toDateInputValue(new Date());
+
     this.token = this.authService.getDecodedAccessToken();
     if (this.token) {
       this.usuario_id = this.token.id;
@@ -76,7 +75,7 @@ export class SaidaMaterialCriarComponent implements OnInit {
       secretaria_id: ['', [Validators.required]],
       almoxarifado_id: ['', [Validators.required]],
       setor_id: ['', [Validators.required]],
-      data_solicitacao: ['', [Validators.required]],
+      data_solicitacao: ['', [Validators.required, this.maxHojeValidator()]],
       observacao: ['', [Validators.maxLength(200)]],
       tipo_saida_id: ['', [Validators.maxLength(1)]],
       secretaria_destino_id: ['', []],
@@ -85,7 +84,6 @@ export class SaidaMaterialCriarComponent implements OnInit {
       centro_custo_id: ['', [Validators.required]],
       conta_contabil: ['', [Validators.maxLength(30)]],
       responsavel_retirada_id: ['', [Validators.required]],
-      //cidadao_id: ['', []],
     });
 
     await this.consultarConfiguracaoUsuario();
@@ -379,4 +377,26 @@ export class SaidaMaterialCriarComponent implements OnInit {
       });
     });
   }
+
+  private toDateInputValue(date: Date): string {
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const dd = String(date.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+/** Valida se a data do input não é maior que hoje */
+private maxHojeValidator() {
+  return (control: any) => {
+    const value: string | null = control.value;
+    if (!value) return null; // deixa o required cuidar se precisar
+
+    // value vem como "YYYY-MM-DD"
+    const selected = new Date(value + 'T00:00:00');
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // zera hora
+
+    return selected > today ? { maxHoje: true } : null;
+  };
+ }
 }
