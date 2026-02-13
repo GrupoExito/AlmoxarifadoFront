@@ -522,82 +522,49 @@ autorizar(): void {
 entregar(): void {
 
   Swal.fire({
-    title: 'Necessita transporte?',
-    text: 'A entrega do material necessita transporte?',
-    icon: 'question',
-    showCancelButton: true,
-    showDenyButton: true,
-    confirmButtonText: 'Sim',
-    denyButtonText: 'Não',
-    cancelButtonText: 'Cancelar',
-    confirmButtonColor: '#23b349',
-    denyButtonColor: '#3085d6',
-    cancelButtonColor: '#eb2067',
-  }).then((result) => {
-
-    if (result.isConfirmed) {
-      this.confirmarEntrega(1); // necessita transporte
-    }
-
-    if (result.isDenied) {
-      this.confirmarEntrega(0); // não necessita
-    }
-
-  });
-}
-
-private confirmarEntrega(transporte: number): void {
-
-  Swal.fire({
-    title: 'Confirmar entrega',
+    title: 'Confirmar a entrega do material',
     text: 'Confirma a entrega dos materiais autorizados?',
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonText: 'Sim, confirmar',
+    confirmButtonText: 'Sim, confirmo',
     cancelButtonText: 'Cancelar',
     confirmButtonColor: '#23b349',
     cancelButtonColor: '#eb2067',
   }).then((result) => {
-
-    if (!result.isConfirmed) return;
+    if (!result.isConfirmed) {
+      return;
+    }
 
     Swal.showLoading();
 
-    this.saidaMaterialItemService
-      .entregar(this.saidaMaterial.id!, transporte)
-      .subscribe({
-        next: () => {
-          Swal.close();
+    this.saidaMaterialItemService.entregar(this.saidaMaterial.id!).subscribe({
+      next: () => {
+        Swal.close();
 
-          this.saidaMaterial.status_id = 4;
-          this.saidaMaterial.status_descricao = 'Entregue';
+        this.saidaMaterial.status_id = 4;
+        this.saidaMaterial.status_descricao = 'Entregue'; // ou o texto correto do seu sistema
 
-          const atual = this.saidaMaterialService.sMData.getValue();
-          this.saidaMaterialService.setSaida({
-            ...(atual ?? ({} as any)),
-            saidaMaterial: {
-              ...(atual?.saidaMaterial ?? {} as any),
-              ...this.saidaMaterial
-            }
-          });
+        const atual = this.saidaMaterialService.sMData.getValue();
+        this.saidaMaterialService.setSaida({
+          ...(atual ?? ({} as any)),
+          saidaMaterial: { ...(atual?.saidaMaterial ?? {} as any), ...this.saidaMaterial }
+        });
 
-          Swal.fire('Entregue!', 'Material entregue com sucesso.', 'success');
-          this.listarProdutosAdicionados();
-        },
-        error: (error) => {
-          console.error(error);
-          Swal.close();
-          Swal.fire(
-            'Erro!',
-            error?.error?.message || 'Falha ao entregar o material.',
-            'error'
-          );
-        }
-      });
-
+        Swal.fire('Entregue!', 'Material entregue com sucesso.', 'success');
+        this.listarProdutosAdicionados();
+      },
+      error: (error) => {
+        console.error(error);
+        Swal.close();
+        Swal.fire(
+          'Erro!',
+          error?.error?.message || 'Falha ao entregar o material.',
+          'error'
+        );
+      }
+    });
   });
 }
-
 
 private calcularValorTotalAutorizado(): number {
   return this.itensControls.reduce((acc, g) => {

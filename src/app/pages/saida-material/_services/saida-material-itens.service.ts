@@ -49,8 +49,8 @@ export class SaidaMaterialItemService {
     return this.http.put<void>(`${this.baseURL}/autorizar`, itens);
   }
 
-  entregar(saida_id: number): Observable<void> {
-    return this.http.put<void>(`${this.baseURL}/entregar/${saida_id}`, null);
+  entregar(saida_id: number, transporte: number=0): Observable<void> {
+    return this.http.put<void>(`${this.baseURL}/entregar/${saida_id}/${transporte}`, null);
   }
 
   consultarUltimoValorEntrada(saidaMaterialItem: SaidaMaterialItem): Observable<SaidaMaterialItem> {

@@ -1,33 +1,11 @@
 <div id="adicionarItem"></div>
 <div class="card card-xxl-stretch mb-5 mb-xxl-8 mt-3">
   <!-- begin::Header -->
-<div class="card-header border-1 py-3 d-flex align-items-center">
-  <h3 class="card-title align-items-start flex-column mb-0">
-    <span class="card-label fw-bolder fs-3 mb-1">Itens</span>
-  </h3>
-
-  <div class="ms-auto d-flex gap-2">
-    <button
-      *ngIf="saidaMaterial?.status_id === 2"
-      type="button"
-      class="btn btn-sm btn-success"
-      (click)="autorizar()"
-      [disabled]="!autorizacaoForm.valid"
-    >
-      Autorizar
-    </button>
-
-    <button
-      *ngIf="saidaMaterial?.status_id === 3"
-      type="button"
-      class="btn btn-sm btn-success"
-      (click)="entregar()"
-      [disabled]="!autorizacaoForm.valid"
-    >
-      Entregar
-    </button>
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Itens</span>
+    </h3>
   </div>
-</div>
   <!-- end::Header -->
 
   <div class="container-fluid">
@@ -117,7 +95,28 @@
               </tbody>
             </table>
           </div>
+
+          <!-- Botão Autorizar -->
+          <div class="d-flex justify-content-end mt-3">
+            <button *ngIf="this.saidaMaterial.status_id === 2"
+              type="button"
+              class="btn btn-success"
+              (click)="autorizar()"
+              [disabled]="!autorizacaoForm.valid"
+            >
+              Autorizar
+            </button>
+            <button *ngIf="this.saidaMaterial.status_id === 3"
+              type="button"
+              class="btn btn-success"
+              (click)="entregar()"
+              [disabled]="!autorizacaoForm.valid"
+            >
+              Entregar
+            </button>
+          </div>
         </form>
+
       </div>
     </div>
   </div>
