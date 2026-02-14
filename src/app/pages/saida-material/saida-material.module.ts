@@ -22,6 +22,7 @@ import { SaidaMateriaListarPorCidadaoComponent } from './listar-por-cidadao/said
 import { SaidaMaterialAnexoComponent } from './anexo/saida-material-anexo.component';
 import { SaidaMateriaListarAutorizadorComponent } from './listar-por-autorizador/saida-material-listar-autorizador.component';
 import { SaidaMaterialItemAutorizarComponent } from './autorizar/saida-material-itens-autorizar.component';
+import { SaidaMaterialListarTransporteComponent } from './transporte/saida-material-listar-transporte.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { SaidaMaterialItemAutorizarComponent } from './autorizar/saida-material-
     SaidaMateriaListarAutorizadorComponent,
     SaidaMaterialAnexoComponent,
     SaidaMaterialItemAutorizarComponent,
+    SaidaMaterialListarTransporteComponent,
   ],
   imports: [
     CommonModule,

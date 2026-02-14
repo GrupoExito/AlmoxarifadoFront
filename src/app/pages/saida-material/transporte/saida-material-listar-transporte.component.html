@@ -1,0 +1,75 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-1 pt-5">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Saidas de Material - Transporte</span>
+    </h3>
+  </div>
+  <!-- end::Header -->
+  <!-- begin::Body -->
+  <div class="card-body py-3">
+    
+    <!-- begin::Table container -->
+    <div class="table-responsive">
+      <!-- begin::Table -->
+      <table
+        datatable
+        [dtOptions]="dtOptions"
+        [dtTrigger]="dtTrigger"
+        class="table table-hover table-row-dashed table-row-gray-300 align-middle gs-0 gy-1"
+      >
+        <!-- begin::Table head -->
+        <thead>
+          <tr class="fw-bolder text-dark fs-5">
+            <th class="min-w-10px">Código</th>
+            <th class="min-w-30px">Almoxarifado</th>
+            <th class="min-w-30px">Data</th>
+            <th class="min-w-60px text-center">Ações</th>
+          </tr>
+        </thead>
+        <!-- end::Table head -->
+        <!-- begin::Table body -->
+        <tbody>
+          <tr *ngFor="let saidaMaterial of saidasMaterial; trackBy: trackItem">
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-start flex-column">
+                  <span class="text-dark fw-normal fs-5 mx-3"> {{ saidaMaterial.id }} </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span href="#" class="text-dark fw-normal d-block fs-5">{{ saidaMaterial.almoxarifado }}</span>
+            </td>
+            <td class="text-content-start">
+              <div class="d-flex flex-column w-100 me-2">
+                <span href="#" class="text-dark fw-normal d-block fs-5">
+                  {{ saidaMaterial.data_solicitacao | date : 'dd/MM/yyyy' }}
+                </span>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex justify-content-end flex-shrink-0">
+              <button
+                title="Finalizar transporte"
+                *ngIf="saidaMaterial?.status_id === 4"
+                (click)="abrirModalFinalizarTransporte(saidaMaterial)"
+                class="btn btn-icon btn-active-color-primary btn-md me-1"
+              >
+                <span
+                  [inlineSVG]="'./assets/media/icons/duotune/general/gen057.svg'"
+                  class="svg-icon svg-icon-3"
+                ></span>
+              </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+        <!-- end::Table body -->
+      </table>
+      <!-- end::Table -->
+    </div>
+    <!-- end::Table container -->
+  </div>
+  <!-- begin::Body -->
+</div>

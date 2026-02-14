@@ -12,26 +12,19 @@ import { SaidaMateriaListarPorCidadaoComponent } from './listar-por-cidadao/said
 import { SaidaMaterialAnexoComponent } from './anexo/saida-material-anexo.component';
 import { SaidaMateriaListarAutorizadorComponent } from './listar-por-autorizador/saida-material-listar-autorizador.component';
 import { SaidaMaterialItemAutorizarComponent } from './autorizar/saida-material-itens-autorizar.component';
+import { SaidaMaterialListarTransporteComponent } from './transporte/saida-material-listar-transporte.component';
 
 const routes: Routes = [
   {
     path: '',
     component: SaidaMaterialComponent,
     children: [
-      // {
-      //   path: '',
-      //   component: EntradaMateriaListarComponent,
-      // },
       {
         path: 'criar',
         canActivate: [PermissaoUsuarioGuard],
         data: { permissao: { tela: 'Almoxarifado', acao: 'nova_saida' } },
         component: SaidaMaterialCriarComponent,
       },
-      // {
-      //   path: 'editar/:id',
-      //   component: EntradaMaterialEditarComponent,
-      // },
     ],
   },
   {
@@ -77,6 +70,10 @@ const routes: Routes = [
   {
     path: 'listar/porautorizador',
     component: SaidaMateriaListarAutorizadorComponent,
+  },
+    {
+    path: 'transporte',
+    component: SaidaMaterialListarTransporteComponent,
   },
   { path: '', redirectTo: 'listar', pathMatch: 'full', component: SaidaMateriaListarComponent },
   { path: '**', redirectTo: 'listar', pathMatch: 'full' },

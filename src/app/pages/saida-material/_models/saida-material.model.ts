@@ -28,6 +28,7 @@ export interface SaidaMaterial {
   status_descricao?: String;
   cidadao_id?: number;
   cidadao?: string;
+  codigo_transporte?: string;
 }
 
 export interface SaidaMaterialTransferencia {

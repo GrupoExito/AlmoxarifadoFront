@@ -93,7 +93,33 @@ export class SaidaMaterialService {
     return this.http.get<SaidaMaterial[]>(`${this.baseURL}/porusuario/${usuario_id}`);
   }
 
-    listarPorUsuarioAutorizador(usuario_id: number): Observable<SaidaMaterial[]> {
+  listarPorUsuarioAutorizador(usuario_id: number): Observable<SaidaMaterial[]> {
     return this.http.get<SaidaMaterial[]>(`${this.baseURL}/autorizador/${usuario_id}`);
   }
+
+  listarPorStatusEmTrasnporte(): Observable<SaidaMaterial[]> {
+    return this.http.get<SaidaMaterial[]>(`${this.baseURL}/transporte`);
+  }
+
+  entregar(saida_id: number, transporte: number=0): Observable<void> {
+    return this.http.put<void>(`${this.baseURL}/entregar/${saida_id}/${transporte}`, null);
+  }
+
+finalizarTransporte(
+  saida_id: number,
+  data_recebimento: string, // yyyy-MM-dd
+  nome_recebedor: string,
+  cpf_recebedor: string,
+  codigo_transporte: string
+): Observable<void> {
+  const body = {
+    codigo_transporte,
+    nome_recebedor,
+    cpf_recebedor,
+    data_recebimento,
+  };
+
+  return this.http.put<void>(`${this.baseURL}/finalizarTransporte/${saida_id}`, body);
+}
+
 }

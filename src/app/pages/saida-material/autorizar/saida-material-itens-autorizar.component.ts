@@ -548,22 +548,7 @@ entregar(): void {
 
 private confirmarEntrega(transporte: number): void {
 
-  Swal.fire({
-    title: 'Confirmar entrega',
-    text: 'Confirma a entrega dos materiais autorizados?',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Sim, confirmar',
-    cancelButtonText: 'Cancelar',
-    confirmButtonColor: '#23b349',
-    cancelButtonColor: '#eb2067',
-  }).then((result) => {
-
-    if (!result.isConfirmed) return;
-
-    Swal.showLoading();
-
-    this.saidaMaterialItemService
+    this.saidaMaterialService
       .entregar(this.saidaMaterial.id!, transporte)
       .subscribe({
         next: () => {
@@ -595,7 +580,7 @@ private confirmarEntrega(transporte: number): void {
         }
       });
 
-  });
+
 }
 
 
