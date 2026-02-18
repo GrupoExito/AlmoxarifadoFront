@@ -187,6 +187,10 @@ listarProdutosAdicionados() {
       this.saidaItens = saidaItens;
 
       this.buildItensAutorizacaoForm(saidaItens);
+      if (this.separacaoIniciada) {
+        this.itensSeparados.clear(); // reseta marcações, pois a lista foi reconstruída
+      }
+
     },
     error: (error) => {
       console.log(error);
@@ -714,6 +718,112 @@ private quantidadeAutorizadaValidator(maxSolicitada: number): ValidatorFn {
     // 0 é permitido aqui: significa "não autorizar" aquele item
     return null;
   };
+}
+
+separacaoIniciada = false;
+
+// guarda quais índices foram marcados
+private itensSeparados = new Set<number>();
+
+get todosItensSeparados(): boolean {
+  return this.itensControls?.length > 0 && this.itensSeparados.size === this.itensControls.length;
+}
+
+isItemSeparado(index: number): boolean {
+  return this.itensSeparados.has(index);
+}
+
+toggleItemSeparado(index: number, ev: Event): void {
+  const checked = (ev.target as HTMLInputElement).checked;
+  if (checked) this.itensSeparados.add(index);
+  else this.itensSeparados.delete(index);
+}
+
+iniciarSeparacao(): void {
+  Swal.fire({
+    title: 'Iniciar separação?',
+    text: 'Este procedimento não altera o status até sua finalização.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sim',
+    cancelButtonText: 'Não',
+    confirmButtonColor: '#23b349',
+    cancelButtonColor: '#eb2067',
+  }).then((res) => {
+    if (!res.isConfirmed) return;
+
+    this.separacaoIniciada = true;
+    this.itensSeparados.clear();
+    this.cd.detectChanges();
+  });
+}
+
+finalizarSeparacao(): void {
+  if (!this.todosItensSeparados) {
+    Swal.fire('Atenção', 'Marque todos os itens para finalizar a separação.', 'warning');
+    return;
+  }
+
+  Swal.fire({
+    title: 'Finalizar separação?',
+    text: 'Deseja finalizar a separação?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Sim',
+    cancelButtonText: 'Não',
+    confirmButtonColor: '#23b349',
+    cancelButtonColor: '#eb2067',
+  }).then((res) => {
+    if (!res.isConfirmed) return;
+
+    Swal.showLoading();
+
+    this.saidaMaterialService.disponibilizarEntrega(this.saidaMaterial.id!).subscribe({
+      next: () => {
+        Swal.close();
+
+        // Atualiza SOMENTE o flag para liberar o botão Entregar
+        this.saidaMaterial.disponivel_entrega = true;
+
+        // encerra modo separação
+        this.separacaoIniciada = false;
+        this.itensSeparados.clear();
+
+        // opcional: publica no service, se você usa isso em outras áreas da tela
+        const atual = this.saidaMaterialService.sMData.getValue();
+        this.saidaMaterialService.setSaida({
+          ...(atual ?? ({} as any)),
+          saidaMaterial: { ...(atual?.saidaMaterial ?? {} as any), ...this.saidaMaterial }
+        });
+
+        this.cd.detectChanges();
+        Swal.fire('Ok!', 'Separação finalizada. Material disponível para entrega.', 'success');
+      },
+      error: (error) => {
+        console.error(error);
+        Swal.close();
+        Swal.fire('Erro!', error?.error?.message || 'Falha ao disponibilizar para entrega.', 'error');
+      },
+    });
+  });
+}
+
+get algunsItensSeparados(): boolean {
+  const total = this.itensControls?.length ?? 0;
+  return this.itensSeparados.size > 0 && this.itensSeparados.size < total;
+}
+
+toggleSelecionarTodos(ev: Event): void {
+  const checked = (ev.target as HTMLInputElement).checked;
+
+  this.itensSeparados.clear();
+
+  if (checked) {
+    // marca todos
+    for (let i = 0; i < this.itensControls.length; i++) {
+      this.itensSeparados.add(i);
+    }
+  }
 }
 
 }

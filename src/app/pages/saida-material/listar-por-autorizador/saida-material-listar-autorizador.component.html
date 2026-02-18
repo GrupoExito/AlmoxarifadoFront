@@ -56,7 +56,21 @@
               <span href="#" class="text-dark fw-normal d-block fs-5">{{ saidaMaterial.observacao }}</span>
             </td>
             <td>
-              <span href="#" class="text-dark fw-normal d-block fs-5">{{ saidaMaterial.status }}</span>
+              <div class="d-flex flex-column">
+                <!-- texto principal do status -->
+                <span class="text-dark fw-normal d-block fs-5">
+                  {{ saidaMaterial.status }}
+                </span>
+
+                <!-- complemento sutil quando estiver AUTORIZADO -->
+                <small
+                  *ngIf="saidaMaterial?.status_id === 3"
+                  class="text-muted fw-normal"
+                  style="line-height: 1;"
+                >
+                  {{ saidaMaterial?.disponivel_entrega ? 'Disponível para entrega' : 'Aguardando separação' }}
+                </small>
+              </div>
             </td>
             <td>
               <span href="#" class="text-dark fw-normal d-block fs-5">{{ saidaMaterial.tipo_saida_descricao }}</span>

@@ -101,6 +101,10 @@ export class SaidaMaterialService {
     return this.http.get<SaidaMaterial[]>(`${this.baseURL}/transporte`);
   }
 
+  disponibilizarEntrega(saida_id: number): Observable<void> {
+    return this.http.put<void>(`${this.baseURL}/disponibilizarentrega/${saida_id}`, null);
+  }
+
   entregar(saida_id: number, transporte: number=0): Observable<void> {
     return this.http.put<void>(`${this.baseURL}/entregar/${saida_id}/${transporte}`, null);
   }

@@ -7,26 +7,52 @@
   </h3>
 
   <div class="ms-auto d-flex gap-2">
-    <button
-      *ngIf="saidaMaterial?.status_id === 2"
-      type="button"
-      class="btn btn-sm btn-success"
-      (click)="autorizar()"
-      [disabled]="!autorizacaoForm.valid"
-    >
-      Autorizar
-    </button>
 
-    <button
-      *ngIf="saidaMaterial?.status_id === 3"
-      type="button"
-      class="btn btn-sm btn-success"
-      (click)="entregar()"
-      [disabled]="!autorizacaoForm.valid"
-    >
-      Entregar
-    </button>
-  </div>
+  <!-- Autorizar (igual) -->
+  <button
+    *ngIf="saidaMaterial?.status_id === 2"
+    type="button"
+    class="btn btn-sm btn-success"
+    (click)="autorizar()"
+    [disabled]="!autorizacaoForm.valid"
+  >
+    Autorizar
+  </button>
+
+  <!-- AUTORIZADO (status 3) -->
+  <!-- Se NÃO está disponível para entrega, entra no fluxo de separação -->
+  <button
+    *ngIf="saidaMaterial?.status_id === 3 && saidaMaterial?.disponivel_entrega !== true && !separacaoIniciada"
+    type="button"
+    class="btn btn-sm btn-warning"
+    (click)="iniciarSeparacao()"
+  >
+    Iniciar separação
+  </button>
+
+  <button
+    *ngIf="saidaMaterial?.status_id === 3 && saidaMaterial?.disponivel_entrega !== true && separacaoIniciada"
+    type="button"
+    class="btn btn-sm btn-primary"
+    (click)="finalizarSeparacao()"
+    [disabled]="!todosItensSeparados"
+  >
+    Finalizar separação
+  </button>
+
+  <!-- Entregar só aparece se disponível_entrega === true -->
+  <button
+    *ngIf="saidaMaterial?.status_id === 3 && saidaMaterial?.disponivel_entrega === true"
+    type="button"
+    class="btn btn-sm btn-success"
+    (click)="entregar()"
+    [disabled]="!autorizacaoForm.valid"
+  >
+    Entregar
+  </button>
+
+</div>
+
 </div>
   <!-- end::Header -->
 
@@ -38,20 +64,40 @@
         <form [formGroup]="autorizacaoForm">
           <div class="table-responsive">
             <table class="table table-hover table-row-dashed table-row-gray-300 align-middle gs-0 gy-0">
-              <thead>
-                <tr class="fw-bolder text-dark fs-5">
-                  <th class="min-w-20px">Seq</th>
-                  <th class="min-w-60px">Código</th>
-                  <th class="min-w-240px">Descrição</th>
-                  <th class="min-w-40px">Und</th>
-                  <th class="min-w-80px">Qtd. solicitada</th>
-                  <th class="min-w-120px">Qtd. autorizada</th>
-                </tr>
-              </thead>
+<thead>
+  <tr class="fw-bolder text-dark fs-5">
+<th class="min-w-20px text-center" *ngIf="separacaoIniciada">
+  <input
+    type="checkbox"
+    class="form-check-input"
+    [checked]="todosItensSeparados"
+    [indeterminate]="algunsItensSeparados"
+    (change)="toggleSelecionarTodos($event)"
+    title="Selecionar todos"
+  />
+</th>
+
+    <th class="min-w-20px">Seq</th>
+    <th class="min-w-60px">Código</th>
+    <th class="min-w-240px">Descrição</th>
+    <th class="min-w-40px">Und</th>
+    <th class="min-w-80px">Qtd. solicitada</th>
+    <th class="min-w-120px">Qtd. autorizada</th>
+  </tr>
+</thead>
 
               <!-- FormArray "itens" -->
               <tbody formArrayName="itens">
-                <tr *ngFor="let itemGroup of itensControls; let i = index" [formGroupName]="i">
+                <tr *ngFor="let itemGroup of itensControls; let i = index" [formGroupName]="i" [class.table-success]="separacaoIniciada && isItemSeparado(i)">
+<!-- Checkbox separação -->
+<td *ngIf="separacaoIniciada" class="text-center">
+  <input
+    type="checkbox"
+    class="form-check-input"
+    [checked]="isItemSeparado(i)"
+    (change)="toggleItemSeparado(i, $event)"
+  />
+</td>
                   <!-- Seq -->
                   <td>
                     <span class="text-dark fw-normal fs-6">
@@ -122,8 +168,6 @@
     </div>
   </div>
 </div>
-
-
 <div class="modal fade" id="modalSaidaPedido" tabindex="-1" aria-labelledby="modalSaidaPedidoLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
