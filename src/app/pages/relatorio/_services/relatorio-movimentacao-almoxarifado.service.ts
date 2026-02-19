@@ -110,7 +110,7 @@ export class RelatorioAlmoxarifadoService {
   }
 
   MaterialEstoqueLoteDataValidade(documento: FiltroRelatorioDTO): Observable<ArrayBuffer> {
-    return this.http.post(`${this.baseURL}/materialestoqueLoteDataValidade`, documento, {
+    return this.http.post(`${this.baseURL}/estoque/loteedatavalidade`, documento, {
       responseType: 'arraybuffer',
     });
   }
