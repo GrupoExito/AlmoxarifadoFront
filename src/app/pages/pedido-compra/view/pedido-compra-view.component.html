@@ -1,0 +1,194 @@
+<div class="card px-0 mb-3">
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Pedido de Compra</span>
+    </h3>
+
+    <div class="btn-toolbar" role="toolbar">
+      <div
+        class="card-toolbar"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        data-bs-trigger="hover"
+        title="Clique para voltar"
+      >
+        <a
+          href="javascript:void(0)"
+          routerLink="/pedidocompra/listar"
+          class="btn btn-sm btn-light-primary align-items-end"
+        >
+          <span
+            [inlineSVG]="'./assets/media/icons/duotune/general/gen058.svg'"
+            class="svg-icon svg-icon-3"
+          ></span>
+          Voltar
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="card px-0">
+    <div class="mt-2">
+      <div class="d-flex flex-column">
+        <div class="nav nav-pills d-flex nav-pills-custom mb-0">
+          <!-- Card 1: Número do Pedido -->
+          <div class="card text-dark header-informations mb-3 mx-4 px-0">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <b>Número: {{ resumo?.id || id }}</b>
+              </li>
+              <li class="list-group-item">
+                <b>Tipo: Pedido de Compra</b>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Card 2: Fornecedor + Status -->
+          <div class="card text-dark header-informations mb-3 mx-4 px-0">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <b>Fornecedor: {{ resumo?.fornecedor || '-' }}</b>
+              </li>
+              <li class="list-group-item d-flex align-items-center justify-content-between">
+                <b>Status:</b>
+                <span [class]="statusCssClass">{{ statusEntrega }}</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Card 3: Totais -->
+          <div class="card text-dark header-informations mb-3 mx-4 px-0">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <b>Total do Pedido: {{ (resumo?.quantidade_pedido ?? 0) | number:'1.2-2' }}</b>
+              </li>
+              <li class="list-group-item">
+                <b>Total de Entrada: {{ (resumo?.quantidade_entrada ?? 0) | number:'1.2-2' }}</b>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+<!-- PARTE 2: Itens do Pedido -->
+<div class="card mb-5">
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Itens do Pedido</span>
+      <small class="text-muted">Quantidade do pedido x quantidade entregue</small>
+    </h3>
+  </div>
+
+  <div class="card-body py-3">
+    <div class="table-responsive">
+      <table class="table table-hover table-row-dashed table-row-gray-300 align-middle gs-0 gy-1">
+        <thead>
+          <tr class="fw-bolder text-dark fs-5">
+            <th class="min-w-250px">Item</th>
+            <th class="min-w-80px text-end">Qtd. Pedido</th>
+            <th class="min-w-80px text-end">Qtd. Entregue</th>
+            <th class="min-w-80px text-end">Saldo</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let it of itensSaldo">
+            <td>
+              <span class="text-dark fw-normal d-block fs-5">
+                {{ it.descricao_almoxarifado }}
+              </span>
+            </td>
+
+            <td class="text-end">
+              <span class="text-dark fw-normal d-block fs-5">
+                {{ (it.quantidade_pedido ?? 0) | number:'1.2-2' }}
+              </span>
+            </td>
+
+            <td class="text-end">
+              <span class="text-dark fw-normal d-block fs-5">
+                {{ (it.quantidade_entrada ?? 0) | number:'1.2-2' }}
+              </span>
+            </td>
+
+            <td class="text-end">
+              <span class="text-dark fw-normal d-block fs-5">
+                {{ (it.saldo_pedido ?? ((it.quantidade_pedido ?? 0) - (it.quantidade_entrada ?? 0))) | number:'1.2-2' }}
+              </span>
+            </td>
+          </tr>
+
+          <tr *ngIf="!itensSaldo?.length">
+            <td colspan="4" class="text-center text-muted py-5">Nenhum item encontrado para este pedido.</td>
+          </tr>
+        </tbody>
+
+        <tfoot *ngIf="itensSaldo?.length">
+          <tr class="fw-bolder text-dark fs-5">
+            <td class="text-end">Totais:</td>
+            <td class="text-end">{{ totalPedido() | number:'1.2-2' }}</td>
+            <td class="text-end">{{ totalEntrada() | number:'1.2-2' }}</td>
+            <td class="text-end">{{ (totalPedido() - totalEntrada()) | number:'1.2-2' }}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- PARTE 3: Entradas vinculadas -->
+<div class="card">
+  <div class="card-header border-1 pt-2">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Entradas do Pedido</span>
+    </h3>
+  </div>
+
+  <div class="card-body py-3">
+    <div class="table-responsive">
+      <table class="table table-hover table-row-dashed table-row-gray-300 align-middle gs-0 gy-1">
+        <thead>
+          <tr class="fw-bolder text-dark fs-5">
+            <th class="min-w-60px">Entrada</th>
+            <th class="min-w-100px">Data</th>
+            <th class="min-w-120px">Nota</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let e of entradas">
+            <td>
+              <span class="text-dark fw-normal fs-5">
+                {{ e.entrada_id }}
+              </span>
+            </td>
+
+            <td>
+              <span class="text-dark fw-normal fs-5">
+                {{ e.data_entrada | date:'dd/MM/yyyy' }}
+              </span>
+            </td>
+
+            <td>
+              <span class="text-dark fw-normal fs-5">
+                {{ e.nota || '-' }}
+              </span>
+            </td>
+          </tr>
+
+          <tr *ngIf="!entradas?.length">
+            <td colspan="3" class="text-center text-muted py-5">
+              Nenhuma entrada encontrada para este pedido.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>

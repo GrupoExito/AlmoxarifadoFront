@@ -1,0 +1,105 @@
+<div class="card card-xxl-stretch mb-5 mb-xxl-8">
+  <div class="card-header border-1 pt-5">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Pedidos de Compra - Saldo</span>
+    </h3>
+
+    <div class="btn-toolbar" role="toolbar">
+      <div class="card-toolbar me-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Clique para filtrar">
+        <button (click)="openAccordion()" class="btn btn-sm btn-light-primary">
+          <i class="fa fa-light fa-filter" *ngIf="!filtroButton"></i>
+          <i class="fa fa-light fa-filter-circle-xmark" *ngIf="filtroButton"></i>
+          Filtrar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body py-3">
+    <div class="row mb-3" *ngIf="filtroButton">
+      <div class="col-md-2">
+        <div class="form-group mb-0">
+          <label>N° Pedido</label>
+          <input class="form-control" type="text" maxlength="20" [(ngModel)]="pedidoCompraSelecionado" />
+        </div>
+      </div>
+
+<div class="col-md-4">
+  <div class="form-group mb-0">
+    <label>Fornecedor</label>
+
+    <ng-select
+      class="ngSelectDropdown"
+      [items]="fornecedores"
+      bindLabel="razao_social"
+      bindValue="id"
+      [(ngModel)]="fornecedorSelecionado"
+      placeholder="Selecione"
+      [clearable]="true"
+    >
+    </ng-select>
+  </div>
+</div>
+
+
+      <div class="col-md-3">
+        <div class="form-group mb-0">
+          <label>Exibir</label>
+          <select class="form-select" [(ngModel)]="parcialSelecionado">
+            <option value="0">Todos com saldo</option>
+            <option value="1">Apenas saldo parcial</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="d-flex col-md-12 mb-3 mt-3 align-self-end justify-content-end">
+        <button (click)="filtrar()" class="btn btn-success btn-sm">Filtrar</button>
+        <button (click)="limparFiltros()" class="btn btn-primary btn-sm mx-2">Limpar Filtros</button>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table
+        datatable
+        [dtOptions]="dtOptions"
+        [dtTrigger]="dtTrigger"
+        class="table table-hover table-row-dashed table-row-gray-300 align-middle gs-0 gy-1"
+      >
+        <thead>
+          <tr class="fw-bolder text-dark fs-5">
+            <th class="min-w-10px">Pedido</th>
+            <th class="min-w-30px">Fornecedor</th>
+            <th class="min-w-180px">Objeto</th>
+            <th class="min-w-30px text-end">Qtd. Entrada</th>
+            <th class="min-w-30px text-end">Saldo</th>
+            <th class="min-w-30px text-center">Detalhes</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let p of pedidos; trackBy: trackItem">
+            <td><span class="text-dark fw-normal fs-5 mx-3">{{ p.id }}</span></td>
+            <td><span class="text-dark fw-normal d-block fs-5">{{ p.fornecedor }}</span></td>
+            <td><span class="text-dark fw-normal d-block fs-5">{{ p.objeto }}</span></td>
+            <td class="text-end">
+              <span class="text-dark fw-normal d-block fs-5">{{ p.quantidade_entrada || 0 | number:'1.2-2' }}</span>
+            </td>
+            <td class="text-end">
+              <span class="text-dark fw-normal d-block fs-5">{{ p.saldo_pedido || 0 | number:'1.2-2' }}</span>
+            </td>
+            <td class="text-center">
+              <!-- por enquanto pode ser outra tela / placeholder -->
+              <a
+                class="btn btn-icon btn-active-color-primary btn-md"
+                [routerLink]="['/pedidocompra/view', p.id]"
+                title="Visualizar detalhamento"
+              >
+                <span [inlineSVG]="'./assets/media/icons/duotune/general/gen021.svg'" class="svg-icon svg-icon-3"></span>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

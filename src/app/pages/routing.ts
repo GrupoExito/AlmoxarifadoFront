@@ -11,6 +11,10 @@ const Routing: Routes = [
     loadChildren: () => import('./almoxarifado/almoxarifado.module').then((m) => m.AlmoxarifadoModule),
   },
   {
+    path: 'pedidocompra',
+    loadChildren: () => import('./pedido-compra/pedido-compra.module').then((m) => m.PedidoCompraModule),
+  },
+  {
     path: 'localprodutoservico',
     loadChildren: () =>
       import('./local-produto-servico/local-produto-servico.module').then((m) => m.LocalProdutoServicoModule),
