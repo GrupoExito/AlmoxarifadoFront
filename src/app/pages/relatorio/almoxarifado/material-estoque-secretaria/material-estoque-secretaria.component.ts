@@ -77,18 +77,27 @@ export class RelatorioMaterialEstoqueSecretariaComponent implements OnInit {
     // Limpar os campos selecionados
     this.dataInicialSelecionada = '';
     this.dataFinalSelecionada = '';
-    
+
     this.optionAlmoxarifado = 0;
     this.selectedAlmoxarifado = [];
-  
+
     this.optionSecretariaFundo = 0;
     this.selectedSecretariaFundo = [];
-  
+
     this.optionProdutos = 0;
     this.selectedProdutos = [];
   }
-  
+
   filtrar() {
+    if (!this.dataInicialSelecionada || !this.dataFinalSelecionada) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Atenção!',
+        text: 'Por favor, selecione as datas inicial e final para gerar o relatório.',
+        confirmButtonColor: '#3085d6',
+      });
+      return; // Interrompe a execução aqui
+    }
     Swal.showLoading();
     const relatorioMaterialEstoqueSecretaria: FiltroRelatorioDTO = {
       secretaria: this.optionSecretariaFundo,
