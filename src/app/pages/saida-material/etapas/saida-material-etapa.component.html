@@ -143,9 +143,9 @@
               </div>
               <div class="">
                 <span class="text-gray-800 fw-bold fs-5 d-block">Histórico</span>
-                <span class="text-gray-600 fw-semibold fs-3">{{
+                <!--span class="text-gray-600 fw-semibold fs-3">{{
                   eMQuantidade ? eMQuantidade.quantidade_historico : '-'
-                }}</span>
+                }}</span-->
               </div>
             </a>
           </div>
@@ -177,26 +177,21 @@
             <!--end::Nav link-->
           </div>
 
-          <div *ngIf="saidaMaterial.status_id==2 || saidaMaterial.status_id==3 || saidaMaterial.status_id==4" class="nav-item mx-4 mb-3 me-0" role="presentation">
-            <a
-              [ngClass]="{ disabled: !this.id }"
-              class="nav-link nav-link-border-solid btn btn-outline btn-flex flex-column flex-stack pt-9 pb-7 page-bg active"
-              data-bs-toggle="pill"
-              (click)="open(content)"
-              style="width: 90px; height: 130px"
-              aria-selected="false"
-              role="tab"
-              tabindex="-1"
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModal"
-            >
-              <div class="nav-icon mb-3">
-                <img src="/assets/media/icons/printer.png" class="icon-config" alt="" />
-              </div>
-              <div class="">
-                <span class="text-gray-800 fw-bold fs-5 d-block">Impressão</span>
-              </div>
-            </a>
+          <div *ngIf="saidaMaterial.status_id==3 || saidaMaterial.status_id==4" class="nav-item mx-4 mb-3 me-0" role="presentation">
+  <button
+    type="button"
+    [disabled]="!id"
+    class="nav-link nav-link-border-solid btn btn-outline btn-flex flex-column flex-stack pt-9 pb-7 page-bg active"
+    (click)="open(content)"
+    style="width: 90px; height: 130px"
+  >
+    <div class="nav-icon mb-3">
+      <img src="/assets/media/icons/printer.png" class="icon-config" alt="" />
+    </div>
+    <div>
+      <span class="text-gray-800 fw-bold fs-5 d-block">Impressão</span>
+    </div>
+  </button>
           </div>
         </div>
       </div>
@@ -215,8 +210,9 @@
       <label>Impressões</label>
       <select class="form-select" [(ngModel)]="selectedImpressao">
         <option value="0" aria-placeholder="Impressões">Selecione</option>
-        <option value="1" aria-placeholder="Impressões">Guia de Saída de Material</option>
+        <option value="1" aria-placeholder="Impressões" *ngIf="saidaMaterial.status_id==4">Guia de Saída de Material</option>
         <!--option value="2" aria-placeholder="Impressões">Guia de Saída de Material Por Cidadão</option-->
+        <option value="3" aria-placeholder="Impressões" *ngIf="saidaMaterial.status_id==3" >Guia de separação de Material</option>
       </select>
     </div>
   </div>

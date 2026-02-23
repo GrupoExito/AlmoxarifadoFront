@@ -73,11 +73,18 @@ export class SaidaMaterialService {
     return this.routeId;
   }
 
-  filtrar(parameters: any, usuario_id: number): Observable<SaidaMaterial[]> {
-    return this.http.get<SaidaMaterial[]>(`${this.baseURL}/porusuario/${usuario_id}`, {
-      params: parameters,
-    });
+filtrar(parameters: any, usuario_id: number): Observable<SaidaMaterial[]> {
+  const p: any = { ...parameters };
+
+  // se vier array, transforma em "1,3,4"
+  if (Array.isArray(p.status_id)) {
+    p.status_id = p.status_id.join(',');
   }
+
+  return this.http.get<SaidaMaterial[]>(`${this.baseURL}/porusuario/${usuario_id}`, {
+    params: p,
+  });
+}
 
   filtrarSaidasCidadao(parameters: any): Observable<SaidaMaterial[]> {
     return this.http.get<SaidaMaterial[]>(`${this.baseURL}/filtrarSaidaporcidadao`, {

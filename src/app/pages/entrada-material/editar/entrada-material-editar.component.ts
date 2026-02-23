@@ -74,7 +74,6 @@ export class EntradaMaterialEditarComponent implements OnInit {
       tipo_entrada: ['', []],
       secretaria_origem_id: ['', []],
       almoxarifado_origem_id: ['', []],
-      conta_contabil: ['', []],
       data_nota: ['', []],
       saida_material_id: ['', []],
       observacao: ['', [Validators.maxLength(200)]],
@@ -107,11 +106,6 @@ this.secretariaService.listarTodos().subscribe({
 
                     const entradaQuantidade = this.entradaMaterialService.consultarEntradaQuantidade(this.id!);
 
-
-                        console.log(entradaMaterial);
-                        console.log('data_entrada', this.baseService.formatDate(entradaMaterial.data_entrada));
-                        console.log('data_nota', this.baseService.formatDate(entradaMaterial.data_nota));
-
                         this.editarMaterialEntradaForm.patchValue(entradaMaterial);
                         this.editarMaterialEntradaForm.get('data_entrada')?.setValue(this.baseService.formatDate(entradaMaterial.data_entrada));
                         this.editarMaterialEntradaForm.get('data_nota')?.setValue(this.baseService.formatDate(entradaMaterial.data_nota));
@@ -119,6 +113,7 @@ this.secretariaService.listarTodos().subscribe({
                         this.editarMaterialEntradaForm.get('pedido_despesa_id')?.disable();
                         this.editarMaterialEntradaForm.get('saida_material_id')?.disable();
                         this.editarMaterialEntradaForm.get('almoxarifado_id')?.disable();
+                        this.atualizarRegraFornecedor();
                         //this.selectedPedidoCompra = entradaMaterial.pedido_despesa_id!;
                         this.editarMaterialEntradaForm.get('pedido_despesa_id')?.setValue(entradaMaterial.pedido_despesa_id);
                       
@@ -155,7 +150,6 @@ this.secretariaService.listarTodos().subscribe({
       tipo_entrada_id: this.editarMaterialEntradaForm.get('tipo_entrada')!.value,
       secretaria_origem_id: this.editarMaterialEntradaForm.get('secretaria_origem_id')!.value,
       almoxarifado_origem_id: this.editarMaterialEntradaForm.get('almoxarifado_origem_id')!.value,
-      conta_contabil: this.editarMaterialEntradaForm.get('conta_contabil')!.value,
       data_nota: this.editarMaterialEntradaForm.get('data_nota')!.value || null,
       saida_material_id: this.editarMaterialEntradaForm.get('saida_material_id')!.value,
       observacao: this.editarMaterialEntradaForm.get('observacao')!.value,
@@ -233,6 +227,19 @@ this.secretariaService.listarTodos().subscribe({
       this.editarMaterialEntradaForm.controls.secretaria_origem_id.setValue(null);
       this.editarMaterialEntradaForm.get('pedido_despesa_id')!.clearValidators();
       this.editarMaterialEntradaForm.get('pedido_despesa_id')!.updateValueAndValidity();
+    }
+  }
+
+  private atualizarRegraFornecedor(): void {
+    const tipo = Number(this.editarMaterialEntradaForm.get('tipo_entrada')?.value);
+    const fornecedorCtrl = this.editarMaterialEntradaForm.get('fornecedor_id');
+
+    if (!fornecedorCtrl) return;
+
+    if (tipo === 1) {
+      fornecedorCtrl.disable({ emitEvent: false });  // bloqueia alteração
+    } else {
+      fornecedorCtrl.enable({ emitEvent: false });   // libera alteração
     }
   }
 }

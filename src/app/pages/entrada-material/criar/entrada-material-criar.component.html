@@ -164,8 +164,8 @@
               </div>
             </div>
             <div class="col-md-2">
-              <div class="form-group mb-0">
-                <label>Data da Entrada*</label>
+              <div class="form-group">
+                <label class="form-label mb-2">Data da Entrada*</label>
                 <input class="form-control" type="date" formControlName="data_entrada" [max]="hoje"/>
                 <div
                   *ngIf="
@@ -203,8 +203,8 @@
               </div>
             </div>
             <div class="col-md-2">
-              <div class="form-group mb-0">
-                <label>Data Nota</label>
+              <div class="form-group">
+                <label class="form-label mb-2">Data Nota</label>
                 <input class="form-control" type="date" formControlName="data_nota" [max]="hoje" />
                 <div
                   *ngIf="
@@ -215,12 +215,6 @@
                 >
                   Campo obrigatório!
                 </div>
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="form-group">
-                <label class="form-label">Conta Contábil</label>
-                <input class="form-control" type="text" formControlName="conta_contabil" maxlength="30" />
               </div>
             </div>
           </div>

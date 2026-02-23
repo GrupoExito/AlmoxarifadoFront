@@ -15,7 +15,6 @@ export interface SaidaMaterial {
   almoxarifado_destino_id?: number;
   data_registro?: string;
   centro_custo_id: number;
-  conta_contabil: number;
   almoxarifado?: string;
   solicitante?: string;
   secretaria?: string;
@@ -26,7 +25,7 @@ export interface SaidaMaterial {
   unidade_externa_id?: number;
   responsavel_retirada_id?: number;
   status_descricao?: String;
-  cidadao_id?: number;
+  //cidadao_id?: number;
   cidadao?: string;
   codigo_transporte?: string;
   disponivel_entrega?: boolean;

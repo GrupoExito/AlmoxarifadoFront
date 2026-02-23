@@ -81,14 +81,14 @@
     <th class="min-w-60px">Código</th>
     <th class="min-w-240px">Descrição</th>
     <th class="min-w-40px">Und</th>
-    <th class="min-w-80px">Qtd. solicitada</th>
+    <th class="min-w-80px" *ngIf="!separacaoIniciada">Qtd. solicitada</th>
     <th class="min-w-120px">Qtd. autorizada</th>
   </tr>
 </thead>
 
               <!-- FormArray "itens" -->
               <tbody formArrayName="itens">
-                <tr *ngFor="let itemGroup of itensControls; let i = index" [formGroupName]="i" [class.table-success]="separacaoIniciada && isItemSeparado(i)">
+                <tr *ngFor="let itemGroup of itensControls; let i = index" [formGroupName]="i" [hidden]="!mostrarItemNaSeparacao(itemGroup)" [class.table-success]="separacaoIniciada && isItemSeparado(i)">
 <!-- Checkbox separação -->
 <td *ngIf="separacaoIniciada" class="text-center">
   <input
@@ -127,12 +127,13 @@
                   </td>
 
                   <!-- Quantidade solicitada -->
-                  <td *ngIf="this.saidaMaterial.status_id === 2">
+                  <td *ngIf="!separacaoIniciada && this.saidaMaterial.status_id === 2">
                     <span class="text-dark fw-normal fs-6">
                       {{ itemGroup.value.quantidade_solicitada }}
                     </span>
                   </td>
-                  <td *ngIf="this.saidaMaterial.status_id === 3">
+
+                  <td *ngIf="!separacaoIniciada && this.saidaMaterial.status_id === 3">
                     <span class="text-dark fw-normal fs-6">
                       {{ itemGroup.value.qtd_solicitada }}
                     </span>

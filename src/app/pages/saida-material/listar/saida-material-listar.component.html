@@ -100,18 +100,24 @@
           </select>
         </div>
       </div>
-      <div class="col-md-2">
-        <div class="form-group mb-0">
-          <label>Status</label>
-          <select class="form-select" [(ngModel)]="statusSelecionado">
-            <option value="">Selecione</option>
-            <option value="1">Em cadastro</option>
-            <option value="2">Solicitado</option>
-            <option value="3">Autorizado</option>
-            <option value="4">Entregue</option>
-          </select>
-        </div>
-      </div>
+<div class="col-md-3">
+  <div class="form-group mb-0">
+    <label>Status</label>
+
+    <ng-select
+      class="ngSelectDropdown"
+      [items]="statusOptions"
+      bindLabel="label"
+      bindValue="id"
+      [(ngModel)]="statusSelecionados"
+      [multiple]="true"
+      placeholder="Selecione um ou mais"
+      [closeOnSelect]="false"
+      [clearable]="true"
+    >
+    </ng-select>
+  </div>
+</div>
       <div class="col-md-2">
         <div class="form-group mb-0">
           <label>Tipo Saída</label>

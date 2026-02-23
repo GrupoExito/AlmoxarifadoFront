@@ -57,15 +57,24 @@ export class SaidaMaterialEditarComponent implements OnInit {
   selectedCentroCusto: number;
   subscription1: Subscription;
   visualizarSaida: SMData | null;
-  tipoSaida: string;
+  tipoSaida: number;
   usuario_id: number = 1;
-  cidadaos: Cidadao[];
+  //cidadaos: Cidadao[];
   saidaAlmoxarifadoUsuario: boolean | undefined = true;
   saida_almoxarifado_solicitante_setor: boolean | undefined = false;
 
   async ngOnInit(): Promise<void> {
-    console.log('Editar');
-    this.id = Number(this.routeActive.snapshot.paramMap.get('id'));
+
+    const idHere = this.routeActive.snapshot.paramMap.get('id');
+    const idParent = this.routeActive.parent?.snapshot.paramMap.get('id');
+    const idStr = idHere ?? idParent;
+
+    this.id = idStr ? Number(idStr) : null;
+
+    if (!this.id) {
+      Swal.fire('Erro', 'ID não encontrado na URL.', 'error');
+      return;
+    }
 
     this.editarMaterialSaidaForm = this.fb.group({
       status_id: ['', []],
@@ -74,15 +83,13 @@ export class SaidaMaterialEditarComponent implements OnInit {
       solicitante_id: ['', []],
       setor_id: ['', []],
       observacao: ['', [Validators.maxLength(200)]],
-      tipo_saida: ['', []],
+      tipo_saida_id: ['', []],
       secretaria_destino_id: ['', []],
       almoxarifado_destino_id: ['', []],
-      conta_contabil: ['', [Validators.maxLength(30)]],
       centro_custo_id: ['', []],
       data: ['', [Validators.required]],
       unidade_externa_id: ['', []],
       responsavel_retirada_id: ['', []],
-      cidadao_id: ['', []],
     });
 
     await this.consultarConfiguracaoUsuario();
@@ -116,8 +123,11 @@ export class SaidaMaterialEditarComponent implements OnInit {
         this.editarMaterialSaidaForm.patchValue(this.saidaMaterial);
         this.editarMaterialSaidaForm.get('data')?.setValue(this.baseService.formatDate(this.saidaMaterial.data_solicitacao));
 
+        this.editarMaterialSaidaForm.get('tipo_saida_id')?.disable({ emitEvent: false });
+        this.editarMaterialSaidaForm.get('almoxarifado_id')?.disable({ emitEvent: false });
+
         if (this.saidaMaterialService.smDataEtapasHeader.getValue()!.quantidade_itens > 0) {
-          this.editarMaterialSaidaForm.get('almoxarifado_id')?.disable();
+          //this.editarMaterialSaidaForm.get('almoxarifado_id')?.disable();
           this.editarMaterialSaidaForm.get('secretaria_id')?.disable();
         }
       },
@@ -140,25 +150,26 @@ export class SaidaMaterialEditarComponent implements OnInit {
 
   editar() {
     Swal.showLoading();
-    const saidaMaterial: SaidaMaterial = {
-      id: this.saidaMaterial.id!,
-      status_id: 1,
-      almoxarifado_id: this.editarMaterialSaidaForm.get('almoxarifado_id')!.value,
-      secretaria_id: this.editarMaterialSaidaForm.get('secretaria_id')!.value,
-      setor_id: this.editarMaterialSaidaForm.get('setor_id')!.value,
-      solicitante_id: this.editarMaterialSaidaForm.get('solicitante_id')!.value,
-      centro_custo_id: this.editarMaterialSaidaForm.get('centro_custo_id')!.value,
-      data_solicitacao: this.editarMaterialSaidaForm.get('data')!.value,
-      usuario_id: this.usuario_id,
-      observacao: this.editarMaterialSaidaForm.get('observacao')!.value,
-      tipo_saida_id: this.editarMaterialSaidaForm.get('tipo_saida')!.value,
-      secretaria_destino_id: this.editarMaterialSaidaForm.get('secretaria_destino_id')!.value,
-      almoxarifado_destino_id: this.editarMaterialSaidaForm.get('almoxarifado_destino_id')!.value,
-      conta_contabil: this.editarMaterialSaidaForm.get('conta_contabil')!.value,
-      unidade_externa_id: this.editarMaterialSaidaForm.get('unidade_externa_id')!.value,
-      responsavel_retirada_id: this.editarMaterialSaidaForm.get('responsavel_retirada_id')!.value,
-      cidadao_id: this.editarMaterialSaidaForm.get('cidadao_id')!.value,
-    };
+
+      const form = this.editarMaterialSaidaForm.getRawValue();
+
+      const saidaMaterial: SaidaMaterial = {
+        id: this.saidaMaterial.id!,
+        status_id: 1,
+        almoxarifado_id: form.almoxarifado_id,
+        secretaria_id: form.secretaria_id,
+        setor_id: form.setor_id,
+        solicitante_id: form.solicitante_id,
+        centro_custo_id: form.centro_custo_id,
+        data_solicitacao: form.data,
+        usuario_id: this.usuario_id,
+        observacao: form.observacao,
+        tipo_saida_id: form.tipo_saida_id,
+        secretaria_destino_id: form.secretaria_destino_id,
+        almoxarifado_destino_id: form.almoxarifado_destino_id,
+        unidade_externa_id: form.unidade_externa_id,
+        responsavel_retirada_id: form.responsavel_retirada_id,
+      };
 
     this.saidaMaterialService.editar(this.id!, saidaMaterial).subscribe({
       next: () => {
@@ -179,8 +190,11 @@ export class SaidaMaterialEditarComponent implements OnInit {
   }
 
   onTipoSaidaChange() {
-    console.log(this.tipoSaida);
-    if (this.tipoSaida == 'T') {
+
+    const tipo = Number(this.editarMaterialSaidaForm.get('tipo_saida_id')?.value);
+    this.tipoSaida = tipo;
+
+    if (tipo == 2) {
       this.editarMaterialSaidaForm.get('almoxarifado_destino_id')!.setValidators([Validators.required]);
       this.editarMaterialSaidaForm.get('almoxarifado_destino_id')!.updateValueAndValidity();
       this.editarMaterialSaidaForm.get('secretaria_destino_id')!.setValidators([Validators.required]);
@@ -195,7 +209,7 @@ export class SaidaMaterialEditarComponent implements OnInit {
       console.log(this.editarMaterialSaidaForm, 'else');
     }
 
-    if (this.tipoSaida == 'x') {
+    if (tipo == 4) {
       this.editarMaterialSaidaForm.get('unidade_externa_id')!.setValidators([Validators.required]);
       this.editarMaterialSaidaForm.get('unidade_externa_id')!.updateValueAndValidity();
     } else {

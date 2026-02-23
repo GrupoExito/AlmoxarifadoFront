@@ -137,28 +137,45 @@ export class SaidaMaterialEtapaComponent implements OnInit {
   }
 
   imprimir() {
-    Swal.showLoading();
-    const enumPos = Number(this.selectedImpressao) - 1;
-    let documento: FiltroRelatorioDTO = {
-      //impressao_id: this.selectedImpressao,
-      //impressao_nome: DocumentoSaida[enumPos],
-      id: this.id!,
-    };
-    if (this.selectedImpressao == 0) {
-      Swal.fire('Erro!', 'Selecione um documento', 'info');
-      return;
-    }
-    this.relatorioService.downloadSaida(documento).subscribe({
-      next: (res) => {
-        this.baseService.relatorioMensagemModoImpressao(res);
-        this.modalService.dismissAll(0);
-      },
-      error: (error) => {
-        console.log(error);
-        Swal.fire('Erro!', error.error.message, 'error');
-      },
-    });
+  Swal.showLoading();
+
+  if (!this.id) {
+    Swal.fire('Erro!', 'Saída não encontrada.', 'error');
+    return;
   }
+
+  if (this.selectedImpressao == 0) {
+    Swal.fire('Erro!', 'Selecione um documento', 'info');
+    return;
+  }
+
+  const documento: FiltroRelatorioDTO = { id: this.id };
+
+  let request$;
+
+  if (this.selectedImpressao == 1) {
+    // Guia de Saída de Material
+    request$ = this.relatorioService.downloadSaida(documento);
+  } else if (this.selectedImpressao == 3) {
+    // Guia de separação de Material
+    request$ = this.relatorioService.downloadSaidaSeparacao(documento);
+  } else {
+    Swal.fire('Erro!', 'Opção de impressão inválida.', 'error');
+    return;
+  }
+
+  request$.subscribe({
+    next: (res) => {
+      this.baseService.relatorioMensagemModoImpressao(res);
+      this.modalService.dismissAll();
+      this.selectedImpressao = 0; // opcional: resetar select
+    },
+    error: (error) => {
+      console.log(error);
+      Swal.fire('Erro!', error?.error?.message ?? 'Falha ao gerar relatório', 'error');
+    },
+  });
+}
 
   calcvalorTotalSaida() {
     if (this.saidaMaterialItem) {

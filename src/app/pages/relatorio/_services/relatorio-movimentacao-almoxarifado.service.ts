@@ -42,6 +42,12 @@ export class RelatorioAlmoxarifadoService {
     });
   }
 
+  downloadSaidaSeparacao(documento: FiltroRelatorioDTO): Observable<ArrayBuffer> {
+    return this.http.post(`${this.baseURL}/saida/separacao`, documento, {
+      responseType: 'arraybuffer',
+    });
+  }
+
   exportarSaida(documento: ImpressaoDocumentoSaida): Observable<ArrayBuffer> {
     return this.http.post(`${this.baseURL}/exportacao/saida`, documento, {
       responseType: 'arraybuffer',

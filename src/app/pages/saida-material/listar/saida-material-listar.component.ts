@@ -52,13 +52,21 @@ export class SaidaMateriaListarComponent implements OnInit, OnDestroy {
   ItemSelecionado: string = '';
   idSelecionado: string = '';
   tipoSelecionado: string = '';
-  statusSelecionado: string = '';
   dataInicialSelecionado: string = '';
   dataFinalSelecionado: string = '';
   filtroButton: boolean = false;
   filtroAccordion: boolean = false;
   saidaAlmoxarifadoUsuario: boolean | undefined = false;
   usuario_id: number = 1;
+
+  statusSelecionados: number[] = [];
+
+  statusOptions = [
+    { id: 1, label: 'Em cadastro' },
+    { id: 2, label: 'Solicitado' },
+    { id: 3, label: 'Autorizado' },
+    { id: 4, label: 'Entregue' },
+  ];
 
   async ngOnInit(): Promise<void> {
   this.dtOptions = {
@@ -234,7 +242,7 @@ this.saidaMateriaLService.consultarSaidaQuantidade(id).subscribe({
 const parameters: Record<string, any> = {
       secretaria_id: this.secretariaSelecionada ?? null,
       almoxarifado_id: this.almoxarifadoSelecionado ?? null,
-      status_id: this.statusSelecionado ?? null,
+      status_id: (this.statusSelecionados?.length ? this.statusSelecionados : null),
       setor_id: this.setorSelecionado ?? null,
       solicitante_id: this.solicitanteSelecionado ?? null,
       saida_id: this.idSelecionado ?? null,
@@ -294,7 +302,7 @@ const parameters: Record<string, any> = {
     this.solicitanteSelecionado = '';
     this.idSelecionado = '';
     this.tipoSelecionado = '';
-    this.statusSelecionado = '';
+    this.statusSelecionados = [];
     this.dataInicialSelecionado = '';
     this.dataFinalSelecionado = '';
   }

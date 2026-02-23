@@ -463,7 +463,8 @@ autorizar(): void {
 
     return {
       id,
-      quantidade: isNaN(qtd) ? 0 : qtd
+      quantidade: isNaN(qtd) ? 0 : qtd,
+      saida_material_id: this.saida_id
     };
   });
 
@@ -725,8 +726,17 @@ separacaoIniciada = false;
 // guarda quais índices foram marcados
 private itensSeparados = new Set<number>();
 
+private get indicesVisiveisSeparacao(): number[] {
+  const idx: number[] = [];
+  this.itensControls.forEach((g, i) => {
+    if (this.mostrarItemNaSeparacao(g)) idx.push(i);
+  });
+  return idx;
+}
+
 get todosItensSeparados(): boolean {
-  return this.itensControls?.length > 0 && this.itensSeparados.size === this.itensControls.length;
+  const visiveis = this.indicesVisiveisSeparacao;
+  return visiveis.length > 0 && visiveis.every(i => this.itensSeparados.has(i));
 }
 
 isItemSeparado(index: number): boolean {
@@ -809,21 +819,40 @@ finalizarSeparacao(): void {
 }
 
 get algunsItensSeparados(): boolean {
-  const total = this.itensControls?.length ?? 0;
-  return this.itensSeparados.size > 0 && this.itensSeparados.size < total;
+  const visiveis = this.indicesVisiveisSeparacao;
+  const marcados = visiveis.filter(i => this.itensSeparados.has(i)).length;
+  return marcados > 0 && marcados < visiveis.length;
 }
 
 toggleSelecionarTodos(ev: Event): void {
   const checked = (ev.target as HTMLInputElement).checked;
+  const visiveis = this.indicesVisiveisSeparacao;
 
-  this.itensSeparados.clear();
-
-  if (checked) {
-    // marca todos
-    for (let i = 0; i < this.itensControls.length; i++) {
-      this.itensSeparados.add(i);
-    }
+  // só mexe nos visíveis
+  if (!checked) {
+    visiveis.forEach(i => this.itensSeparados.delete(i));
+    return;
   }
+
+  visiveis.forEach(i => this.itensSeparados.add(i));
 }
 
+private parseNumberAny(v: any): number {
+  if (v === null || v === undefined) return 0;
+  if (typeof v === 'number') return v;
+  const s = String(v).trim();
+  if (!s) return 0;
+  // aceita "1.234,0000" ou "123,45" etc
+  return this.parseNumeroPtBr(s);
+}
+
+/** Regra: durante separação, só mostra itens com qtd autorizada > 0 */
+mostrarItemNaSeparacao(itemGroup: FormGroup): boolean {
+  if (!this.separacaoIniciada) return true;
+
+  // quando status_id === 3, você exibe itemGroup.value.qtd_autorizada
+  const qtd = this.parseNumberAny(itemGroup.get('qtd_autorizada')?.value);
+
+  return isFinite(qtd) && qtd > 0;
+}
 }

@@ -14,7 +14,7 @@
           <div class="row mt-2">
             <div class="col-md-4">
               <div class="form-group">
-                <label class="form-group">Almoxarifado</label>
+                <label class="form-group">Almoxarifado*</label>
                 <ng-select class="ngSelectDropdown" [items]="almoxarifados" bindLabel="descricao" bindValue="id"
                   formControlName="almoxarifado_id">
                 </ng-select>
@@ -29,7 +29,7 @@
             </div>
             <div class="col-md-4">
               <div class="form-group">
-                <label class="form-group">Secretaria</label>
+                <label class="form-group">Secretaria*</label>
                 <ng-select class="ngSelectDropdown" [items]="secretarias" bindLabel="descricao" bindValue="id"
                   formControlName="secretaria_fundo_id">
                 </ng-select>
@@ -43,9 +43,15 @@
             </div>
             <div class="col-md-4">
               <div class="form-group">
-                <label class="form-group">Fornecedor</label>
-                <ng-select class="ngSelectDropdown" [items]="fornecedores" bindLabel="razao_social" bindValue="id"
-                  formControlName="fornecedor_id">
+                <label class="form-group">Fornecedor*</label>
+                <ng-select
+                  class="ngSelectDropdown"
+                  [items]="fornecedores"
+                  bindLabel="razao_social"
+                  bindValue="id"
+                  formControlName="fornecedor_id"
+                  [clearable]="tipoEntrada != 1"
+                >
                 </ng-select>
                 <div *ngIf="
                     editarMaterialEntradaForm.get('fornecedor_id')?.touched &&
@@ -59,7 +65,7 @@
           <div class="row mt-3">
             <div class="col-md-2">
               <div class="form-group">
-                <label class="form-label mb-2">Tipo Entrada </label>
+                <label class="form-label mb-2">Tipo Entrada*</label>
                 <select class="form-select" formControlName="tipo_entrada" aria-label="Tipo_entrada"
                   (change)="onTipoEntradaChange()" >
                   <option [ngValue]="1">Compra</option>
@@ -79,8 +85,8 @@
               </div>
             </div>
             <div class="col-md-2">
-              <div class="form-group mb-0">
-                <label>Data da Entrada</label>
+              <div class="form-group">
+                <label class="form-label mb-2">Data da Entrada*</label>
                 <input class="form-control" type="date" formControlName="data_entrada" />
                 <div *ngIf="
                     editarMaterialEntradaForm.get('data_entrada')?.touched &&
@@ -109,8 +115,8 @@
               </div>
             </div>
             <div class="col-md-2">
-              <div class="form-group mb-0">
-                <label>Data Nota</label>
+              <div class="form-group">
+                <label class="form-label mb-2">Data Nota</label>
                 <input class="form-control" type="date" formControlName="data_nota" />
                 <div *ngIf="
                     editarMaterialEntradaForm.get('data_nota')?.touched &&
@@ -120,25 +126,12 @@
                 </div>
               </div>
             </div>
-            
-            <div class="col-md-3">
-              <div class="form-group">
-                <label class="form-label">Conta Contábil</label>
-                <input class="form-control" type="text" formControlName="conta_contabil" maxlength="30" />
-                <div *ngIf="
-                    editarMaterialEntradaForm.get('conta_contabil')?.touched &&
-                    editarMaterialEntradaForm.get('conta_contabil')?.hasError('required')
-                  " class="text text-danger mt-3">
-                  Campo obrigatório!
-                </div>
-              </div>
-            </div>
-            
+
           </div>
           <div class="row mt-2">
             <div *ngIf="tipoEntrada == 2" class="col-md-4 mt-2 mb-0">
               <div class="form-group">
-                <label class="form-group">Almoxarifado Origem</label>
+                <label class="form-group">Almoxarifado Origem*</label>
                 <ng-select class="ngSelectDropdown" [items]="almoxarifados" bindLabel="descricao" bindValue="id"
                   formControlName="almoxarifado_origem_id">
                 </ng-select>
@@ -147,7 +140,7 @@
 
             <div *ngIf="tipoEntrada == 2" class="col-md-4 mt-2 mb-0">
               <div class="form-group">
-                <label class="form-group">Secretaria Origem</label>
+                <label class="form-group">Secretaria Origem*</label>
                 <ng-select class="ngSelectDropdown" [items]="secretarias" bindLabel="descricao" bindValue="id"
                   formControlName="secretaria_origem_id">
                 </ng-select>
@@ -156,7 +149,7 @@
             <div *ngIf="tipoEntrada === 4" class="col-md-1">
               <div class="form-group">
                 <div class="form-group">
-                  <label class="form-label">N° Saida</label>
+                  <label class="form-label">N° Saida*</label>
                   <input class="form-control" type="number" formControlName="saida_material_id" maxlength="6" />
                 </div>
               </div>

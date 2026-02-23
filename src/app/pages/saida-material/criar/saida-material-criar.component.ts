@@ -82,7 +82,6 @@ export class SaidaMaterialCriarComponent implements OnInit {
       almoxarifado_destino_id: ['', []],
       unidade_externa_id: ['', []],
       centro_custo_id: ['', [Validators.required]],
-      conta_contabil: ['', [Validators.maxLength(30)]],
       responsavel_retirada_id: ['', [Validators.required]],
     });
 
@@ -131,7 +130,6 @@ export class SaidaMaterialCriarComponent implements OnInit {
       almoxarifado_destino_id: this.criarSaidaMaterialForm.get('almoxarifado_destino_id')!.value,
       secretaria_destino_id: this.criarSaidaMaterialForm.get('secretaria_destino_id')!.value,
       centro_custo_id: this.criarSaidaMaterialForm.get('centro_custo_id')!.value,
-      conta_contabil: this.criarSaidaMaterialForm.get('conta_contabil')!.value,
       unidade_externa_id: this.criarSaidaMaterialForm.get('unidade_externa_id')!.value,
       responsavel_retirada_id: this.criarSaidaMaterialForm.get('responsavel_retirada_id')!.value,
       //cidadao_id: this.criarSaidaMaterialForm.get('cidadao_id')!.value || null,

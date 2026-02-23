@@ -110,7 +110,7 @@
             </div>
           </div>
           <div class="row mt-3">
-            <div class="col-md-2">
+            <div class="col-md-3">
               <div class="form-group">
                 <label class="form-label mb-2">Tipo Saída*</label>
                 <select
@@ -186,21 +186,6 @@
               </div>
             </div>
             <div class="col-md-2">
-              <div class="form-group">
-                <label class="form-label">Conta Contábil*</label>
-                <input class="form-control" type="text" formControlName="conta_contabil" maxlength="30" />
-                <div
-                  *ngIf="
-                    editarMaterialSaidaForm.get('conta_contabil')?.touched &&
-                    editarMaterialSaidaForm.get('conta_contabil')?.hasError('required')
-                  "
-                  class="text text-danger mt-3"
-                >
-                  Campo obrigatório!
-                </div>
-              </div>
-            </div>
-            <div class="col-md-2">
               <div class="form-group mb-0">
                 <label>Data</label>
                 <input class="form-control" type="date" formControlName="data" />
@@ -215,7 +200,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-3">
+            <!--div class="col-md-3">
               <div class="form-group">
                 <label class="form-group">Cidadão</label>
                 <ng-select
@@ -236,8 +221,8 @@
                   Campo obrigatório!
                 </div>
               </div>
-            </div>
-            <div *ngIf="tipoSaida === 'X'" class="col-md-6">
+            </div-->
+            <div *ngIf="tipoSaida == 4" class="col-md-6">
               <div class="form-group">
                 <label class="form-group">Unidade Externa</label>
                 <ng-select
@@ -261,7 +246,7 @@
               </div>
             </div>
 
-            <div *ngIf="tipoSaida === 'T'" class="col-md-6">
+            <div *ngIf="tipoSaida == 2" class="col-md-6">
               <div class="form-group">
                 <label class="form-group">Almoxarifado Destino</label>
                 <ng-select
@@ -285,7 +270,7 @@
                 </div>
               </div>
             </div>
-            <div *ngIf="tipoSaida === 'T'" class="col-md-6">
+            <div *ngIf="tipoSaida == 2" class="col-md-6">
               <div class="form-group">
                 <label class="form-group">Secretaria Destino</label>
                 <ng-select

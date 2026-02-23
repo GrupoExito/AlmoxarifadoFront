@@ -17,7 +17,6 @@ export interface EntradaMaterial {
   almoxarifado_origem_id?: number;
   saida_material_id?: number;
   data_registro?: string;
-  conta_contabil: number;
   data_nota?: string;
   almoxarifado?: string;
   fornecedor?: string;
