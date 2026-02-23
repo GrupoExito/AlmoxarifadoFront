@@ -588,8 +588,11 @@ enviarXmlNotaFiscal() {
     if (!result.isConfirmed) return;
 
     Swal.showLoading();
+
+    const pedidoIdParaEnvio = this.pedido_compra_id == null ? 0 : this.pedido_compra_id;
+
     this.entradaMaterialItemService
-      .adicionarItensPorNotaFiscal(this.pedido_compra_id, this.entrada_id, this.xmlFile!)
+      .adicionarItensPorNotaFiscal(pedidoIdParaEnvio, this.entrada_id, this.xmlFile!)
       .subscribe({
         next: () => {
           this.modalXmlNotaFiscal.hide();
