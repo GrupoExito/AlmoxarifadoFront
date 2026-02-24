@@ -28,7 +28,7 @@ export interface DashboardVencidosMes {
 }
 
 export interface DashboardPedidoCompraSecretaria {
-  gsecretaria_fundo_id: number;
+  secretaria_fundo_id: number;
   secretaria_descricao: string;
   secretaria_sigla: string;
   quantidade_pedidos: number;
