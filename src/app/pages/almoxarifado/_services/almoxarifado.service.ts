@@ -6,7 +6,7 @@ import { Almoxarifadocep } from '@pages/shared/models/almoxarifadocep.model';
 import { AData, ADataEtapasHeader, Almoxarifado } from '../_models/almoxarifado.model';
 import { ItemAlmoxarifado } from '../_models/itemAlmoxarifado.model';
 import { UsuarioAlmoxarifado } from '../_models/usuarioAlmoxarifado.model';
-import { Dashboard } from '../_models/Dashboard.model';
+import { DashboardResponseDTO } from '../_models/dashboard.model';
 
 @Injectable({
   providedIn: 'root',
@@ -97,8 +97,9 @@ export class AlmoxarifadoService {
     return this.http.put<void>(`${this.baseURL}/reativar/${almoxarifado_id}`, null);
   }
 
-  GetDashboard(): Observable<Dashboard> {
-    return this.http.get<Dashboard>(`${this.baseURL}/dashboard`);
+  GetDashboard(ano?: number): Observable<DashboardResponseDTO> {
+    const params = ano ? { params: { ano } } : {};
+    return this.http.get<DashboardResponseDTO>(`${this.baseURL}/dashboard`, params);
   }
 
   filtrar(parameters: any): Observable<Almoxarifado[]> {

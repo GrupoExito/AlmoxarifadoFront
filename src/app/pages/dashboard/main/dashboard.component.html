@@ -5,19 +5,19 @@
       <div class="info-container">
         <div class="info-box">
           <h3>Almoxarifados Ativos</h3>
-          <p id="licitacao">{{ dados.almoxarifado_ativo_total }}</p>
+          <p id="licitacao">{{ dados?.almoxarifado_ativo_total }}</p>
         </div>
         <div class="info-box">
           <h3>Secretarias Atendidas</h3>
-          <p id="credenciamento">{{ dados.secretarias_atendidas_total }}</p>
+          <p id="credenciamento">{{ dados?.secretarias_atendidas_total }}</p>
         </div>
         <div class="info-box">
           <h3>Usuários</h3>
-          <p id="dispensa">{{ dados.usuarios_total }}</p>
+          <p id="dispensa">{{ dados?.usuarios_total }}</p>
         </div>
         <div class="info-box">
           <h3>Solicitantes</h3>
-          <p id="inexigibilidade">{{ dados.solicitantes_total }}</p>
+          <p id="inexigibilidade">{{ dados?.solicitantes_total }}</p>
         </div>
       </div>
     </div>
@@ -28,19 +28,19 @@
       <div class="info-container">
         <div class="info-box">
           <h3>Itens</h3>
-          <p id="total-contratos">{{ dados.itens_total }}</p>
+          <p id="total-contratos">{{ dados?.itens_total }}</p>
         </div>
         <div class="info-box">
           <h3>Valor</h3>
-          <p id="valor-total">{{ dados.valor_total | currency }}</p>
+          <p id="valor-total">{{ dados?.valor_total | currency }}</p>
         </div>
         <div class="info-box">
           <h3>Valor Entrada/Mês</h3>
-          <p id="valor-total-pago">{{ dados.valor_entrada_mes_total | currency }}</p>
+          <p id="valor-total-pago">{{ dados?.valor_entrada_mes_total | currency }}</p>
         </div>
         <div class="info-box">
           <h3>Valor Saída/Mês</h3>
-          <p id="valor-total-pago">{{ dados.valor_saida_mes_total | currency }}</p>
+          <p id="valor-total-pago">{{ dados?.valor_saida_mes_total | currency }}</p>
         </div>
       </div>
     </div>
