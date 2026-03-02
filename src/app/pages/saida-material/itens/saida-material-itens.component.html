@@ -49,31 +49,36 @@
           </div>
         </div>
         <form [formGroup]="addProdutoForm">
-  <div class="row mt-3">
-    <!-- Select de Itens (sem ngModel) -->
-    <div class="col-12">
-      <div class="form-group">
-        <label class="form-label">Itens</label>
-        <ng-select
-          appendTo="body"
-          class="ngSelectDropdown"
-          [virtualScroll]="true"
-          [items]="itemDisponivel"
-          bindLabel="descricao"
-          bindValue="id"
-          formControlName="produto_servico_id"
-          (change)="onSelectItem($event)"
-          placeholder="Selecione um item"
-        >
-          <ng-template ng-option-tmp let-item="item">
-            <div [attr.data-title]="item.descricao">
-              {{ item.descricao }}
-            </div>
-          </ng-template>
-        </ng-select>
-      </div>
+  <div class="row mt-3 align-items-end g-2">
+  <div class="col">
+    <div class="form-group mb-0">
+      <label class="form-label">Itens</label>
+      <ng-select
+        appendTo="body"
+        class="ngSelectDropdown"
+        [virtualScroll]="true"
+        [items]="itemDisponivel"
+        bindLabel="descricao"
+        bindValue="id"
+        formControlName="produto_servico_id"
+        (change)="onSelectItem($event)"
+        placeholder="Selecione um item"
+      >
+        <ng-template ng-option-tmp let-item="item">
+          <div [attr.data-title]="item.descricao">
+            {{ item.descricao }}
+          </div>
+        </ng-template>
+      </ng-select>
     </div>
   </div>
+
+  <div class="col-auto" *ngIf="saidaMaterial?.status_id === 1">
+    <button type="button" class="btn btn-sm btn-primary" (click)="abrirModalCodigoBarra()">
+      Ler código de barras
+    </button>
+  </div>
+</div>
 
   <!-- Tabela de Lotes/Validades do produto selecionado -->
   <div class="row mt-4" *ngIf="exibirTabelaLotes">
@@ -359,6 +364,49 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
         <button type="button" class="btn btn-primary" (click)="adicionarItensPedido()">Adicionar itens</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="modalCodigoBarra"
+  tabindex="-1"
+  aria-labelledby="modalCodigoBarraLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCodigoBarraLabel">Selecionar item por código de barras</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <label class="form-label">Código de barras</label>
+
+        <div class="input-group">
+          <input
+            #barcodeInput
+            type="text"
+            class="form-control"
+            [(ngModel)]="codigoBarraModal"
+            (keydown.enter)="buscarPorCodigoBarra()"
+            placeholder="Aponte o leitor e pressione Enter"
+          />
+          <button type="button" class="btn btn-primary" (click)="buscarPorCodigoBarra()">
+            Buscar
+          </button>
+        </div>
+
+        <small class="text-muted d-block mt-2">
+          Dica: o leitor normalmente digita o código e envia Enter automaticamente.
+        </small>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
       </div>
     </div>
   </div>

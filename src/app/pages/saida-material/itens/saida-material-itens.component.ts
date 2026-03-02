@@ -25,6 +25,8 @@ import { PedidoCompraItem } from '@pages/compra/_models/pedido-compra-item.model
 
 import { takeUntil } from 'rxjs/operators';
 
+import { ElementRef } from '@angular/core';
+
 @Component({
   selector: 'app-saida-material-itens',
   templateUrl: './saida-material-itens.component.html',
@@ -40,6 +42,11 @@ export class SaidaMaterialItemComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private cd: ChangeDetectorRef
   ) {}
+
+  @ViewChild('barcodeInput') barcodeInput!: ElementRef<HTMLInputElement>;
+
+  codigoBarraModal = '';
+  private modalCodigoBarra?: bootstrap.Modal;
 
   @ViewChild(DataTableDirective, { static: false })
   dtElement!: DataTableDirective;
@@ -565,6 +572,56 @@ private refreshLotesSelecionado(): void {
     return parseFloat(s);
   }
 
+  abrirModalCodigoBarra(): void {
+    this.codigoBarraModal = '';
+
+    const el = document.getElementById('modalCodigoBarra') as HTMLElement;
+    this.modalCodigoBarra = new bootstrap.Modal(el);
+    this.modalCodigoBarra.show();
+
+    // foca no input (pequeno delay por causa da animação do modal)
+    setTimeout(() => {
+      try {
+        this.barcodeInput?.nativeElement?.focus();
+        this.barcodeInput?.nativeElement?.select();
+      } catch {}
+    }, 250);
+
+    this.cd.markForCheck();
+  }
+
+  buscarPorCodigoBarra(): void {
+    const codigo = (this.codigoBarraModal || '').trim();
+
+    if (!codigo) {
+      Swal.fire('Atenção', 'Informe o código de barras.', 'info');
+      return;
+    }
+
+    // garante comparação mais “tolerante”
+    const item = (this.itemDisponivel || []).find(i =>
+      String(i.codigo_barra ?? '').trim() === codigo
+    );
+
+    if (!item) {
+      Swal.fire('Não encontrado', 'Nenhum item disponível com este código de barras.', 'warning');
+      return;
+    }
+
+    // 1) seleciona no ng-select (por ser bindValue="id")
+    this.addProdutoForm.get('produto_servico_id')?.setValue(item.id);
+
+    // 2) roda o mesmo fluxo do select (carregar lotes/saldos)
+    this.onSelectItem(item);
+
+    // 3) fecha modal e limpa
+    this.codigoBarraModal = '';
+    this.modalCodigoBarra?.hide();
+
+    this.cd.markForCheck();
+  }
+
+
   get temQuantidadeParaAdicionar(): boolean {
     return this.lotesControls.some((ctrl) => {
       const raw = ctrl.get('quantidade')?.value;
@@ -593,11 +650,11 @@ private refreshLotesSelecionado(): void {
     }, 0);
   }
 
-get totalDigitado(): number {
-  return this.lotesControls.reduce((acc, ctrl) => {
-    const raw = ctrl.get('quantidade')?.value;
-    const qtd = this.parseNumeroPtBr(raw);
-    return acc + (qtd > 0 ? qtd : 0);
-  }, 0);
-}
+  get totalDigitado(): number {
+    return this.lotesControls.reduce((acc, ctrl) => {
+      const raw = ctrl.get('quantidade')?.value;
+      const qtd = this.parseNumeroPtBr(raw);
+      return acc + (qtd > 0 ? qtd : 0);
+    }, 0);
+  }
 }
