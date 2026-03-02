@@ -60,14 +60,6 @@ export interface DashboardUltimosPedidos {
   status_descricao?: string;
 }
 
-export interface DashboardPedidoCompraSecretaria {
-  gsecretaria_fundo_id: number;
-  secretaria_descricao: string;
-  secretaria_sigla: string;
-  quantidade_pedidos: number;
-  valor_pedidos: number;
-}
-
 export enum NaturezaContrato {
   Servicos = 8,
   Transportes = 12,
@@ -97,4 +89,11 @@ export interface ItemContrato {
 
 export interface MesContrato {
   items: ItemContrato[];
+}
+
+export interface DashboardEntradaPorAlmoxarifado {
+  almoxarifado_id: number;
+  almoxarifado_descricao: string;
+  quantidade: number;
+  valor_total: number;
 }

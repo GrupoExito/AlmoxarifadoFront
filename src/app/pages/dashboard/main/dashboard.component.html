@@ -31,7 +31,7 @@
           <p id="total-contratos">{{ dados?.itens_total }}</p>
         </div>
         <div class="info-box">
-          <h3>Valor</h3>
+          <h3>Valor Entrada(Total)</h3>
           <p id="valor-total">{{ dados?.valor_total | currency }}</p>
         </div>
         <div class="info-box">
@@ -61,6 +61,7 @@
       <div class="card-body">
         <div id="chart">
           <apx-chart
+            *ngIf="topItensReady"
             [series]="chartOptionsSetor.series!"
             [chart]="chartOptionsSetor.chart!"
             [dataLabels]="chartOptionsSetor.dataLabels!"
@@ -85,6 +86,7 @@
       <div class="card-body">
         <div id="chart">
           <apx-chart
+            *ngIf="vencer90Ready"
             [series]="chartOptionsStatus.series!"
             [chart]="chartOptionsStatus.chart!"
             [dataLabels]="chartOptionsStatus.dataLabels!"
@@ -92,6 +94,29 @@
             [xaxis]="chartOptionsStatus.xaxis!"
           ></apx-chart>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card shadow mt-3">
+  <div class="card-body py-3">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+      <div class="d-flex align-items-center gap-2">
+        <span class="fw-bolder">Ano selecionado:</span>
+        <span class="badge badge-light-primary">{{ ano }}</span>
+      </div>
+
+      <div class="btn-group" role="group" aria-label="Selecionar ano">
+        <button
+          *ngFor="let a of anosTabs"
+          type="button"
+          class="btn btn-sm"
+          [ngClass]="a === ano ? 'btn-primary' : 'btn-light-primary'"
+          (click)="setAno(a)"
+        >
+          {{ a }}
+        </button>
       </div>
     </div>
   </div>
@@ -108,6 +133,7 @@
       <div class="card-body">
         <div id="chart">
           <apx-chart
+            *ngIf="vencidosAnoReady"
             [series]="chartOptionsContratosVencimentos.series"
             [chart]="chartOptionsContratosVencimentos.chart"
             [xaxis]="chartOptionsContratosVencimentos.xaxis"
@@ -132,85 +158,73 @@
   <div class="card">
     <div class="card-header">
       <h3 class="card-title">
-        <span class="card-label fw-bolder fs-3">Resumo dos Itens por Almoxarifado</span>
+        <span class="card-label fw-bolder fs-3">Resumo das Entradas por Almoxarifado - {{ ano }}</span>
+      </h3>
+    </div>
+
+    <div class="card-body py-3">
+      <div class="table-responsive">
+        <table class="table table-row-dashed table-row-gray-200 align-middle gs-0 gy-4">
+          <thead>
+            <tr class="border-0">
+              <th class="text-center fw-bolder">ID</th>
+              <th class="text-center fw-bolder">Almoxarifado</th>
+              <th class="text-center fw-bolder">Qtd. Total</th>
+              <th class="text-center fw-bolder">Valor Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let a of entradasPorAlmoxarifado">
+              <td class="text-center">{{ a.almoxarifado_id }}</td>
+              <td class="text-center">{{ a.almoxarifado_descricao }}</td>
+              <td class="text-center">{{ a.quantidade}}</td>
+              <td class="text-right">
+                <span class="text-left text-dark">{{ a.valor_total | currency : 'BRL' }}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-xxl-12 mt-3" *appPermission="['Pedido Compra', 'visualizar_valor_pedido']">
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">
+        <span class="card-label fw-bolder fs-3">Resumo dos Itens por Secretaria - {{ ano }}</span>
       </h3>
       <div class="card-toolbar">
-        <ul class="nav">
-          <li class="nav-item">
-            <a
-              class="nav-link btn btn-sm btn-color-muted btn-active btn-active-light-primary fw-bolder px-4 me-1"
-              data-bs-toggle="tab"
-              [ngClass]="activeClassCompra('2024')"
-              (click)="setTabCompra('2024')"
-            >
-              2024
-            </a>
-          </li>
-          <li class="nav-item">
-            <a
-              class="nav-link btn btn-sm btn-color-muted btn-active btn-active-light-primary fw-bolder px-4 me-1"
-              data-bs-toggle="tab"
-              [ngClass]="activeClassCompra('2025')"
-              (click)="setTabCompra('2025')"
-            >
-              2025
-            </a>
-          </li>
-        </ul>
+
       </div>
     </div>
 
     <div class="card-body py-3">
       <div class="tab-content">
-        <div class="tab-pane fade" [ngClass]="activeClassCompra('2025')" id="2025">
-          <div class="table-responsive">
-            <table class="table table-row-dashed table-row-gray-200 align-middle gs-0 gy-4">
-              <thead>
-                <tr class="border-0">
-                  <th class="text-center fw-bolder">ID</th>
-                  <th class="text-center fw-bolder">Secretaria</th>
-                  <th class="text-center fw-bolder">Quantidade de Pedidos</th>
-                  <th class="text-center fw-bolder">Valor total</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let pedido of pedidosPorSecretaria">
-                  <td class="text-center">{{ pedido.gsecretaria_fundo_id }}</td>
-                  <td class="text-center">{{ pedido.secretaria_descricao }}</td>
-                  <td class="text-center">{{ pedido.quantidade_pedidos }}</td>
-                  <td class="text-right">
-                    <span class="text-left text-dark">{{ pedido.valor_pedidos | currency : 'BRL' }}</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="tab-pane fade" [ngClass]="activeClassCompra('2024')" id="2024">
-          <div class="table-responsive">
-            <table class="table table-row-dashed table-row-gray-200 align-middle gs-0 gy-4">
-              <thead>
-                <tr class="border-0">
-                  <th class="text-center">ID</th>
-                  <th class="text-center">Secretaria</th>
-                  <th class="text-center">Quantidade Pedido</th>
-                  <th class="text-center">Valor total</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let pedido of pedidosPorSecretaria">
-                  <td class="text-left fw-bold">{{ pedido.gsecretaria_fundo_id }}</td>
-                  <td class="text-left fw-bold">{{ pedido.secretaria_descricao }}</td>
-                  <td class="text-left fw-bold">{{ pedido.quantidade_pedidos }}</td>
-                  <td class="text-center">
-                    <span class="text-left fw-bold text-dark">{{ pedido.valor_pedidos | currency : 'BRL' }}</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+  <div class="tab-pane fade" *ngFor="let a of anosTabs" [ngClass]="activeClassCompra(a)" [id]="a">
+    <div class="table-responsive">
+      <table class="table table-row-dashed table-row-gray-200 align-middle gs-0 gy-4">
+        <thead>
+          <tr class="border-0">
+            <th class="text-center fw-bolder">Secretaria</th>
+            <th class="text-center fw-bolder">Quantidade de Pedidos</th>
+            <th class="text-center fw-bolder">Valor total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let entrada of entradasPorSecretaria">
+            <td class="text-center">{{ entrada.secretaria_descricao }}</td>
+            <td class="text-center">{{ entrada.quantidade }}</td>
+            <td class="text-right">
+              <span class="text-left text-dark">{{ entrada.valor_total | currency : 'BRL' }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
     </div>
   </div>
 </div>

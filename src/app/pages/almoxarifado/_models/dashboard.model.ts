@@ -1,3 +1,5 @@
+import { DashboardEntradaPorAlmoxarifado } from "@pages/dashboard/_model/DashboardQuantitativos.model";
+
 export interface DashboardKpis {
   almoxarifado_ativo_total: number;
   secretarias_atendidas_total: number;
@@ -27,12 +29,12 @@ export interface DashboardVencidosMes {
   qtd_vencidos: number;
 }
 
-export interface DashboardPedidoCompraSecretaria {
+export interface DashboardEntradaSecretaria {
   secretaria_fundo_id: number;
   secretaria_descricao: string;
   secretaria_sigla: string;
-  quantidade_pedidos: number;
-  valor_pedidos: number;
+  quantidade: number;
+  valor_total: number;
 }
 
 export interface DashboardResponseDTO {
@@ -40,5 +42,6 @@ export interface DashboardResponseDTO {
   itensMaisSolicitados: DashboardTopItem[];
   itensVencendo90Dias: DashboardItemVencimento[];
   itensVencidosAno: DashboardVencidosMes[];
-  pedidosPorSecretaria: DashboardPedidoCompraSecretaria[];
+  entradasPorSecretaria: DashboardEntradaSecretaria[];
+  entradasPorAlmoxarifado: DashboardEntradaPorAlmoxarifado[];
 }

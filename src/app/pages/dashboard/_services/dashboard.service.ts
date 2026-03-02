@@ -3,7 +3,6 @@ import { environment } from '@env/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {
-  DashboardPedidoCompraSecretaria,
   DashboardQuadrimestreQuantitativos,
   DashboardQuantitativos,
   DashboardUltimosPedidos,
@@ -18,9 +17,6 @@ export class DashboardService {
   baseURL = `${environment.apiUrl}`;
   constructor(private http: HttpClient) {}
 
-  listarPedidoCompraPorSecretariaPorUsuario(ano: string): Observable<DashboardPedidoCompraSecretaria[]> {
-    return this.http.get<DashboardPedidoCompraSecretaria[]>(`${this.baseURL}/dashboard/pedido/${ano}`);
-  }
 
   listarProcessosTramitacao(id: number): Observable<DashboardQuantitativos[]> {
     return this.http.get<DashboardQuantitativos[]>(`${this.baseURL}/dashboard/processostramitacao/${id}`);

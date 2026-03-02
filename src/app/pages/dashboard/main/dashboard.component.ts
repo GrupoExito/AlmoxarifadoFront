@@ -12,8 +12,8 @@ import {
 import { AlmoxarifadoService } from '@pages/almoxarifado/_services/almoxarifado.service';
 
 // Ajuste o import conforme onde você colocou as interfaces
-import { DashboardKpis, DashboardResponseDTO } from '@pages/almoxarifado/_models/dashboard.model';
-import { DashboardPedidoCompraSecretaria } from '../_model/DashboardQuantitativos.model';
+import { DashboardEntradaSecretaria, DashboardKpis, DashboardResponseDTO } from '@pages/almoxarifado/_models/dashboard.model';
+import { DashboardEntradaPorAlmoxarifado } from '../_model/DashboardQuantitativos.model';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -24,8 +24,6 @@ export type ChartOptions = {
   tooltip: ApexTooltip;
   yaxis: ApexYAxis[];
 };
-
-type Year = '2024' | '2025';
 
 type DadosColumns = {
   name: string;
@@ -39,14 +37,21 @@ type DadosColumns = {
 })
 export class DashboardComponent implements OnInit {
   // Tabs
-  activeTabCompra: Year = '2025';
-  ano: number = 2025;
+  activeTabCompra: number;
+  ano: number;
+
+  anoAtual = new Date().getFullYear();
+  anoAnterior = this.anoAtual - 1;
+
+  anosTabs: number[] = [this.anoAnterior, this.anoAtual];
 
   // KPIs
   dados?: DashboardKpis;
 
   // Tabela
-  pedidosPorSecretaria: DashboardPedidoCompraSecretaria[] = [];
+  entradasPorSecretaria: DashboardEntradaSecretaria[] = [];
+
+  entradasPorAlmoxarifado: DashboardEntradaPorAlmoxarifado[];
 
   // Meses (para gráfico anual)
   meses: string[] = [
@@ -89,29 +94,36 @@ export class DashboardComponent implements OnInit {
   chartOptionsContratosVencimentos: any = {};
   chartHeight: string = '150';
 
+  topItensReady = false;
+  vencer90Ready = false;
+  vencidosAnoReady = false;
+
   constructor(private almoxarifadoService: AlmoxarifadoService) {}
 
-  ngOnInit(): void {
-    this.ano = Number(this.activeTabCompra);
+ngOnInit(): void {
+  this.activeTabCompra = this.anoAtual;
+  this.ano = this.anoAtual;
 
-    // inicializa gráfico anual vazio
-    this.chartOptionsContratosVencimentos = getChartOptions(
-      this.chartHeight,
-      this.dataContratosVencimento,
-      this.meses.map((m) => `${m}/${this.ano}`)
-    );
+  // inicia gráfico anual vazio
+  this.chartOptionsContratosVencimentos = getChartOptions(
+    this.chartHeight,
+    this.dataContratosVencimento,
+    this.meses.map((m) => `${m}/${this.ano}`)
+  );
 
-    this.carregarDashboard();
-  }
+  this.carregarDashboard();
+}
 
   carregarDashboard(): void {
     this.almoxarifadoService.GetDashboard(this.ano).subscribe({
       next: (res: DashboardResponseDTO | any) => {
+
         // suporta camelCase ou PascalCase sem dor de cabeça
         const kpis = res.kpis ?? res.Kpis;
         this.dados = kpis;
 
-        this.pedidosPorSecretaria = res.pedidosPorSecretaria ?? res.PedidosPorSecretaria ?? [];
+        this.entradasPorSecretaria = res.entradasPorSecretaria ?? res.EntradasPorSecretaria ?? [];
+        this.entradasPorAlmoxarifado = res.entradasPorAlmoxarifado ?? res.EntradasPorAlmoxarifado ?? [];
 
         const topItens = res.itensMaisSolicitados ?? res.ItensMaisSolicitados ?? [];
         const vencer90 = res.itensVencendo90Dias ?? res.ItensVencendo90Dias ?? [];
@@ -125,14 +137,14 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  setTabCompra(tab: Year) {
-    this.activeTabCompra = tab;
-    this.ano = Number(tab);
+  setTabCompra(ano: number) {
+    this.activeTabCompra = ano;
+    this.ano = ano;
     this.carregarDashboard();
   }
 
-  activeClassCompra(tab: Year) {
-    return tab === this.activeTabCompra ? 'show active' : '';
+  activeClassCompra(ano: number) {
+    return ano === this.activeTabCompra ? 'show active' : '';
   }
 
   montarGraficoTopItens(dataset: { descricao: string; qtd: number }[]) {
@@ -141,6 +153,8 @@ export class DashboardComponent implements OnInit {
       series: [{ name: 'Solicitações', data: dataset.map((x) => x.qtd ?? 0) }],
       xaxis: { categories: dataset.map((x) => x.descricao) },
     };
+
+    this.topItensReady = true;
   }
 
   montarGraficoVencimento90(dataset: { descricao: string; quantidade: number; data_validade: string }[]) {
@@ -160,6 +174,8 @@ export class DashboardComponent implements OnInit {
       series: [{ name: 'Quantidade', data: ordenado.map((x) => x.quantidade ?? 0) }],
       xaxis: { categories: labels },
     };
+
+    this.vencer90Ready = true;
   }
 
   montarGraficoVencidosAno(dataset: { mes: number; qtd_vencidos: number }[]) {
@@ -177,6 +193,15 @@ export class DashboardComponent implements OnInit {
       this.dataContratosVencimento,
       this.meses.map((m) => `${m}/${this.ano}`)
     );
+
+    this.vencidosAnoReady = true;
+  }
+
+  setAno(ano: number) {
+    if (this.ano === ano) return;
+    this.ano = ano;
+    this.activeTabCompra = ano; // se quiser manter a tabela sincronizada
+    this.carregarDashboard();
   }
 }
 

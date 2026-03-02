@@ -249,7 +249,7 @@ export class EntradaMaterialCriarComponent implements OnInit {
     }
   }
 
-confimarEntrada() {
+confirmarEntrada() {
   if (!this.id) return;
 
   Swal.showLoading();
@@ -264,22 +264,41 @@ confimarEntrada() {
         return;
       }
 
-      // pode confirmar
-      this.entradaMaterialService.alterarStatusEntradaMaterial(this.id!, 2).subscribe({
-        next: () => {
-          this.entradaMaterial!.status_id = 2;
-          this.atualizarEntradaMaterial();
-          Swal.fire('Atualizado!', 'Entrada confirmada com sucesso!', 'success').then((result) => {
-            if (result.value) {
-              //this.entradaMaterial.status_id=2;
-              //this.route.navigate(['/entradamaterial/view', this.id, 'cadastro']);
-            }
+      Swal.close();
+
+      //CONFIRMAÇÃO ANTES DE ALTERAR STATUS
+      Swal.fire({
+        title: 'Confirmar Entrada?',
+        text: 'Após a confirmação, não será possível alterar esta entrada.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sim, confirmar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33'
+      }).then((result) => {
+        if (result.isConfirmed) {
+
+          Swal.showLoading();
+
+          this.entradaMaterialService.alterarStatusEntradaMaterial(this.id!, 2).subscribe({
+            next: () => {
+              this.entradaMaterial!.status_id = 2;
+              this.atualizarEntradaMaterial();
+
+              Swal.fire(
+                'Atualizado!',
+                'Entrada confirmada com sucesso!',
+                'success'
+              );
+            },
+            error: (error) => {
+              console.log(error);
+              Swal.fire('Erro!', error.error, 'error');
+            },
           });
-        },
-        error: (error) => {
-          console.log(error);
-          Swal.fire('Erro!', error.error, 'error');
-        },
+
+        }
       });
     },
     error: (error) => {
@@ -288,7 +307,6 @@ confimarEntrada() {
     },
   });
 }
-
 
   reabrirEntrada() {
     Swal.showLoading();
